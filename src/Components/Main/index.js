@@ -1,6 +1,7 @@
 import React from "react"
 import Button from "@material-ui/core/Button";
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
+import ListUser from "../ListUser";
 
 export default function HomeScreen () 
 {
@@ -14,6 +15,7 @@ export default function HomeScreen ()
             <Link to="/register" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Register</Button>
             </Link>
+            <ListUser/>
         </React.Fragment>
     )
 }
