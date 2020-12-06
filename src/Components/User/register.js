@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,8 +7,13 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {signUpService} from "./Service/authService";
+import Collapse from "@material-ui/core/Collapse";
+import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,11 +54,46 @@ export default function Register() {
             rePassword: "",
         }
     )
+    const [status, setStatus] = useState({type: "error", content: ""});
+    const [alert, setAlert] = useState(false);
+    const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
     const classes = useStyles();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(information.email.length === 0 || information.lastName.length === 0 || information.firstName.length === 0 ||
+            information.password.length === 0 || information.rePassword.length === 0)
+        {
+            setStatus({type: "error", content: "Please fill all fields"})
+            setAlert(true);
+        }else if(information.password !== information.rePassword)
+        {
+            setStatus({type: "error", content: "Password not match"})
+            setAlert(true);
+        }
+        else if(information.password.length < 6)
+        {
+            setStatus({type: "error", content: "Password at least 6 characters"})
+            setAlert(true);
+        }
+        else {
+            const res = await signUpService(information.username, information.firstName,information.lastName,
+                information.password, information.email)
+            if(res.data.err)
+            {
+                setStatus({type: "error", content: res.data.err});
+                setAlert(true);
+            }else if (res.data.msg)
+            {
+                setStatus({type: "success", content: res.data.msg});
+                setAlert(true);
+                //direct
+                //setIsSignUpSuccess(true);
+            }
+        }
     }
+
+    if(isSignUpSuccess) return (<Redirect to="/login"/>)
 
     return (
         <div>
@@ -66,6 +106,24 @@ export default function Register() {
                     <Typography component="h1" variant="h5">
                         Register
                     </Typography>
+                    <Collapse in={alert}>
+                        <Alert severity={status.type}
+                               action={
+                                   <IconButton
+                                       aria-label="close"
+                                       color="inherit"
+                                       size="small"
+                                       onClick={() => {
+                                           setAlert(false);
+                                       }}
+                                   >
+                                       <CloseIcon fontSize="inherit" />
+                                   </IconButton>
+                               }
+                        >
+                            {status.content}
+                        </Alert>
+                    </Collapse>
                     <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>

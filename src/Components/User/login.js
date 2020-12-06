@@ -1,8 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Avatar, Button, Container, CssBaseline, TextField, Grid, Typography}  from '@material-ui/core';
 import { makeStyles} from '@material-ui/core/styles';
-import {Link} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {loginService} from "./Service/authService";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import Alert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -30,13 +35,36 @@ export default function LogIn() {
         user: "",
         password: "",
     });
+    const [status, setStatus] = useState({type: "error", content:""});
+    const [alert, setAlert] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const classes = useStyles();
 
-    const handleSubmit = (e) =>
+    const handleSubmit = async (e) =>
     {
         e.preventDefault();
-        alert("Submit");
+        if(input.user.length === 0 || input.password.length === 0)
+        {
+            setStatus({type: "error", content: "Please enter username or password"})
+            setAlert(true);
+        }
+        else {
+            const res = await loginService(input.user, input.password);
+
+            if(res.error)
+            {
+                setStatus({type: "error", content: res.error})
+                setAlert(true);
+            }
+            else
+            {
+                //direct
+                setIsLogin(true);
+            }
+        }
     }
+
+    if(isLogin) return(<Redirect to ="/"/>);
 
     return (
         <div>
@@ -49,6 +77,24 @@ export default function LogIn() {
                     <Typography component="h1" variant="h5">
                         Login
                     </Typography>
+                    <Collapse in={alert}>
+                        <Alert severity={status.type}
+                               action={
+                                   <IconButton
+                                       aria-label="close"
+                                       color="inherit"
+                                       size="small"
+                                       onClick={() => {
+                                           setAlert(false);
+                                       }}
+                                   >
+                                       <CloseIcon fontSize="inherit" />
+                                   </IconButton>
+                               }
+                        >
+                            {status.content}
+                        </Alert>
+                    </Collapse>
                     <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <TextField
                             variant="outlined"
