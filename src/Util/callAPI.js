@@ -1,8 +1,8 @@
 import axios from "axios"
 const URL_API = "http://localhost:3000/";
 
-const callAPI = (method, pathUrl, body) => {
-    const token = JSON.parse(localStorage.getItem('user'));
+const callAPI = async (method, pathUrl, body) => {
+    const token = await JSON.parse(localStorage.getItem('user'));
     return axios({
         method: method,
         url: URL_API + pathUrl,
