@@ -5,18 +5,23 @@ import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
 import Lobby from "./Components/Lobby/Main";
 import Game from "./Components/Game"
+import {UserProvider} from "./Components/User/UserContext";
+import NavigationBar from "./Components/Main/navigationBar";
 
 const App = () => {
   return(
       <React.Fragment>
           <Router>
-              <Switch>
-                  <Route path="/" exact component={HomeScreen}/>
-                  <Route path="/login" component={LogIn}/>
-                  <Route path="/register" component={Register}/>
-                  <Route path="/lobby" component={Lobby}/>
-                  <Route path="/game" component={Game}/>
-              </Switch>
+              <UserProvider>
+                  <NavigationBar/>
+                  <Switch>
+                      <Route path="/" exact component={HomeScreen}/>
+                      <Route path="/login" component={LogIn}/>
+                      <Route path="/register" component={Register}/>
+                      <Route path="/lobby" component={Lobby}/>
+                      <Route path="/game" component={Game}/>
+                  </Switch>
+              </UserProvider>
           </Router>
       </React.Fragment>
   )

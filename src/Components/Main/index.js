@@ -97,39 +97,39 @@ export default function HomeScreen() {
             </Link>
             <Link to="/lobby" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Lobby</Button>
-            
+            </Link>
             <Link to="/game" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Play Now</Button>
             </Link>
             <ListUser listUser={listUser} listUserNow={listUserNow}/>
-            {/* <div className="card">
-                <form onSubmit={onMessageSubmit}>
-                    <h1>Messanger</h1>
-                    <div className="name-field">
-                        <TextField
-                            name="name"
-                            onChange={e => onTextChange(e)}
-                            value={state.name}
-                            label="Name"
-                        />
-                    </div>
-                    <div>
-                        <TextField
-                            name="message"
-                            onChange={e => onTextChange(e)}
-                            value={state.message}
-                            id="outlined-multiline-static"
-                            variant="outlined"
-                            label="Message"
-                        />
-                    </div>
-                    <button>Send Message</button>
-                </form>
-                <div className="render-chat">
-                    <h1>Chat Log</h1>
-                    {renderChat()}
-                </div>
-            </div> */}
+            {/*<div className="card">*/}
+            {/*    <form onSubmit={onMessageSubmit}>*/}
+            {/*        <h1>Messanger</h1>*/}
+            {/*        <div className="name-field">*/}
+            {/*            <TextField*/}
+            {/*                name="name"*/}
+            {/*                onChange={e => onTextChange(e)}*/}
+            {/*                value={state.name}*/}
+            {/*                label="Name"*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*        <div>*/}
+            {/*            <TextField*/}
+            {/*                name="message"*/}
+            {/*                onChange={e => onTextChange(e)}*/}
+            {/*                value={state.message}*/}
+            {/*                id="outlined-multiline-static"*/}
+            {/*                variant="outlined"*/}
+            {/*                label="Message"*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*        <button>Send Message</button>*/}
+            {/*    </form>*/}
+            {/*    <div className="render-chat">*/}
+            {/*        <h1>Chat Log</h1>*/}
+            {/*        {renderChat()}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </React.Fragment>
     )
 }

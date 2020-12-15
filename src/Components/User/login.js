@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {useUpdateUserContext} from "./UserContext";
+
 import {Avatar, Button, Container, CssBaseline, TextField, Grid, Typography}  from '@material-ui/core';
 import { makeStyles} from '@material-ui/core/styles';
 import {Redirect, Link} from "react-router-dom";
@@ -38,6 +40,7 @@ export default function LogIn() {
     const [status, setStatus] = useState({type: "error", content:""});
     const [alert, setAlert] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const updateUser = useUpdateUserContext();
     const classes = useStyles();
 
     const handleSubmit = async (e) =>
@@ -59,6 +62,7 @@ export default function LogIn() {
             else
             {
                 //direct
+                updateUser(true, null);
                 setIsLogin(true);
             }
         }
