@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
 import Lobby from "./Components/Lobby/Main";
+import Game from "./Components/Game"
 
 const App = () => {
   return(
@@ -14,6 +15,7 @@ const App = () => {
                   <Route path="/login" component={LogIn}/>
                   <Route path="/register" component={Register}/>
                   <Route path="/lobby" component={Lobby}/>
+                  <Route path="/game" component={Game}/>
               </Switch>
           </Router>
       </React.Fragment>
