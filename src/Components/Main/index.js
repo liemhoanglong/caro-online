@@ -37,26 +37,24 @@ export default function HomeScreen() {
         rederListUser();
     }, [])
 
-    // socket nghe user login
     useEffect(() => {
+        // socket nghe user login
         socket.on('server-send-data', (listUsersOnline) => {
             let temp = listUsersOnline
-            console.log('connect '+JSON.stringify(listUsersOnline));
+            // console.log('connect '+JSON.stringify(listUsersOnline));
             setListUserNow(temp);
             // console.log('connect '+JSON.stringify(listUserNow));
         })
-    })    
-    
-    // socket nghe user logout
-    useEffect(() => {
+
+        // socket nghe user logout
         socket.on('disconnect', (listUsersOnline) => {
             let temp = listUsersOnline
-            console.log('disconnect '+ JSON.stringify(listUsersOnline));
+            // console.log('disconnect '+ JSON.stringify(listUsersOnline));
             setListUserNow(temp);
             // console.log('disconnect '+JSON.stringify(listUserNow));
         })
-    })
-
+    })    
+    
     // const [state, setState] = useState({ message: '', name: '' })
     // const [chat, setChat] = useState([])
 
@@ -96,6 +94,10 @@ export default function HomeScreen() {
 
             <Link to="/register" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Register</Button>
+            </Link>
+            
+            <Link to="/game" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button>Play Now</Button>
             </Link>
             <ListUser listUser={listUser} listUserNow={listUserNow}/>
             {/* <div className="card">
