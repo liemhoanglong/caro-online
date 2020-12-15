@@ -97,6 +97,9 @@ export default function HomeScreen() {
             <Link to="/register" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Register</Button>
             </Link>
+            <Link to="/lobby" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button>Lobby</Button>
+            </Link>
             <ListUser listUser={listUser} listUserNow={listUserNow}/>
             {/* <div className="card">
                 <form onSubmit={onMessageSubmit}>

@@ -14,16 +14,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ListUser(props) {
-    // const userOnline = ["5fcc7c0f39b1402038d3091f"];
     console.log(props.listUserNow)
-    const userOnline = props.listUserNow.reduce((a, o) => (a.push(o.userID), a), []) 
+    const userOnline = props.listUserNow.reduce((a, o) => (a.push(o.userID), a), [])
     console.log(userOnline)
+    // const userOnline = [1,2,3];
+    // const listUser = [10, 11, 12];
     const classes = useStyles();
 
     return (
         <Container>
             <List className={classes.root} component="nav" aria-label="main mailbox folders">
-                {props.listUser.map((user, i) => {
+                {props.listUser.map((user, i) => { // props.listUser.map ....
                     return (
                         <ListItem key={i} button style={{ borderRadius: "10px" }}>
                             { userOnline.includes(user.id) ?
@@ -31,7 +32,6 @@ export default function ListUser(props) {
                                     <FiberManualRecordIcon style={{ fill: "green" }} />
                                 </ListItemIcon>
                                 :
-
                                 <ListItemIcon>
                                     <FiberManualRecordIcon />
                                 </ListItemIcon>
