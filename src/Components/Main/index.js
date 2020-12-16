@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
-import TextField from '@material-ui/core/TextField';
+import {Link} from "react-router-dom";
 import io from 'socket.io-client';
 
 //api local
@@ -20,7 +19,7 @@ export default function HomeScreen() {
     // console.log(JSON.parse(localStorage.getItem("user")).id)
     // socket nói
     useEffect(() => {
-        const rederListUser = async () => {
+        const renderListUser = async () => {
             try {
                 let res = await userAPI.getAllUser();
                 //xóa người dùng hiện thời ra khỏi list user
@@ -29,28 +28,25 @@ export default function HomeScreen() {
                 setListUser(res);
                 // console.log(res);
                 socket.emit('client-send-data', idUser)
-                setReset(!reset);
             } catch (error) {
                 console.log('Failed to fetch: ', error);
             }
         }
-        rederListUser();
+        renderListUser();
     }, [])
 
     useEffect(() => {
         // socket nghe user login
         socket.on('server-send-data', (listUsersOnline) => {
-            let temp = listUsersOnline
             // console.log('connect '+JSON.stringify(listUsersOnline));
-            setListUserNow(temp);
+            setListUserNow(listUsersOnline);
             // console.log('connect '+JSON.stringify(listUserNow));
         })
 
         // socket nghe user logout
         socket.on('disconnect', (listUsersOnline) => {
-            let temp = listUsersOnline
             // console.log('disconnect '+ JSON.stringify(listUsersOnline));
-            setListUserNow(temp);
+            setListUserNow(listUsersOnline);
             // console.log('disconnect '+JSON.stringify(listUserNow));
         })
     })    
@@ -100,6 +96,9 @@ export default function HomeScreen() {
             </Link>
             <Link to="/game" style={{ textDecoration: 'none', color: "inherit" }}>
                 <Button>Play Now</Button>
+            </Link>
+            <Link to="/test" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button>Testing</Button>
             </Link>
             <ListUser listUser={listUser} listUserNow={listUserNow}/>
             {/*<div className="card">*/}

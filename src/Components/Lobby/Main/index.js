@@ -83,7 +83,7 @@ const table = (classes) =>
                                     </StyledTableCell>
                                     :
                                     <StyledTableCell align="right">
-                                        <Button variant="contained" color="primary" disableElevation disabled={true}>
+                                        <Button variant="contained" color="primary" disableElevation disabled>
                                             Play
                                         </Button>
                                     </StyledTableCell>
@@ -102,7 +102,7 @@ export default function Lobby() {
 
     return (
         <Grid container>
-            <Grid container item alignContent={"flex-end"} justify={"flex-end"} style={{margin: 5}}>
+            <Grid container item alignContent="flex-end" justify="flex-end" style={{margin: 5}}>
                 <SearchRoom/>
                 <Button variant="contained" color="primary" disableElevation>
                     Chơi ngay
@@ -115,16 +115,15 @@ export default function Lobby() {
                 <Grid item xs={9}>
                     {table(classes)}
                 </Grid>
-                <Grid direction={"row"} alignContent={"center"} container item xs = {3} >
+                <Grid direction="row" alignContent="center" container item xs = {3} >
                     <Grid item xs={12}>
                         <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
                     </Grid>
-                    <Grid items xs={12}>
+                    <Grid item xs={12}>
                         <Typography>Điểm: 1609</Typography>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography>Người chơi đang online</Typography>
-                        <ListUser/>
                     </Grid>
                 </Grid>
             </Grid>

@@ -7,6 +7,7 @@ import Lobby from "./Components/Lobby/Main";
 import Game from "./Components/Game"
 import {UserProvider} from "./Components/User/UserContext";
 import NavigationBar from "./Components/Main/navigationBar";
+import ListUser2 from "./Components/ListUser/listuserTesting2";
 
 const App = () => {
   return(
@@ -20,6 +21,7 @@ const App = () => {
                       <Route path="/register" component={Register}/>
                       <Route path="/lobby" component={Lobby}/>
                       <Route path="/game" component={Game}/>
+                      <Route path="/testing" component={ListUser2}/>
                   </Switch>
               </UserProvider>
           </Router>
