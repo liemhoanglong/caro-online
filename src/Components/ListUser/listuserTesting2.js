@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import StarIcon from '@material-ui/icons/Star';
 import Paper from "@material-ui/core/Paper";
 import {Typography} from "@material-ui/core";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {socket} from "../../Context/socket";
+import callAPI from "../../Util/callAPI";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,8 +25,37 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function InsetList() {
+export default function UserList() {
+    const [listUserOnline, setListUserOnline] = useState([]);
     const classes = useStyles();
+
+    useEffect(() => {
+        socket.on("user-connect", data => {
+            setListUserOnline(data);
+        })
+    },[])
+
+    useEffect(() => {
+        socket.on("user-disconnect", data => {
+            setListUserOnline(data);
+        })
+    }, [])
+
+    const displayItem = () =>
+    {
+        const currentUsername = JSON.parse(localStorage.getItem("user"));
+        const result = listUserOnline.filter((dl) => currentUsername.id !== dl.user.userID);
+        return result.map((dl, index) => {
+            return(
+                <ListItem key={index} button>
+                    <ListItemIcon>
+                        <FiberManualRecordIcon style={{fill: "green"}}/>
+                    </ListItemIcon>
+                    <ListItemText primary={dl.user.username}/>
+                </ListItem>
+            )
+        });
+    }
 
     return (
         <Paper className={classes.paper} elevation={4}>
@@ -33,50 +63,8 @@ export default function InsetList() {
                 Online users
             </Typography>
             <List component="nav" className={classes.root} aria-label="contacts">
-                <ListItem button disabled style={{backgroundColor: "#f3f3f3"}}>
-                    <ListItemIcon>
-                        <FiberManualRecordIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Chelsea Otakan" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <FiberManualRecordIcon style={{fill: "green"}} />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Eric Hoffman" />
-                </ListItem>
+                {displayItem()}
             </List>
         </Paper>
-
     );
 }

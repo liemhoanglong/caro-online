@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useUserContext, useUpdateUserContext} from "../User/UserContext";
+import {useUserContext, useUpdateUserContext} from "../../Context/UserContext";
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';

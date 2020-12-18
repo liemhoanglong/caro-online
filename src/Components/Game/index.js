@@ -139,8 +139,8 @@ const Game = (props) => {
                     />
                 </div>
             </Grid>
-            <Grid xs={3}>
-                <Grid xs={12} className="game-info">
+            <Grid item xs={3}>
+                <Grid item xs={12} className="game-info">
                     <h1>Lịch sử bước đi</h1>
                     <div className="game-status">{status}</div>
                     <div>
@@ -154,7 +154,7 @@ const Game = (props) => {
                         <ol>{isDes ? moves.reverse() : moves}</ol>
                     </GridList>
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                     <GridList cellHeight={160}>
                         <h3>hello</h3>
                     </GridList>
