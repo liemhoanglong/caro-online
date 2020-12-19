@@ -1,12 +1,15 @@
 import React from "react";
 import HomeScreen from "./Components/Main";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+
+import {UserProvider} from "./Context/UserContext";
+
 import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
-import Lobby from "./Components/Lobby/Main";
+import Lobby from "./Components/Lobby";
 import Game from "./Components/Game"
-import {UserProvider} from "./Components/User/UserContext";
 import NavigationBar from "./Components/Main/navigationBar";
+import ListUser from "./Components/ListUser";
 
 const App = () => {
   return(
@@ -20,6 +23,7 @@ const App = () => {
                       <Route path="/register" component={Register}/>
                       <Route path="/lobby" component={Lobby}/>
                       <Route path="/game" component={Game}/>
+                      <Route path="/testing" component={ListUser}/>
                   </Switch>
               </UserProvider>
           </Router>

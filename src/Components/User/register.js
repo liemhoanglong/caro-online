@@ -15,7 +15,6 @@ import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(1),
@@ -88,7 +87,7 @@ export default function Register() {
                 setStatus({type: "success", content: res.data.msg});
                 setAlert(true);
                 //direct
-                //setIsSignUpSuccess(true);
+                setIsSignUpSuccess(true);
             }
         }
     }

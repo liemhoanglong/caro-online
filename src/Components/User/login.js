@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
-import {useUpdateUserContext} from "./UserContext";
-
-import {Avatar, Button, Container, CssBaseline, TextField, Grid, Typography}  from '@material-ui/core';
-import { makeStyles} from '@material-ui/core/styles';
 import {Redirect, Link} from "react-router-dom";
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {loginService} from "./Service/authService";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
+import { makeStyles} from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
+
+import {useUpdateUserContext} from "../../Context/UserContext";
+import {userLogin} from "../../Context/socket";
+import {loginService} from "./Service/authService";
+
+import {Avatar, Button, Container,
+    CssBaseline, TextField, Grid,
+    Typography, Collapse}  from '@material-ui/core';
+
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -53,16 +57,15 @@ export default function LogIn() {
         }
         else {
             const res = await loginService(input.user, input.password);
-
             if(res.error)
             {
                 setStatus({type: "error", content: res.error})
                 setAlert(true);
             }
-            else
+            else //login success
             {
-                //direct
                 updateUser(true, null);
+                userLogin(res.id, res.username);
                 setIsLogin(true);
             }
         }
@@ -149,6 +152,5 @@ export default function LogIn() {
                 </div>
             </Container>
         </div>
-
     );
 }

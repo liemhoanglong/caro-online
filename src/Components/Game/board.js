@@ -17,10 +17,11 @@ const Board = ({ winningSquares, squares, onClick, size }) => {
     let index = 0
     for (let i = 0; i < size; i++) {
         const sq = []
-        for (let j = 0; j < size; j++) {
+        for (let j = 0; j < size; j++)
+        {
             sq.push(renderSquare(index, winningSquares, squares, onClick, size));
             index++
-        };
+        }
         row.push(
             <div key={"row " + row + 1} className="board-row">
                 {sq}

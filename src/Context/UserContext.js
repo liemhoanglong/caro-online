@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from "react";
-import callAPI from "../../Util/callAPI";
+import callAPI from "../Util/callAPI";
 
 const UserContext = React.createContext();
 const UpdateUserContext = React.createContext();

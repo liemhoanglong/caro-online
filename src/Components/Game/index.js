@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Grid, GridList, Card, CardActions, CardActionArea, Button, CardMedia } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState} from 'react';
+import {Button, Card, CardActionArea, CardActions, CardMedia, Grid, GridList} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import calculateWinner from "./gameCheck";
 
 import './game.css';
 import Board from './board'
@@ -11,10 +12,9 @@ const useStyles = makeStyles({
     },
 });
 
-
 const config = 15
 
-const Game = (props) => {
+export default function Game(){
     const classes = useStyles();
 
     const [size, setSize] = useState(config);
@@ -27,7 +27,7 @@ const Game = (props) => {
         const history2 = history.slice(0, stepNumber + 1);
         const current = history2[history2.length - 1]
         const squares = current.squares.slice()
-        if (calculateWinner1(squares, current.location) || squares[i]) {
+        if (calculateWinner(squares, current.location) || squares[i]) {
             return;
         }
         squares[i] = xIsNext ? 'X' : 'O';
@@ -44,27 +44,20 @@ const Game = (props) => {
         setIsDes(!isDes)
     }
 
-    const jumpTo = (step) => {
-        setStepNumber(step)
-        setXIsNext((step % 2 === 0))
-    }
-
-    const loca = (move) => {
+    const location = (move) => {
         let r = Math.floor((move) / size) + 1
         let c = Math.floor((move) % size) + 1
         return ': row ' + r + ' col ' + c
     }
 
     const current = history[stepNumber];
-    const winner = calculateWinner1(current.squares, current.location);
+    const winner = calculateWinner(current.squares, current.location);
     const moves = history.map((step, move) => {
-        // console.log(history[move].location)
         const desc = move ?
-            'Go to move #' + move + loca(history[move].location) :
+            'Go to move #' + move + location(history[move].location) :
             'Go to game start';
         return (
             <li key={move}>
-                {/* <button onClick={() => jumpTo(move)}> */}
                 <button style={{ width: "110%" }}>
                     {move === stepNumber ? <b>{desc}</b> : desc}
                 </button>
@@ -123,11 +116,6 @@ const Game = (props) => {
                         </CardActions>
                     </Card>
                 </Grid>
-
-                {/* <form className="input-size">
-                    <label htmlFor="size">Board size: </label>
-                    <input type="number" id="size" name="size" onChange={(event) => setSize(event.target.value)} />
-                </form> */}
             </Grid>
             <Grid item xs={6}>
                 <div className="game-board">
@@ -139,22 +127,21 @@ const Game = (props) => {
                     />
                 </div>
             </Grid>
-            <Grid xs={3}>
-                <Grid xs={12} className="game-info">
+            <Grid item xs={3}>
+                <Grid item xs={12} className="game-info">
                     <h1>Lịch sử bước đi</h1>
                     <div className="game-status">{status}</div>
                     <div>
-                        Sort by: {isDes ? "Asending" : "Descending"}
+                        Sort by: {isDes ? "Ascending" : "Descending"}
                     </div>
                     <label className="switch">
                         <input type="checkbox" onClick={() => sortHistory()} />
-                        <span className="slider round"></span>
                     </label>
                     <GridList cellHeight={160}>
                         <ol>{isDes ? moves.reverse() : moves}</ol>
                     </GridList>
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                     <GridList cellHeight={160}>
                         <h3>hello</h3>
                     </GridList>
@@ -164,83 +151,3 @@ const Game = (props) => {
     );
 }
 
-// ========================================
-
-const location = (move, size) => {
-    let r = Math.floor((move) / size) + 1
-    let c = Math.floor((move) % size) + 1
-    return [r, c]
-}
-
-//Declaring a Winner
-function calculateWinner(squares, size) {
-    // console.log(squares)
-
-    if (size <= 3) {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return { player: squares[a], line: [a, b, c] };
-            }
-        }
-    } else {
-
-    }
-
-    return null;
-}
-
-function calculateWinner1(squares, indexNow) {
-    const size = config;
-    const di = [0, 0, 1, -1, -1, 1, -1, 1];
-    const dj = [1, -1, 0, 0, -1, 1, 1, -1];
-
-    let i = Math.floor(indexNow / size);
-    let j = indexNow % size;
-
-    for (let k = 0; k < di.length; k += 2) {
-        let log = [];
-        console.log(log)
-        let tempI = i, tempJ = j;
-        let tempIndex = tempI * size + tempJ;
-        let count1 = 0;
-        while (tempI >= 0 && tempI <= size - 1 && tempJ >= 0 && tempJ <= size - 1 && squares[tempIndex] === squares[indexNow]) {
-            log.push(tempIndex);
-            count1++;
-            tempI = tempI + di[k];
-            tempJ = tempJ + dj[k];
-            tempIndex = tempI * size + tempJ;
-        }
-        tempI = i;
-        tempJ = j;
-        tempIndex = tempI * size + tempJ;
-        let count2 = 0;
-        while (tempI >= 0 && tempI <= size - 1 && tempJ >= 0 && tempJ <= size - 1 && squares[tempIndex] === squares[indexNow]) {
-            log.push(tempIndex);
-            count2++;
-            tempI = tempI + di[k + 1];
-            tempJ = tempJ + dj[k + 1];
-            tempIndex = tempI * size + tempJ;
-        }
-        if (count1 + count2 - 1 === 5) {
-            const winner = {
-                square: squares[indexNow],
-                line: log
-            }
-            return winner;
-        }
-    }
-    return null;
-}
-
-export default Game;

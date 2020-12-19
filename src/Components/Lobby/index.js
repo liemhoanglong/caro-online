@@ -1,17 +1,11 @@
 import React from 'react';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {Grid, Avatar} from "@material-ui/core";
+import {Table, TableBody, TableCell,
+        TableContainer, TableHead, TableRow,
+        Paper, Grid, Avatar, Button, Typography} from '@material-ui/core';
+
 import SearchRoom from "./searchRoom";
-import Button from "@material-ui/core/Button";
-import ListUser from "../../ListUser";
-import Typography from "@material-ui/core/Typography";
+import ListUser from '../ListUser/index'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -83,7 +77,7 @@ const table = (classes) =>
                                     </StyledTableCell>
                                     :
                                     <StyledTableCell align="right">
-                                        <Button variant="contained" color="primary" disableElevation disabled={true}>
+                                        <Button variant="contained" color="primary" disableElevation disabled>
                                             Play
                                         </Button>
                                     </StyledTableCell>
@@ -102,7 +96,7 @@ export default function Lobby() {
 
     return (
         <Grid container>
-            <Grid container item alignContent={"flex-end"} justify={"flex-end"} style={{margin: 5}}>
+            <Grid container item alignContent="flex-end" justify="flex-end" style={{margin: 5}}>
                 <SearchRoom/>
                 <Button variant="contained" color="primary" disableElevation>
                     Chơi ngay
@@ -115,15 +109,14 @@ export default function Lobby() {
                 <Grid item xs={9}>
                     {table(classes)}
                 </Grid>
-                <Grid direction={"row"} alignContent={"center"} container item xs = {3} >
+                <Grid direction="row" alignContent="center" container item xs = {3} >
                     <Grid item xs={12}>
                         <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
                     </Grid>
-                    <Grid items xs={12}>
+                    <Grid item xs={12}>
                         <Typography>Điểm: 1609</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography>Người chơi đang online</Typography>
                         <ListUser/>
                     </Grid>
                 </Grid>

@@ -3,7 +3,7 @@ import React from 'react'
 const Square = (props) => {
   return (
     <button 
-      className={"square" + (props.isWin ? " square-win" : '') + (props.value === 'X' ? " Xturn": '')} 
+      className={"square" + (props.isWin ? " square-win" : '') + (props.value === 'X' ? " X turn": '')}
       onClick={props.onClick}
     >
       {props.value}
