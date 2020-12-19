@@ -1,22 +1,19 @@
 import React, {useState} from 'react';
-import {Button, Card, CardActionArea, CardActions, CardMedia, Grid, GridList} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import {Grid, Button, IconButton, Typography} from '@material-ui/core';
 import calculateWinner from "./gameCheck";
-
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import './game.css';
 import Board from './board'
+import Player from "./player";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
 
-const useStyles = makeStyles({
-    root: {
-        maxWidth: 345,
-    },
-});
-
-const config = 15
+const config = 16
 
 export default function Game(){
-    const classes = useStyles();
-
     const [size, setSize] = useState(config);
     const [history, setHistory] = useState([{ squares: Array(size * size).fill(null), }])
     const [stepNumber, setStepNumber] = useState(0)
@@ -27,7 +24,7 @@ export default function Game(){
         const history2 = history.slice(0, stepNumber + 1);
         const current = history2[history2.length - 1]
         const squares = current.squares.slice()
-        if (calculateWinner(squares, current.location) || squares[i]) {
+        if (calculateWinner(squares, current.location, size) || squares[i]) {
             return;
         }
         squares[i] = xIsNext ? 'X' : 'O';
@@ -39,7 +36,6 @@ export default function Game(){
         setXIsNext(!xIsNext)
         setIsDes(true)
     }
-
     const sortHistory = () => {
         setIsDes(!isDes)
     }
@@ -51,17 +47,19 @@ export default function Game(){
     }
 
     const current = history[stepNumber];
-    const winner = calculateWinner(current.squares, current.location);
+    const winner = calculateWinner(current.squares, current.location, size);
     const moves = history.map((step, move) => {
         const desc = move ?
-            'Go to move #' + move + location(history[move].location) :
-            'Go to game start';
+            'Move #' + move + location(history[move].location) :
+            'Move #0: Game start';
         return (
-            <li key={move}>
-                <button style={{ width: "110%" }}>
-                    {move === stepNumber ? <b>{desc}</b> : desc}
-                </button>
-            </li>
+            <ListItem button key={move}>
+                {move === stepNumber ?
+                    <ListItemText primary={desc}/>
+                    :
+                    <ListItemText primary={desc}/>
+                }
+            </ListItem>
         );
     });
 
@@ -75,76 +73,78 @@ export default function Game(){
     }
 
     return (
-        <div className="game">
-            <Grid item xs={3}>
-                <Grid item xs={12}>
-                    <Card className={classes.root}>
-                        <CardActionArea style={{ textAlign: "center" }}>
-                            <h1>Bạn</h1>
-                            <CardMedia
-                                component="img"
-                                alt="player 1"
-                                height="200"
-                                src="https://gamek.mediacdn.vn/133514250583805952/2020/3/7/anh-1-1583592253266481895600.jpg"
-                                title="player 1"
-                            />
-                            <h2>Naruto</h2>
-                        </CardActionArea>
-                    </Card>
+        <div>
+            <Grid container direction="column">
+                <Grid container direction="row">
+                    <Grid item xs={1}>
+                        <IconButton>
+                            <ArrowBackIcon style={{fontSize: 36}}/>
+                        </IconButton>
+                    </Grid>
+                    <Grid container justify="center" alignItems="center" item xs={9}>
+                        <Typography variant="h4">Phòng: 1</Typography>
+                    </Grid>
+                    <Grid container justify="center" alignItems="center" item xs={1}>
+                        <Typography variant="h6">00:45</Typography>
+                    </Grid>
+                    <Grid container justify="center" alignItems="center" item xs={1}>
+                        <Button variant="contained" color="primary" disableElevation>Mời bạn</Button>
+                    </Grid>
                 </Grid>
-                <br />
-                <Grid item xs={12}>
-                    <Card className={classes.root}>
-                        <CardActionArea style={{ textAlign: "center" }}>
-                            <h1>Đối thủ</h1>
-                            <CardMedia
-                                component="img"
-                                alt="player 2"
-                                height="200"
-                                src="https://tophinhanhdep.com/wp-content/uploads/2020/03/hinh-nen-bell-mere-hai-tac-mu-rom-em-gai-nuoi-1024x576.jpg"
-                                title="player 2"
-                            />
-                            <h2>Nami</h2>
-                        </CardActionArea>
-                        <CardActions style={{ textAlign: "center" }}>
-                            <Button variant="contained" color="secondary">
-                                Xin hòa
-                                </Button>
-                            <Button variant="contained" color="primary">
-                                Đầu hàng
-                            </Button>
-                        </CardActions>
-                    </Card>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <div className="game-board">
-                    <Board
-                        winningSquares={winner ? winner.line : []}
-                        squares={current.squares}
-                        onClick={i => handleClick(i)}
-                        size={size}
-                    />
-                </div>
-            </Grid>
-            <Grid item xs={3}>
-                <Grid item xs={12} className="game-info">
-                    <h1>Lịch sử bước đi</h1>
-                    <div className="game-status">{status}</div>
-                    <div>
-                        Sort by: {isDes ? "Ascending" : "Descending"}
-                    </div>
-                    <label className="switch">
-                        <input type="checkbox" onClick={() => sortHistory()} />
-                    </label>
-                    <GridList cellHeight={160}>
-                        <ol>{isDes ? moves.reverse() : moves}</ol>
-                    </GridList>
-                </Grid>
-                <Grid item xs={12}>
-                    <GridList cellHeight={160}>
-                        <h3>hello</h3>
-                    </GridList>
+                <Grid container direction="row"  style={{padding: 5}}>
+                    <Grid container direction="column" item xs={2}>
+                        <Grid container item justify="center" alignItems="center" spacing={2}>
+                            <Player type="Bạn" elo={123} username={"hung123"}/>
+                            <Grid container item xs={12} justify="center" alignItems="center">
+                                <Typography variant="h3">VS.</Typography>
+                            </Grid>
+                            <Player type="Đối thủ" elo={456} username={"long123"}/>
+                            <Grid container item xs={12} justify="center" alignItems="center">
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary"
+                                            disableElevation fullWidth>Đầu hàng</Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary"
+                                            disableElevation fullWidth>Xin hòa</Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container item xs={5} justify="center" alignItems="center">
+                        <Board
+                            winningSquares={winner ? winner.line : []}
+                            squares={current.squares}
+                            onClick={i => handleClick(i)}
+                            size={size}
+                        />
+                    </Grid>
+                    <Grid item xs={5}>
+                        <Grid container>
+                            <Grid container item xs={12} justify="center">
+                                <Typography variant={"h4"}>{status}</Typography>
+                            </Grid>
+                            <Grid container>
+                                <Grid container direction={"column"} item xs={6}>
+                                    <Grid item container justify="space-between">
+                                        <Typography variant={"h5"}>Lịch sử</Typography>
+                                        <Switch onClick={() => sortHistory()} inputProps={{ 'aria-label': 'primary checkbox' }} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Paper elevation={2}>
+                                            <List component="nav" style={{maxHeight: 300, overflow: "auto"}}>
+                                                {isDes ? moves.reverse() : moves}
+                                            </List>
+                                        </Paper>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid container direction={"column"} item xs={6}>
+                                    <Typography variant={"h5"}>Chat</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </div>
