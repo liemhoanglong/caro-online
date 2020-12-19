@@ -8,7 +8,6 @@ export async function loginService(username, password){
             password: password
         })
         if (res.data.accessToken) {
-            // console.log(res.data)
             localStorage.setItem("user", JSON.stringify(res.data));
         }
         return res.data;

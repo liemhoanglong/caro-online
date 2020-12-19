@@ -6,10 +6,10 @@ import {UserProvider} from "./Context/UserContext";
 
 import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
-import Lobby from "./Components/Lobby/Main";
+import Lobby from "./Components/Lobby";
 import Game from "./Components/Game"
 import NavigationBar from "./Components/Main/navigationBar";
-import ListUser2 from "./Components/ListUser/listuserTesting2";
+import ListUser from "./Components/ListUser";
 
 const App = () => {
   return(
@@ -23,7 +23,7 @@ const App = () => {
                       <Route path="/register" component={Register}/>
                       <Route path="/lobby" component={Lobby}/>
                       <Route path="/game" component={Game}/>
-                      <Route path="/testing" component={ListUser2}/>
+                      <Route path="/testing" component={ListUser}/>
                   </Switch>
               </UserProvider>
           </Router>

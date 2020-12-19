@@ -57,7 +57,6 @@ export default function LogIn() {
         }
         else {
             const res = await loginService(input.user, input.password);
-            console.log(res);
             if(res.error)
             {
                 setStatus({type: "error", content: res.error})

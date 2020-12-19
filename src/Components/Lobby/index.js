@@ -1,17 +1,11 @@
 import React from 'react';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {Grid, Avatar} from "@material-ui/core";
+import {Table, TableBody, TableCell,
+        TableContainer, TableHead, TableRow,
+        Paper, Grid, Avatar, Button, Typography} from '@material-ui/core';
+
 import SearchRoom from "./searchRoom";
-import Button from "@material-ui/core/Button";
-import ListUser from "../../ListUser";
-import Typography from "@material-ui/core/Typography";
+import ListUser from '../ListUser/index'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -123,7 +117,7 @@ export default function Lobby() {
                         <Typography>Điểm: 1609</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography>Người chơi đang online</Typography>
+                        <ListUser/>
                     </Grid>
                 </Grid>
             </Grid>
