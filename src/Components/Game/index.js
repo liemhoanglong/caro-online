@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, Button, IconButton, Typography} from '@material-ui/core';
 import calculateWinner from "./gameCheck";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -10,31 +10,60 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
+import {socket} from "../../Context/socket";
 
-const config = 16
-
-export default function Game(){
-    const [size, setSize] = useState(config);
-    const [history, setHistory] = useState([{ squares: Array(size * size).fill(null), }])
+export default function Game() {
+    const [size, setSize] = useState(16);
+    const [history, setHistory] = useState([{squares: Array(size * size).fill(null),}])
     const [stepNumber, setStepNumber] = useState(0)
-    const [xIsNext, setXIsNext] = useState(true)
+
+    const [isPlayerX, setIsPlayerX] = useState(true);
+    const [isYourTurn, setIsYourTurn] = useState(true)
     const [isDes, setIsDes] = useState(true)
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    useEffect(() => {
+        socket.on("join-room-success", (data) => {
+            if(data.playerO === user.id)
+            {
+                setIsPlayerX(false);
+                setIsYourTurn(false);
+            }
+        })
+
+    },[user.id])
+
+    useEffect(() => {
+        socket.on("move", (data) => {
+            moving(data);
+        })
+    })
+
     const handleClick = (i) => {
+        if(isYourTurn)
+        {
+            moving(i);
+        }
+
+    }
+
+    const moving = (i) =>
+    {
         const history2 = history.slice(0, stepNumber + 1);
         const current = history2[history2.length - 1]
         const squares = current.squares.slice()
         if (calculateWinner(squares, current.location, size) || squares[i]) {
             return;
         }
-        squares[i] = xIsNext ? 'X' : 'O';
+        squares[i] = isPlayerX ? "X" : "O"
         setHistory(history2.concat([{
             squares: squares,
             location: i
         }]))
         setStepNumber(history2.length)
-        setXIsNext(!xIsNext)
-        setIsDes(true)
+        setIsYourTurn(!isYourTurn)
+        socket.emit("move", i);
     }
     const sortHistory = () => {
         setIsDes(!isDes)
@@ -69,8 +98,10 @@ export default function Game(){
     } else if (!current.squares.includes(null)) {
         status = "Draw";
     } else {
-        status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+        status = isYourTurn ? "Your turn" : "Rival turn";
     }
+
+
 
     return (
         <div>

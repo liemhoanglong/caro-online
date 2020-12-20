@@ -20,13 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/Game/player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/game.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/game.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/gameCheck.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/gameCheck.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/square.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/square.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Context/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Context/socket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +76,8 @@
       <option name="presentableId" value="Default" />
       <updated>1608362673567</updated>
       <workItem from="1608362716559" duration="328000" />
-      <workItem from="1608376491026" duration="13971000" />
+      <workItem from="1608376491026" duration="14553000" />
+      <workItem from="1608435340911" duration="14838000" />
     </task>
     <servers />
   </component>
@@ -95,6 +94,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608387455692">
