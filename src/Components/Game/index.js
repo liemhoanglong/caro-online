@@ -5,6 +5,25 @@ import calculateWinner from "./gameCheck";
 
 import './game.css';
 import Board from './board'
+<<<<<<< Updated upstream
+=======
+import Player from "./player";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
+import {socket, handleMove} from "../../Context/socket";
+
+export default function Game() {
+    const [size, setSize] = useState(10);
+    const [history, setHistory] = useState([{squares: Array(size * size).fill(null),}])
+    const [stepNumber, setStepNumber] = useState(0)
+
+    const [isPlayerX, setIsPlayerX] = useState(true);
+    const [isYourTurn, setIsYourTurn] = useState(true)
+    const [isDes, setIsDes] = useState(true)
+>>>>>>> Stashed changes
 
 const useStyles = makeStyles({
     root: {
@@ -12,11 +31,22 @@ const useStyles = makeStyles({
     },
 });
 
+<<<<<<< Updated upstream
 const config = 15
+=======
+    useEffect(() => {
+        socket.on("join-room-success", (data) => {
+            if(data.playerO === user.id)
+            {
+                setIsYourTurn(false);
+            }
+        })
+>>>>>>> Stashed changes
 
 export default function Game(){
     const classes = useStyles();
 
+<<<<<<< Updated upstream
     const [size, setSize] = useState(config);
     const [history, setHistory] = useState([{ squares: Array(size * size).fill(null), }])
     const [stepNumber, setStepNumber] = useState(0)
@@ -38,6 +68,41 @@ export default function Game(){
         setStepNumber(history2.length)
         setXIsNext(!xIsNext)
         setIsDes(true)
+=======
+    useEffect(() => {
+        socket.on("move", (data) => {
+            setHistory(data.history);
+            setStepNumber(data.step);
+            setIsPlayerX(!isPlayerX);
+            setIsYourTurn(!isYourTurn);
+        })
+    })
+
+    const handleClick = (i) => {
+        if(isYourTurn)
+        {
+            const history1 = history.slice(0, stepNumber + 1);
+            const current = history1[history1.length - 1]
+            const squares = current.squares.slice()
+            if (calculateWinner(squares, current.location, size) || squares[i]) {
+                return;
+            }
+            squares[i] = isPlayerX ? "X" : "O"
+            const newHistory = history1.concat([{
+                squares: squares,
+                location: i
+            }]);
+
+            const newStepNumber = history1.length;
+        
+            setHistory(newHistory);
+            setStepNumber(newStepNumber);
+            setIsYourTurn(!isYourTurn);
+            setIsPlayerX(!isPlayerX);
+
+            handleMove(newHistory, newStepNumber);
+        }
+>>>>>>> Stashed changes
     }
 
     const sortHistory = () => {
