@@ -40,15 +40,21 @@ export default function UserList() {
     },[])
 
     useEffect(() => {
-        socket.on("user-connect", data => {
-            setListUserOnline(data);
-        })
+        const eventHandler = (data) => setListUserOnline(data);
+        socket.on("user-connect", eventHandler);
+
+        return () => {
+            socket.off("user-connect", eventHandler);
+        }
     },[])
 
     useEffect(() => {
-        socket.on("user-disconnect", data => {
-            setListUserOnline(data);
-        })
+        const eventHandler = (data) => setListUserOnline(data);
+        socket.on("user-disconnect", eventHandler);
+
+        return () => {
+            socket.off("user-disconnect", eventHandler);
+        }
     }, [])
 
     const displayItem = () =>

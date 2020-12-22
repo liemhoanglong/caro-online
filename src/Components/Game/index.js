@@ -24,24 +24,34 @@ export default function Game() {
     const user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
-        socket.on("join-room-success", (data) => 
-        {
+        const eventHandler = (data) => {
             if(data.playerO === user.id)
             {
                 setIsYourTurn(false);
             }
-        })
+        }
+        socket.on("join-room-success", eventHandler);
+
+        return () => {
+            socket.off("join-room-success", eventHandler);
+        }
     })
 
 
     useEffect(() => {
-        socket.on("move", (data) => {
+        const eventHandler = (data) => {
             setHistory(data.history);
             setStepNumber(data.step);
             setIsPlayerX(!isPlayerX);
             setIsYourTurn(!isYourTurn);
-        })
-    })
+        }
+
+        socket.on("move", eventHandler);
+
+        return () => {
+            socket.off("move", eventHandler);
+        }
+    }, [isPlayerX, isYourTurn])
 
     const handleClick = (i) => {
         if(isYourTurn)
