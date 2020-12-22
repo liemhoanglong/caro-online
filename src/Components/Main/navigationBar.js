@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useUserContext, useUpdateUserContext} from "../../Context/UserContext";
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -15,6 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import {logoutService} from "../User/Service/authService";
+import {userLogin} from "../../Context/socket";
 
 const StyledMenu = withStyles({
     paper: {
@@ -83,6 +84,13 @@ export default function NavigationBar()
         setLoginState(false, null);
         handleClose();
     }
+
+    useEffect(() => {
+        if(loginState.isLogin && loginState.user !== null)
+        {
+            userLogin(loginState.user._id, loginState.user.username);
+        }
+    })
 
     const linkTo = () => loginState.isLogin ? "/" : "/";
 

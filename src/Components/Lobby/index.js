@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {Table, TableBody, TableCell,
         TableContainer, TableHead, TableRow,
         Paper, Grid, Avatar, Button, Typography} from '@material-ui/core';
+import {Redirect} from "react-router-dom"
 
 import SearchRoom from "./searchRoom";
 import ListUser from '../ListUser/index'
+import {socket} from "../../Context/socket"
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -92,13 +94,26 @@ const table = (classes) =>
 }
 
 export default function Lobby() {
+    const [isDirectPage, setIsDirectPage] = useState(false);
     const classes = useStyles();
+
+
+    const playNow = () =>
+    {
+        socket.emit("join-room");
+        setIsDirectPage(true);
+    }
+
+    if(isDirectPage)
+        return(
+            <Redirect to="/game"/>
+        )
 
     return (
         <Grid container>
             <Grid container item alignContent="flex-end" justify="flex-end" style={{margin: 5}}>
                 <SearchRoom/>
-                <Button variant="contained" color="primary" disableElevation>
+                <Button variant="contained" color="primary" disableElevation onClick={playNow}>
                     Chơi ngay
                 </Button>
                 <Button variant="contained" color="primary" disableElevation>
