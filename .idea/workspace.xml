@@ -22,8 +22,6 @@
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Context/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Context/socket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,7 +75,7 @@
       <updated>1608362673567</updated>
       <workItem from="1608362716559" duration="328000" />
       <workItem from="1608376491026" duration="14553000" />
-      <workItem from="1608435340911" duration="14838000" />
+      <workItem from="1608435340911" duration="24120000" />
     </task>
     <servers />
   </component>

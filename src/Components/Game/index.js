@@ -10,10 +10,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
-import {socket} from "../../Context/socket";
+import {socket, handleMove} from "../../Context/socket";
 
 export default function Game() {
-    const [size, setSize] = useState(16);
+    const [size, setSize] = useState(10);
     const [history, setHistory] = useState([{squares: Array(size * size).fill(null),}])
     const [stepNumber, setStepNumber] = useState(0)
 
@@ -24,46 +24,59 @@ export default function Game() {
     const user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
-        socket.on("join-room-success", (data) => {
+        const eventHandler = (data) => {
             if(data.playerO === user.id)
             {
-                setIsPlayerX(false);
                 setIsYourTurn(false);
             }
-        })
+        }
+        socket.on("join-room-success", eventHandler);
 
-    },[user.id])
+        return () => {
+            socket.off("join-room-success", eventHandler);
+        }
+    })
+
 
     useEffect(() => {
-        socket.on("move", (data) => {
-            moving(data);
-        })
-    })
+        const eventHandler = (data) => {
+            setHistory(data.history);
+            setStepNumber(data.step);
+            setIsPlayerX(!isPlayerX);
+            setIsYourTurn(!isYourTurn);
+        }
+
+        socket.on("move", eventHandler);
+
+        return () => {
+            socket.off("move", eventHandler);
+        }
+    }, [isPlayerX, isYourTurn])
 
     const handleClick = (i) => {
         if(isYourTurn)
         {
-            moving(i);
-        }
+            const history1 = history.slice(0, stepNumber + 1);
+            const current = history1[history1.length - 1]
+            const squares = current.squares.slice()
+            if (calculateWinner(squares, current.location, size) || squares[i]) {
+                return;
+            }
+            squares[i] = isPlayerX ? "X" : "O"
+            const newHistory = history1.concat([{
+                squares: squares,
+                location: i
+            }]);
 
-    }
+            const newStepNumber = history1.length;
+        
+            setHistory(newHistory);
+            setStepNumber(newStepNumber);
+            setIsYourTurn(!isYourTurn);
+            setIsPlayerX(!isPlayerX);
 
-    const moving = (i) =>
-    {
-        const history2 = history.slice(0, stepNumber + 1);
-        const current = history2[history2.length - 1]
-        const squares = current.squares.slice()
-        if (calculateWinner(squares, current.location, size) || squares[i]) {
-            return;
+            handleMove(newHistory, newStepNumber);
         }
-        squares[i] = isPlayerX ? "X" : "O"
-        setHistory(history2.concat([{
-            squares: squares,
-            location: i
-        }]))
-        setStepNumber(history2.length)
-        setIsYourTurn(!isYourTurn)
-        socket.emit("move", i);
     }
     const sortHistory = () => {
         setIsDes(!isDes)
