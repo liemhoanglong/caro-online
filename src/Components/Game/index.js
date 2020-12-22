@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Button, IconButton, Typography} from '@material-ui/core';
-import calculateWinner from "./gameCheck";
+import {Grid, Button, IconButton, Typography, 
+    List, ListItem, ListItemText, Paper, Switch} from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
 import './game.css';
 import Board from './board'
 import Player from "./player";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Paper from "@material-ui/core/Paper";
-import Switch from "@material-ui/core/Switch";
+import calculateWinner from "./gameCheck";
+import ChatRoom from "../Chat"
 import {socket, handleMove} from "../../Context/socket";
 
 export default function Game() {
@@ -21,10 +19,9 @@ export default function Game() {
     const [isYourTurn, setIsYourTurn] = useState(true)
     const [isDes, setIsDes] = useState(true)
 
-    const user = JSON.parse(localStorage.getItem("user"));
-
     useEffect(() => {
         const eventHandler = (data) => {
+            const user = JSON.parse(localStorage.getItem("user"));
             if(data.playerO === user.id)
             {
                 setIsYourTurn(false);
@@ -36,7 +33,6 @@ export default function Game() {
             socket.off("join-room-success", eventHandler);
         }
     })
-
 
     useEffect(() => {
         const eventHandler = (data) => {
@@ -83,9 +79,9 @@ export default function Game() {
     }
 
     const location = (move) => {
-        let r = Math.floor((move) / size) + 1
-        let c = Math.floor((move) % size) + 1
-        return ': row ' + r + ' col ' + c
+        let row = Math.floor((move) / size) + 1
+        let col = Math.floor((move) % size) + 1
+        return ': row ' + row + ' col ' + col
     }
 
     const current = history[stepNumber];
@@ -113,8 +109,6 @@ export default function Game() {
     } else {
         status = isYourTurn ? "Your turn" : "Rival turn";
     }
-
-
 
     return (
         <div>
@@ -181,10 +175,9 @@ export default function Game() {
                                             </List>
                                         </Paper>
                                     </Grid>
-
                                 </Grid>
                                 <Grid container direction={"column"} item xs={6}>
-                                    <Typography variant={"h5"}>Chat</Typography>
+                                    <ChatRoom/>
                                 </Grid>
                             </Grid>
                         </Grid>

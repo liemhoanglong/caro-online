@@ -1,7 +1,6 @@
 import React from 'react'
 import Square from './square'
 
-// const size = 3
 const Board = ({ winningSquares, squares, onClick, size }) => {
     const renderSquare = (i, winningSquares, squares, onClick, size) => {
         return (
