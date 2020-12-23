@@ -8,6 +8,7 @@ import Board from './board'
 import Player from "./player";
 import calculateWinner from "./gameCheck";
 import ChatRoom from "../Chat"
+
 import {socket, handleMove} from "../../Context/socket";
 
 export default function Game() {
@@ -22,15 +23,15 @@ export default function Game() {
     useEffect(() => {
         const eventHandler = (data) => {
             const user = JSON.parse(localStorage.getItem("user"));
-            if(data.playerO === user.id)
+            if(data.playerO.userID === user.id)
             {
                 setIsYourTurn(false);
             }
         }
-        socket.on("join-room-success", eventHandler);
+        socket.on("join-room-player", eventHandler);
 
         return () => {
-            socket.off("join-room-success", eventHandler);
+            socket.off("join-room-player", eventHandler);
         }
     })
 

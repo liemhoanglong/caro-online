@@ -23,6 +23,9 @@
 .square:focus {
 	outline: none;
 }
+.square:hover {
+	background-color: lightgray;
+}
 
 .kbd-navigation .square:focus {
 	background: #ddd;
