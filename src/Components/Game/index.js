@@ -23,9 +23,13 @@ export default function Game() {
     useEffect(() => {
         const eventHandler = (data) => {
             const user = JSON.parse(localStorage.getItem("user"));
-            if(data.playerO.userID === user.id)
+            if(data.playerO?.userID === user.id)
             {
                 setIsYourTurn(false);
+            }
+            else if(data.playerX?.userID === user.id)
+            {
+                setIsYourTurn(true);
             }
         }
         socket.on("join-room-player", eventHandler);
@@ -177,7 +181,7 @@ export default function Game() {
                                         </Paper>
                                     </Grid>
                                 </Grid>
-                                <Grid container direction={"column"} item xs={6}>
+                                <Grid container direction={"column"} item xs={6} zeroMinWidth wrap="nowrap">
                                     <ChatRoom/>
                                 </Grid>
                             </Grid>

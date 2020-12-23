@@ -44,14 +44,29 @@ export default function ChatRoom()
         }
     },[listMessage])
 
+    useEffect(() => {
+        const eventHandler = (data) => {
+            setListMessage(listMessage.concat({username: data, data: "đã rời khỏi phòng chơi"}));
+        }
+
+        socket.on("chat-user-disconnect", eventHandler);
+
+        return () => {
+            socket.off("chat-user-disconnect", eventHandler);
+        }
+    },[listMessage])
+
     const sendMessage = () =>
     {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const dataToSend = {username: user.username, data: newChat};
-        const dataToRender = {username: "Bạn", data: newChat};
-        setListMessage(listMessage.concat(dataToRender));
-        setNewChat("");
-        socket.emit("chat", dataToSend);
+        if(newChat.length > 0)
+        {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const dataToSend = {username: user.username, data: newChat};
+            const dataToRender = {username: "Bạn", data: newChat};
+            setListMessage(listMessage.concat(dataToRender));
+            setNewChat("");
+            socket.emit("chat", dataToSend);
+        }
     }
 
     return(
@@ -61,9 +76,9 @@ export default function ChatRoom()
                 <List component="nav" style={{height: 300, maxHeight: 300, overflow: "auto"}}>
                     {listMessage.map((dl, index) => {
                         return(
-                            <ListItem style={{maxHeight: 60, height: 30}} key={index}  >
+                            <ListItem key={index} dense={true}  >
                                 <ListItemText>
-                                    <Typography component='div' noWrap >
+                                    <Typography component='div' style={{overflowWrap: 'break-word'}} >
                                         <Box fontWeight='fontWeightBold' display='inline'>{`${dl.username}: `}</Box>
                                         {dl.data}
                                     </Typography>
@@ -80,6 +95,7 @@ export default function ChatRoom()
                                   onChange={(e) => setNewChat(e.target.value)}
                                   value = {newChat}
                                   autoComplete="off"
+                                  multiline
                        />
                    </Grid>
                     <Grid item xs={3}>
