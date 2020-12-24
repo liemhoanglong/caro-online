@@ -98,10 +98,11 @@ export default function ListRoom()
                     <TableHead>
                         <TableRow>
                             <StyledTableCell width= "5%"/>
-                            <StyledTableCell width = "20%">ID phòng</StyledTableCell>
-                            <StyledTableCell width = "30%" align="center">Tên</StyledTableCell>
+                            <StyledTableCell width = "15%">ID phòng</StyledTableCell>
+                            <StyledTableCell width = "25%" align="center">Tên phòng</StyledTableCell>
                             <StyledTableCell width = "15%" align="center">Người chơi</StyledTableCell>
-                            <StyledTableCell width = "15%" align="center">Khán giả</StyledTableCell>
+                            <StyledTableCell width = "10%" align="center">Khán giả</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Trạng thái</StyledTableCell>
                             <StyledTableCell width = "15%" align="center">Tham gia</StyledTableCell>
                         </TableRow>
                     </TableHead>
@@ -109,28 +110,47 @@ export default function ListRoom()
                         {listRoom.slice(page*rowPerPage, page * rowPerPage+ rowPerPage)
                             .map((row, index) => (
                             <StyledTableRow key={index}>
-                                <StyledTableCell component="th" scope="row" width = "25%">
+                                <StyledTableCell width="5%" align="center">
+                                    {row.password ?
+                                        <LockIcon/>
+                                        :
+                                        <LockOpenIcon/>
+                                    }
+                                </StyledTableCell>
+                                <StyledTableCell width = "15%">
                                     {row.id}
                                 </StyledTableCell>
-                                <StyledTableCell width = "30%" align="center">
+                                <StyledTableCell width = "25%" align="left">
                                     {row.name}
                                 </StyledTableCell>
                                 <StyledTableCell width = "15%" align="center">
                                     {`${userInRoom(row)} / 2`}
                                 </StyledTableCell>
-                                <StyledTableCell width = "15%" align="center">{audienceInRoom(row)}</StyledTableCell>
+                                <StyledTableCell width = "10%" align="center">
+                                    {audienceInRoom(row)}
+                                </StyledTableCell>
                                 {row.isStart ?
-                                    <StyledTableCell width = "15%" align="center">
-                                        <Button variant="contained" color="primary" disableElevation disabled>
-                                            Tham gia
-                                        </Button>
-                                    </StyledTableCell>
+                                    <React.Fragment>
+                                        <StyledTableCell width = "15%" align="center">
+                                            Đã chơi
+                                        </StyledTableCell>
+                                        <StyledTableCell width = "15%" align="center">
+                                            <Button variant="contained" color="primary" disableElevation disabled>
+                                                Tham gia
+                                            </Button>
+                                        </StyledTableCell>
+                                    </React.Fragment>
                                     :
-                                    <StyledTableCell width = "15%" align="center">
-                                        <Button variant="contained" color="primary" disableElevation>
-                                            Tham gia
-                                        </Button>
-                                    </StyledTableCell>
+                                    <React.Fragment>
+                                        <StyledTableCell width = "15%" align="center">
+                                            Đang chờ
+                                        </StyledTableCell>
+                                        <StyledTableCell width = "15%" align="center">
+                                            <Button variant="contained" color="primary" disableElevation>
+                                                Tham gia
+                                            </Button>
+                                        </StyledTableCell>
+                                    </React.Fragment>
                                 }
                             </StyledTableRow>
                         ))}
