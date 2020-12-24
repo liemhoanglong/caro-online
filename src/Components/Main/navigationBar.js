@@ -1,21 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useUserContext, useUpdateUserContext} from "../../Context/UserContext";
-
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import {AppBar, Toolbar, Typography, Button, MenuItem} from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import {Link} from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import withStyles from "@material-ui/core/styles/withStyles";
-import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import {logoutService} from "../User/Service/authService";
 import {userLogin} from "../../Context/socket";
+import {socket} from "../../Context/socket";
 
 const StyledMenu = withStyles({
     paper: {
@@ -92,6 +87,11 @@ export default function NavigationBar()
         }
     })
 
+    const handleToHomePage = () =>
+    {
+        socket.emit('go-to-homepage');
+    }
+
     const linkTo = () => loginState.isLogin ? "/" : "/";
 
     return (
@@ -99,7 +99,7 @@ export default function NavigationBar()
             <Toolbar>
                 {/*<img style={{width: 50, height: 50, marginRight: 20}} src={logo} alt={"logo"}/>*/}
                 <Typography variant="h5" className={classes.title}>
-                    <Link to={linkTo} style={{ textDecoration: 'none', color: "inherit" }}>
+                    <Link to={linkTo} style={{ textDecoration: 'none', color: "inherit" }} onClick={handleToHomePage}>
                         Caro XS Max :)
                     </Link>
                 </Typography>

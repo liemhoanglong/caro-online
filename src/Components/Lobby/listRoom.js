@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {Button, Paper, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, TablePagination} from "@material-ui/core";
 import {createStyles, makeStyles, Theme, withStyles} from "@material-ui/core/styles";
 
+import LockIcon from '@material-ui/icons/Lock';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+
 import getListRoom from "./service";
+import {socket} from "../../Context/socket";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -34,17 +39,12 @@ const StyledTableRow = withStyles((theme: Theme) =>
     }),
 )(TableRow);
 
-const roomName = [
-    "Chiến đê",
-    "So tài cao thấp caro nè",
-    "Caro cho cao thủ", "Solo đê bạn ơi",
-    "Gà vcl",
-]
-
 export default function ListRoom()
 {
     const classes = useStyles();
     const [listRoom, setListRoom] = useState([]);
+    const [rowPerPage, setRowPerPage] = useState(6);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
         const fetchData = async () =>
@@ -56,12 +56,23 @@ export default function ListRoom()
         fetchData();
     },[])
 
+    useEffect(() => {
+        const eventHandler = (data) =>
+        {
+            setListRoom(data);
+        }
+
+        socket.on("lobby-change", eventHandler);
+
+        return () => socket.off("lobby-change", eventHandler);
+    },[listRoom])
+
     const userInRoom = (row) =>
     {
         let user = 0;
-        if(row.playerX != null )
+        if(row.playerX)
             user++;
-        if(row.playerO != null)
+        if(row.playerO)
             user++;
         return user;
     }
@@ -69,12 +80,16 @@ export default function ListRoom()
     const audienceInRoom = (row) =>
     {
         let audience = row.audience.length;
-        if(row.playerX != null )
+        if(row.playerX)
             audience--;
-        if(row.playerO != null)
+        if(row.playerO)
             audience--;
         return audience;
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
 
     return(
         <React.Fragment>
@@ -82,38 +97,38 @@ export default function ListRoom()
                 <Table className={classes.table} aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell width = "10%" align="center">ID phòng
-
-                            </StyledTableCell>
-                            <StyledTableCell width = "45%" align="center">Tên</StyledTableCell>
+                            <StyledTableCell width= "5%"/>
+                            <StyledTableCell width = "20%">ID phòng</StyledTableCell>
+                            <StyledTableCell width = "30%" align="center">Tên</StyledTableCell>
                             <StyledTableCell width = "15%" align="center">Người chơi</StyledTableCell>
                             <StyledTableCell width = "15%" align="center">Khán giả</StyledTableCell>
-                            <StyledTableCell width = "15%" align="center">Chơi ngay</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Tham gia</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {listRoom.map((row, index) => (
+                        {listRoom.slice(page*rowPerPage, page * rowPerPage+ rowPerPage)
+                            .map((row, index) => (
                             <StyledTableRow key={index}>
-                                <StyledTableCell component="th" scope="row" width = "10%" align="center">
-                                    {row.name}
+                                <StyledTableCell component="th" scope="row" width = "25%">
+                                    {row.id}
                                 </StyledTableCell>
-                                <StyledTableCell width = "45%" align="center">
-                                    {roomName[Math.floor(Math.random() * roomName.length)]}
+                                <StyledTableCell width = "30%" align="center">
+                                    {row.name}
                                 </StyledTableCell>
                                 <StyledTableCell width = "15%" align="center">
                                     {`${userInRoom(row)} / 2`}
                                 </StyledTableCell>
                                 <StyledTableCell width = "15%" align="center">{audienceInRoom(row)}</StyledTableCell>
-                                {row.numberOfUser === 1 ?
+                                {row.isStart ?
                                     <StyledTableCell width = "15%" align="center">
-                                        <Button variant="contained" color="primary" disableElevation>
-                                            Play
+                                        <Button variant="contained" color="primary" disableElevation disabled>
+                                            Tham gia
                                         </Button>
                                     </StyledTableCell>
                                     :
                                     <StyledTableCell width = "15%" align="center">
-                                        <Button variant="contained" color="primary" disableElevation disabled>
-                                            Play
+                                        <Button variant="contained" color="primary" disableElevation>
+                                            Tham gia
                                         </Button>
                                     </StyledTableCell>
                                 }
@@ -121,6 +136,14 @@ export default function ListRoom()
                         ))}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[6]}
+                    count = {listRoom.length}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    rowsPerPage={rowPerPage}
+                />
             </TableContainer>
         </React.Fragment>
     );

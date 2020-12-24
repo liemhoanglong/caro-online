@@ -49,10 +49,10 @@ export default function ChatRoom()
             setListMessage(listMessage.concat({username: data, data: "đã rời khỏi phòng chơi"}));
         }
 
-        socket.on("chat-user-disconnect", eventHandler);
+        socket.on("chat-user-leave", eventHandler);
 
         return () => {
-            socket.off("chat-user-disconnect", eventHandler);
+            socket.off("chat-user-leave", eventHandler);
         }
     },[listMessage])
 

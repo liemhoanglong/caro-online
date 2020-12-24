@@ -17,6 +17,12 @@ export default function Lobby() {
         setIsDirectPage(true);
     }
 
+    const createRoom = () =>
+    {
+        socket.emit("create-room");
+        setIsDirectPage(true);
+    }
+
     if(isDirectPage)
         return(
             <Redirect to="/game"/>
@@ -29,7 +35,7 @@ export default function Lobby() {
                 <Button variant="contained" color="primary" disableElevation onClick={playNow}>
                     Chơi ngay
                 </Button>
-                <Button variant="contained" color="primary" disableElevation>
+                <Button variant="contained" color="primary" disableElevation onClick={createRoom}>
                     Tạo phòng
                 </Button>
             </Grid>

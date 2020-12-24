@@ -20,12 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/Lobby/listRoom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Components/Lobby/service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Chat/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Chat/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/listRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/listRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +80,8 @@
       <workItem from="1608435340911" duration="24120000" />
       <workItem from="1608651109169" duration="5801000" />
       <workItem from="1608700357028" duration="8328000" />
-      <workItem from="1608724624181" duration="8207000" />
+      <workItem from="1608724624181" duration="9406000" />
+      <workItem from="1608816072110" duration="6558000" />
     </task>
     <servers />
   </component>
