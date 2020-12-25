@@ -6,8 +6,9 @@ import {createStyles, makeStyles, Theme, withStyles} from "@material-ui/core/sty
 import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
-import getListRoom from "./service";
-import {socket} from "../../Context/socket";
+import {getListRoom} from "../service";
+import {socket} from "../../../Context/socket";
+import EnterPassword from "./enterPassword";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -24,7 +25,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
             color: theme.palette.common.white,
         },
         body: {
-            fontSize: 18,
+            fontSize: 16,
         },
     }),
 )(TableCell);
@@ -39,12 +40,15 @@ const StyledTableRow = withStyles((theme: Theme) =>
     }),
 )(TableRow);
 
+const rowPerPage = 6;
+
 export default function ListRoom()
 {
     const classes = useStyles();
     const [listRoom, setListRoom] = useState([]);
-    const [rowPerPage, setRowPerPage] = useState(6);
     const [page, setPage] = useState(0);
+    const [isEnterPassword, setIsEnterPassword] = useState(false);
+    const [selectedRow, setSelectedRow] = useState("");
 
     useEffect(() => {
         const fetchData = async () =>
@@ -91,6 +95,34 @@ export default function ListRoom()
         setPage(newPage);
     };
 
+    const handleCloseEnterPass = () =>
+    {
+        setIsEnterPassword(false);
+        setSelectedRow("")
+    }
+
+    const handleAgreeEnterPass = (result) =>
+    {
+        if(result) //true
+        {
+            setIsEnterPassword(false);
+            socket.emit("join-room-id", selectedRow);
+        }
+    }
+
+    const joinRoom = (row) =>
+    {
+        if(row.password)
+        {
+            setSelectedRow(row.id);
+            setIsEnterPassword(true);
+        }
+        else
+        {
+            socket.emit("join-room-id", row.id);
+        }
+    }
+
     return(
         <React.Fragment>
             <TableContainer component={Paper}>
@@ -98,7 +130,7 @@ export default function ListRoom()
                     <TableHead>
                         <TableRow>
                             <StyledTableCell width= "5%"/>
-                            <StyledTableCell width = "15%">ID phòng</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">ID phòng</StyledTableCell>
                             <StyledTableCell width = "25%" align="center">Tên phòng</StyledTableCell>
                             <StyledTableCell width = "15%" align="center">Người chơi</StyledTableCell>
                             <StyledTableCell width = "10%" align="center">Khán giả</StyledTableCell>
@@ -135,8 +167,9 @@ export default function ListRoom()
                                             Đã chơi
                                         </StyledTableCell>
                                         <StyledTableCell width = "15%" align="center">
-                                            <Button variant="contained" color="primary" disableElevation disabled>
-                                                Tham gia
+                                            <Button variant="contained" color="primary"
+                                                    disableElevation disabled style={{fontsize: 12}}>
+                                                Đã bắt đầu
                                             </Button>
                                         </StyledTableCell>
                                     </React.Fragment>
@@ -146,7 +179,10 @@ export default function ListRoom()
                                             Đang chờ
                                         </StyledTableCell>
                                         <StyledTableCell width = "15%" align="center">
-                                            <Button variant="contained" color="primary" disableElevation>
+                                            <Button variant="contained" color="primary"
+                                                    disableElevation
+                                                    onClick={() => joinRoom(row)}
+                                            >
                                                 Tham gia
                                             </Button>
                                         </StyledTableCell>
@@ -165,6 +201,11 @@ export default function ListRoom()
                     rowsPerPage={rowPerPage}
                 />
             </TableContainer>
+            <EnterPassword open={isEnterPassword}
+                           handleClose={handleCloseEnterPass}
+                           handleAgree={handleAgreeEnterPass}
+                           id = {selectedRow}
+            />
         </React.Fragment>
     );
 }

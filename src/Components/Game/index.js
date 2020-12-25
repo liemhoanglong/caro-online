@@ -13,7 +13,7 @@ import {socket, handleMove} from "../../Context/socket";
 
 export default function Game() {
     const [size, setSize] = useState(10);
-    const [history, setHistory] = useState([{squares: Array(size * size).fill(null),}])
+    const [history, setHistory] = useState([{squares: Array(size * size).fill(null)}])
     const [stepNumber, setStepNumber] = useState(0)
 
     const [isPlayerX, setIsPlayerX] = useState(true);
@@ -23,13 +23,17 @@ export default function Game() {
     useEffect(() => {
         const eventHandler = (data) => {
             const user = JSON.parse(localStorage.getItem("user"));
-            if(data.playerO?.userID === user.id)
+            if(data.playerO && data.playerO.userID === user.id) //if player is O
             {
                 setIsYourTurn(false);
             }
-            else if(data.playerX?.userID === user.id)
+            else if(data.playerX && data.playerX.userID === user.id) // if player is X
             {
                 setIsYourTurn(true);
+            }
+            else // if player is audience
+            {
+
             }
         }
         socket.on("join-room-player", eventHandler);

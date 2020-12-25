@@ -5,7 +5,7 @@ import {Redirect} from "react-router-dom"
 import SearchRoom from "./searchRoom";
 import ListUser from '../ListUser/index'
 import {socket} from "../../Context/socket"
-import ListRoom from "./listRoom";
+import ListRoom from "./ListRoom";
 import CreateRoom from "./createRoom";
 
 
@@ -35,6 +35,7 @@ export default function Lobby() {
     const handleAgreeCreateRoom = (password) =>
     {
         socket.emit("create-room", password);
+
         setIsDirectPage(true);
     }
 

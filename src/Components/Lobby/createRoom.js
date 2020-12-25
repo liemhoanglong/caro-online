@@ -9,6 +9,10 @@ import Grid from "@material-ui/core/Grid";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
+import Collapse from "@material-ui/core/Collapse";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -18,10 +22,18 @@ export default function CreateRoom({open, handleClose, handleAgree})
 {
     const [password, setPassword] = useState("");
     const [isCheck, setIsCheck] = useState(false);
+    const [isSwitch, setIsSwitch] = useState(false);
 
     const handleCheckBox = () =>
     {
         setIsCheck(!isCheck);
+    }
+
+    const closeCreate = () =>
+    {
+        setPassword("");
+        setIsCheck(false);
+        handleClose();
     }
 
     const agreeCreate = () =>
@@ -31,41 +43,80 @@ export default function CreateRoom({open, handleClose, handleAgree})
         setIsCheck(false);
     }
 
+    const handleClickSwitch = () =>
+    {
+        if(isSwitch)
+        {
+            setPassword("");
+            setIsCheck(false)
+        }
+        setIsSwitch(!isSwitch)
+    }
+
     return(
         <React.Fragment>
             <Dialog
                 open={open}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={handleClose}
+                onClose={closeCreate}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle id="alert-dialog-slide-title">Tạo phòng chơi mới</DialogTitle>
                 <DialogContent>
                     <Grid container>
-                        <Grid item xs={3}>
-                            Password:
-                        </Grid>
-                        <Grid item xs={9}>
-                            <TextField
-                                autoComplete="off"
-                                variant="standard"
-                                type={isCheck? "text": "password"}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
-                                control={<Checkbox name="show password" checked={isCheck} onChange={handleCheckBox} />}
-                                label="Hiện password"
+                                control={
+                                    <Switch
+                                        onClick={handleClickSwitch}
+                                        color="primary"
+                                    />
+                                }
+                                label="Password"
                             />
+                        </Grid>
+                        <Collapse in={isSwitch}>
+                            <Grid container spacing={2}>
+                                <Grid item style={{paddingTop: 15}}>
+                                    Password:
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+                                        autoComplete="off"
+                                        variant="standard"
+                                        type={isCheck? "text": "password"}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <FormControlLabel
+                                        control={<Checkbox name="show password" checked={isCheck} onChange={handleCheckBox} />}
+                                        label="Hiện password"
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Collapse>
+                        <Grid item style={{paddingTop: 5, paddingRight: 10}}>
+                            Thời gian 1 nước (giây):
+                        </Grid>
+                        <Grid item>
+                            <Select
+                                labelId="demo-simple-select-helper-label"
+                                id="demo-simple-select-helper"
+                                value="45"
+                            >
+                                <MenuItem value={30}>30</MenuItem>
+                                <MenuItem value={45}>45</MenuItem>
+                                <MenuItem value={60}>60</MenuItem>
+                            </Select>
                         </Grid>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={closeCreate} color="primary">
                         Hủy
                     </Button>
                     <Button onClick={agreeCreate} color="primary">
