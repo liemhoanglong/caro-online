@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: '2px 4px',
             display: 'flex',
             alignItems: 'center',
-            maxWidth: 200,
+            maxWidth: 500,
         },
         input: {
             marginLeft: theme.spacing(1),
@@ -27,8 +27,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function SearchRoom() {
+export default function SearchRoom({handleChange}) {
     const classes = useStyles();
+    const [input, setInput] = useState("");
+
+    const handle = (e) =>
+    {
+        const i = e.target.value;
+        setInput(i);
+        handleChange(i);
+    }
 
     return (
         <Paper component="form" className={classes.root}>
@@ -36,6 +44,8 @@ export default function SearchRoom() {
                 className={classes.input}
                 placeholder="Tìm bàn"
                 inputProps={{ 'aria-label': 'Search Room' }}
+                onChange={(e) => handle(e)}
+                value={input}
             />
             <IconButton className={classes.iconButton} aria-label="search">
                 <SearchIcon />

@@ -1,7 +1,9 @@
 import * as Config from "../Constant/config"
 import io from "socket.io-client"
 
-export const socket = io.connect(Config.API_URL);
+export const socket = io.connect(Config.API_URL, {
+    reconnectionDelayMax: 10000
+});
 
 export const userLogin = (userID, username) =>
 {

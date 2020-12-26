@@ -9,3 +9,8 @@ export async function checkPasswordRoom ({id, password})
 {
     return callAPI("POST", "game/checkPassword", {id, password})
 }
+
+export async function checkAvailableRoom ()
+{
+    return callAPI("POST", "game/checkAvailableRoom", null);
+}

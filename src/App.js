@@ -9,7 +9,7 @@ import Register from "./Components/User/register";
 import Lobby from "./Components/Lobby";
 import Game from "./Components/Game"
 import NavigationBar from "./Components/Main/navigationBar";
-import ListUser from "./Components/ListUser";
+import NotFoundPage from "./Components/Main/pageNotFound";
 
 const App = () => {
   return(
@@ -22,8 +22,8 @@ const App = () => {
                       <Route path="/login" component={LogIn}/>
                       <Route path="/register" component={Register}/>
                       <Route path="/lobby" component={Lobby}/>
-                      <Route path="/game" component={Game}/>
-                      <Route path="/testing" component={ListUser}/>
+                      <Route path="/game/:id" component={Game}/>
+                      <Route component={NotFoundPage}/>
                   </Switch>
               </UserProvider>
           </Router>

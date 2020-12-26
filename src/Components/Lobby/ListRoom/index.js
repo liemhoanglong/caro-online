@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Paper, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, TablePagination} from "@material-ui/core";
 import {createStyles, makeStyles, Theme, withStyles} from "@material-ui/core/styles";
+import {Redirect} from "react-router-dom"
 
 import LockIcon from '@material-ui/icons/Lock';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
@@ -42,19 +43,19 @@ const StyledTableRow = withStyles((theme: Theme) =>
 
 const rowPerPage = 6;
 
-export default function ListRoom()
+export default function ListRoom({search})
 {
     const classes = useStyles();
     const [listRoom, setListRoom] = useState([]);
     const [page, setPage] = useState(0);
     const [isEnterPassword, setIsEnterPassword] = useState(false);
     const [selectedRow, setSelectedRow] = useState("");
+    const [isDirect, setIsDirect] = useState(false);
 
     useEffect(() => {
         const fetchData = async () =>
         {
             const res = await getListRoom();
-            console.log(res);
             setListRoom(res.data);
         }
         fetchData();
@@ -107,21 +108,28 @@ export default function ListRoom()
         {
             setIsEnterPassword(false);
             socket.emit("join-room-id", selectedRow);
+            setIsDirect(true);
         }
     }
 
     const joinRoom = (row) =>
     {
+        setSelectedRow(row.id);
         if(row.password)
         {
-            setSelectedRow(row.id);
             setIsEnterPassword(true);
         }
         else
         {
+            setIsDirect(true);
             socket.emit("join-room-id", row.id);
         }
     }
+
+    if(isDirect)
+        return(
+            <Redirect to={`/game/${selectedRow}`}/>
+        )
 
     return(
         <React.Fragment>
@@ -139,7 +147,8 @@ export default function ListRoom()
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {listRoom.slice(page*rowPerPage, page * rowPerPage+ rowPerPage)
+                        {listRoom.filter(room => room.id.toLowerCase().includes(search.toLowerCase()))
+                            .slice(page*rowPerPage, page * rowPerPage+ rowPerPage)
                             .map((row, index) => (
                             <StyledTableRow key={index}>
                                 <StyledTableCell width="5%" align="center">
