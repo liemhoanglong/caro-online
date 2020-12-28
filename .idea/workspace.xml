@@ -20,14 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/Main/pageNotFound.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/game.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/game.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/square.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/square.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Lobby/ListRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/ListRoom/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/searchRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/searchRoom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Context/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Context/socket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +89,8 @@
       <workItem from="1608724624181" duration="9406000" />
       <workItem from="1608816072110" duration="10600000" />
       <workItem from="1608888200419" duration="14720000" />
-      <workItem from="1608967515429" duration="4869000" />
+      <workItem from="1608967515429" duration="5296000" />
+      <workItem from="1609159192552" duration="13943000" />
     </task>
     <servers />
   </component>
@@ -111,9 +110,23 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1609174694196">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1609174694196" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608907670727">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1608907670727" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Chat/index.js</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

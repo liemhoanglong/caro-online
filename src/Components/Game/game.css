@@ -35,6 +35,12 @@
 	background-color: yellow;
 }
 
-.XTurn{
-	color:#000;
+.xTurn{
+	color: #ff0000;
 }
+
+.oTurn
+{
+	color: #3D55BA;
+}
+

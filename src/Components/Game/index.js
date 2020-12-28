@@ -16,24 +16,32 @@ export default function Game() {
     const [history, setHistory] = useState([{squares: Array(size * size).fill(null)}])
     const [stepNumber, setStepNumber] = useState(0)
 
-    const [isPlayerX, setIsPlayerX] = useState(true);
-    const [isYourTurn, setIsYourTurn] = useState(true)
+    const [displayRenderX, setDisplayRenderX] = useState(true);
+    const [isYourTurn, setIsYourTurn] = useState(true);
+
+    const [gameInfo, setGameInfo] = useState({});
+    const [playerType, setPlayerType] = useState("");
+
     const [isDes, setIsDes] = useState(true)
 
     useEffect(() => {
         const eventHandler = (data) => {
+            console.log(data);
+            setGameInfo(data);
             const user = JSON.parse(localStorage.getItem("user"));
             if(data.playerO && data.playerO.userID === user.id) //if player is O
             {
                 setIsYourTurn(false);
+                setPlayerType("O");
             }
             else if(data.playerX && data.playerX.userID === user.id) // if player is X
             {
                 setIsYourTurn(true);
+                setPlayerType("X");
             }
             else // if player is audience
             {
-
+                setPlayerType("A");
             }
         }
         socket.on("join-room-player", eventHandler);
@@ -47,7 +55,7 @@ export default function Game() {
         const eventHandler = (data) => {
             setHistory(data.history);
             setStepNumber(data.step);
-            setIsPlayerX(!isPlayerX);
+            setDisplayRenderX(!displayRenderX);
             setIsYourTurn(!isYourTurn);
         }
 
@@ -56,7 +64,7 @@ export default function Game() {
         return () => {
             socket.off("move", eventHandler);
         }
-    }, [isPlayerX, isYourTurn])
+    }, [displayRenderX, isYourTurn])
 
     const handleClick = (i) => {
         if(isYourTurn)
@@ -67,7 +75,7 @@ export default function Game() {
             if (calculateWinner(squares, current.location, size) || squares[i]) {
                 return;
             }
-            squares[i] = isPlayerX ? "X" : "O"
+            squares[i] = displayRenderX ? "X" : "O"
             const newHistory = history1.concat([{
                 squares: squares,
                 location: i
@@ -78,7 +86,7 @@ export default function Game() {
             setHistory(newHistory);
             setStepNumber(newStepNumber);
             setIsYourTurn(!isYourTurn);
-            setIsPlayerX(!isPlayerX);
+            setDisplayRenderX(!displayRenderX);
 
             handleMove(newHistory, newStepNumber);
         }
@@ -110,13 +118,95 @@ export default function Game() {
         );
     });
 
+    const renderTurn = () =>
+    {
+        if(playerType === "A") // type = audience
+        {
+            //do ???
+        }
+        else
+        {
+            if(isYourTurn)
+                return (
+                    <>
+                    {"Lượt của bạn"}
+                    <span style={{color: 'red'}}>{playerType}</span>
+                        </>);
+            else
+            {
+                const opposite = playerType === "X"? "O" : "X";
+                return("Lượt đối thủ (" + opposite + ")")
+            }
+        }
+    }
+
+    const renderWinner = (who) =>
+    {
+        if(who === "X")
+        {
+            if(playerType === "X") return "Bạn thắng";
+            else if (playerType === "O") return "Bạn thua";
+            else return gameInfo.playerX.username + " thắng";
+        }else if (who ==="O")
+        {
+            if(playerType === "O") return "Bạn thua";
+            else if(playerType === "X") return "Bạn thắng";
+            else return gameInfo.playerO.username + " thắng";
+        }
+    }
+
+    const renderPlayer1 = () =>
+    {
+        //player is X
+        if (playerType === "X")
+            return (<Player status={1} type="Bạn (X)" elo={100} username={gameInfo.playerX.username} />);
+        //player is O
+        else if (playerType === "O")
+        {
+            return (<Player status={1} type="Bạn (O)" elo={100} username={gameInfo.playerO.username} />)
+        }
+        // is audience
+        else
+        {
+            if(gameInfo.playerX)
+                return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} elo={100} username={gameInfo.playerX.username} />)
+            else return (<Player status={0} type="" elo="" username=""/>);
+        }
+    }
+
+    const renderPlayer2 = () =>
+    {
+        //player is X
+        if (playerType === "X")
+        {
+            if(gameInfo.playerO)
+                return (<Player status={1} type="Đối thủ (O)" elo={200} username={gameInfo.playerO.username} />);
+            else return (<Player status={0} type="" elo="" username=""/>);
+        }
+        //player is O
+        else if (playerType === "O")
+        {
+            if(gameInfo.playerX)
+                return (<Player status={1} type="Đối thủ (X)" elo={200} username={gameInfo.playerX.username} />)
+            else return (<Player status={0} type="" elo="" username=""/>);
+        }
+        // is audience
+        else
+        {
+            if(gameInfo.playerO)
+                return (<Player status={0} type={`${gameInfo.playerO.username} (O)`} elo={200} username={gameInfo.playerO.username} />)
+            else
+                return (<Player status={0} type="" elo="" username=""/>);
+        }
+    }
+
     let status;
     if (winner) {
-        status = 'Winner: ' + winner.square;
+        status = renderWinner(winner.square);
     } else if (!current.squares.includes(null)) {
-        status = "Draw";
+        status = "Hòa";
     } else {
-        status = isYourTurn ? "Your turn" : "Rival turn";
+        status = renderTurn();
     }
 
     return (
@@ -141,11 +231,11 @@ export default function Game() {
                 <Grid container direction="row"  style={{padding: 5}}>
                     <Grid container direction="column" item xs={2}>
                         <Grid container item justify="center" alignItems="center" spacing={2}>
-                            <Player type="Bạn" elo={123} username={"hung123"}/>
+                            {renderPlayer1()}
                             <Grid container item xs={12} justify="center" alignItems="center">
                                 <Typography variant="h3">VS.</Typography>
                             </Grid>
-                            <Player type="Đối thủ" elo={456} username={"long123"}/>
+                            {renderPlayer2()}
                             <Grid container item xs={12} justify="center" alignItems="center">
                                 <Grid item xs={6}>
                                     <Button variant="contained" color="primary"

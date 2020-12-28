@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
         head: {
-            backgroundColor: theme.palette.common.black,
+            backgroundColor: "#2CB895",
             color: theme.palette.common.white,
         },
         body: {
@@ -158,10 +158,10 @@ export default function ListRoom({search})
                                         <LockOpenIcon/>
                                     }
                                 </StyledTableCell>
-                                <StyledTableCell width = "15%">
+                                <StyledTableCell width = "15%" align="center">
                                     {row.id}
                                 </StyledTableCell>
-                                <StyledTableCell width = "25%" align="left">
+                                <StyledTableCell width = "25%" align="center">
                                     {row.name}
                                 </StyledTableCell>
                                 <StyledTableCell width = "15%" align="center">
