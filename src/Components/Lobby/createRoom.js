@@ -63,7 +63,7 @@ export default function CreateRoom({open, handleClose, handleAgree})
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">Tạo phòng chơi mới</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">Create a new room</DialogTitle>
                 <DialogContent>
                     <Grid container>
                         <Grid item xs={12}>
@@ -94,13 +94,13 @@ export default function CreateRoom({open, handleClose, handleAgree})
                                 <Grid item>
                                     <FormControlLabel
                                         control={<Checkbox name="show password" checked={isCheck} onChange={handleCheckBox} />}
-                                        label="Hiện password"
+                                        label="Show password"
                                     />
                                 </Grid>
                             </Grid>
                         </Collapse>
                         <Grid item style={{paddingTop: 5, paddingRight: 10}}>
-                            Thời gian 1 nước (giây):
+                            Time for moving (second):
                         </Grid>
                         <Grid item>
                             <Select
@@ -117,10 +117,10 @@ export default function CreateRoom({open, handleClose, handleAgree})
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeCreate} color="primary">
-                        Hủy
+                        Cancel
                     </Button>
                     <Button onClick={agreeCreate} color="primary">
-                        Xác nhận
+                        Agree
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -11,8 +11,10 @@ import ChatRoom from "../Chat"
 
 import {socket, handleMove} from "../../Context/socket";
 
+const size = 10;
+
 export default function Game() {
-    const [size, setSize] = useState(10);
+    // const [size, setSize] = useState(10);
     const [history, setHistory] = useState([{squares: Array(size * size).fill(null)}])
     const [stepNumber, setStepNumber] = useState(0)
 
@@ -22,10 +24,14 @@ export default function Game() {
     const [gameInfo, setGameInfo] = useState({});
     const [playerType, setPlayerType] = useState("");
 
+    const [isGameOver, setIsGameOver] = useState(false); // game end by win, lose or draw
+    // game end by player out room
+    const [isPlayerOut, setIsPlayerOut] = useState(false);
+
     const [isDes, setIsDes] = useState(true)
 
     useEffect(() => {
-        const eventHandler = (data) => {
+        const joinRoomPlayer = (data) => {
             console.log(data);
             setGameInfo(data);
             const user = JSON.parse(localStorage.getItem("user"));
@@ -33,41 +39,67 @@ export default function Game() {
             {
                 setIsYourTurn(false);
                 setPlayerType("O");
+                setIsPlayerOut(false);
             }
             else if(data.playerX && data.playerX.userID === user.id) // if player is X
             {
                 setIsYourTurn(true);
                 setPlayerType("X");
+                setIsPlayerOut(false);
             }
             else // if player is audience
             {
                 setPlayerType("A");
             }
         }
-        socket.on("join-room-player", eventHandler);
+        socket.on("join-room-player", joinRoomPlayer);
 
         return () => {
-            socket.off("join-room-player", eventHandler);
+            socket.off("join-room-player", joinRoomPlayer);
         }
     })
 
     useEffect(() => {
-        const eventHandler = (data) => {
+        const move = (data) => {
             setHistory(data.history);
             setStepNumber(data.step);
             setDisplayRenderX(!displayRenderX);
             setIsYourTurn(!isYourTurn);
         }
 
-        socket.on("move", eventHandler);
+        socket.on("move", move);
 
         return () => {
-            socket.off("move", eventHandler);
+            socket.off("move", move);
         }
     }, [displayRenderX, isYourTurn])
 
+    useEffect(() =>{
+        const roomChange = (data) =>
+        {
+            setGameInfo(data);
+        }
+
+        socket.on("room-change", roomChange);
+
+        return () => socket.off("room-change", roomChange);
+    },[])
+
+    useEffect(() => {
+        const roomChangePlayer = (data) =>
+        {
+            setGameInfo(data);
+            setIsPlayerOut(true);
+        }
+
+        socket.on("room-change-player", roomChangePlayer);
+
+        return () => socket.off("room-change-player", roomChangePlayer);
+    },[])
+
+
     const handleClick = (i) => {
-        if(isYourTurn)
+        if(gameInfo.isStart && isYourTurn && playerType !== "A")
         {
             const history1 = history.slice(0, stepNumber + 1);
             const current = history1[history1.length - 1]
@@ -91,8 +123,15 @@ export default function Game() {
             handleMove(newHistory, newStepNumber);
         }
     }
+
     const sortHistory = () => {
         setIsDes(!isDes)
+    }
+
+    const startGame = () =>
+    {
+        setGameInfo({...gameInfo, isStart: true});
+        socket.emit("play-game", gameInfo.id);
     }
 
     const location = (move) => {
@@ -129,13 +168,13 @@ export default function Game() {
             if(isYourTurn)
                 return (
                     <>
-                    {"Lượt của bạn"}
+                    {"Your turn "}
                     <span style={{color: 'red'}}>{playerType}</span>
                         </>);
             else
             {
                 const opposite = playerType === "X"? "O" : "X";
-                return("Lượt đối thủ (" + opposite + ")")
+                return("Rival turn (" + opposite + ")")
             }
         }
     }
@@ -144,14 +183,14 @@ export default function Game() {
     {
         if(who === "X")
         {
-            if(playerType === "X") return "Bạn thắng";
-            else if (playerType === "O") return "Bạn thua";
-            else return gameInfo.playerX.username + " thắng";
+            if(playerType === "X") return "You WIN";
+            else if (playerType === "O") return "You lose";
+            else return gameInfo.playerX.username + " win";
         }else if (who ==="O")
         {
-            if(playerType === "O") return "Bạn thua";
-            else if(playerType === "X") return "Bạn thắng";
-            else return gameInfo.playerO.username + " thắng";
+            if(playerType === "O") return "You lose";
+            else if(playerType === "X") return "You WIN";
+            else return gameInfo.playerO.username + " win";
         }
     }
 
@@ -159,44 +198,51 @@ export default function Game() {
     {
         //player is X
         if (playerType === "X")
-            return (<Player status={1} type="Bạn (X)" elo={100} username={gameInfo.playerX.username} />);
+            return (<Player status={1} type="You (X)" player={gameInfo.playerX} />);
         //player is O
         else if (playerType === "O")
         {
-            return (<Player status={1} type="Bạn (O)" elo={100} username={gameInfo.playerO.username} />)
+            return (<Player status={1} type="You (O)" player={gameInfo.playerO} />)
         }
         // is audience
         else
         {
             if(gameInfo.playerX)
-                return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} elo={100} username={gameInfo.playerX.username} />)
-            else return (<Player status={0} type="" elo="" username=""/>);
+                return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} />)
+            else return (<Player status={0} player=""/>);
         }
     }
 
     const renderPlayer2 = () =>
     {
+        if(isPlayerOut)
+        {
+            if(gameInfo.isStart)
+                return (<Player status={-1} type="" player={""}/>)
+            else
+                return (<Player status={0} type="" player={""}/>)
+        }
         //player is X
         if (playerType === "X")
         {
             if(gameInfo.playerO)
-                return (<Player status={1} type="Đối thủ (O)" elo={200} username={gameInfo.playerO.username} />);
-            else return (<Player status={0} type="" elo="" username=""/>);
+                return (<Player status={1} type="Rival (O)" player={gameInfo.playerO} />);
+            else return (<Player status={0} type="" player=""/>);
         }
         //player is O
         else if (playerType === "O")
         {
             if(gameInfo.playerX)
-                return (<Player status={1} type="Đối thủ (X)" elo={200} username={gameInfo.playerX.username} />)
-            else return (<Player status={0} type="" elo="" username=""/>);
+                return (<Player status={1} type="Rival (X)" player={gameInfo.playerX} />)
+            else return (<Player status={0} type="" player=""/>);
         }
         // is audience
         else
         {
             if(gameInfo.playerO)
-                return (<Player status={0} type={`${gameInfo.playerO.username} (O)`} elo={200} username={gameInfo.playerO.username} />)
+                return (<Player status={0} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
             else
-                return (<Player status={0} type="" elo="" username=""/>);
+                return (<Player status={0} type="" player=""/>);
         }
     }
 
@@ -204,7 +250,7 @@ export default function Game() {
     if (winner) {
         status = renderWinner(winner.square);
     } else if (!current.squares.includes(null)) {
-        status = "Hòa";
+        status = "Draw!";
     } else {
         status = renderTurn();
     }
@@ -219,13 +265,13 @@ export default function Game() {
                         </IconButton>
                     </Grid>
                     <Grid container justify="center" alignItems="center" item xs={9}>
-                        <Typography variant="h4">Phòng: 1</Typography>
+                        <Typography variant="h4">{`Room: ${gameInfo.id}`}</Typography>
                     </Grid>
                     <Grid container justify="center" alignItems="center" item xs={1}>
                         <Typography variant="h6">00:45</Typography>
                     </Grid>
                     <Grid container justify="center" alignItems="center" item xs={1}>
-                        <Button variant="contained" color="primary" disableElevation>Mời bạn</Button>
+                        <Button variant="contained" color="primary" disableElevation>Invite...</Button>
                     </Grid>
                 </Grid>
                 <Grid container direction="row"  style={{padding: 5}}>
@@ -239,22 +285,28 @@ export default function Game() {
                             <Grid container item xs={12} justify="center" alignItems="center">
                                 <Grid item xs={6}>
                                     <Button variant="contained" color="primary"
-                                            disableElevation fullWidth>Đầu hàng</Button>
+                                            disableElevation fullWidth>Give up</Button>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button variant="contained" color="primary"
-                                            disableElevation fullWidth>Xin hòa</Button>
+                                            disableElevation fullWidth>Draw deal</Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid container item xs={5} justify="center" alignItems="center">
-                        <Board
-                            winningSquares={winner ? winner.line : []}
-                            squares={current.squares}
-                            onClick={i => handleClick(i)}
-                            size={size}
-                        />
+                        {gameInfo.isStart ?
+                            <Board
+                                winningSquares={winner ? winner.line : []}
+                                squares={current.squares}
+                                onClick={i => handleClick(i)}
+                                size={size}
+                            />
+                            : playerType === "X" ?
+                            <Button onClick={startGame}>Play</Button>
+                                : <Typography>Waiting for host start the game!</Typography>
+                        }
+
                     </Grid>
                     <Grid item xs={5}>
                         <Grid container>
@@ -264,8 +316,9 @@ export default function Game() {
                             <Grid container>
                                 <Grid container direction={"column"} item xs={6}>
                                     <Grid item container justify="space-between">
-                                        <Typography variant={"h5"}>Lịch sử</Typography>
-                                        <Switch onClick={() => sortHistory()} inputProps={{ 'aria-label': 'primary checkbox' }} />
+                                        <Typography variant={"h5"}>Move history</Typography>
+                                        <Switch onClick={() => sortHistory()}
+                                                inputProps={{ 'aria-label': 'primary checkbox' }} />
                                     </Grid>
                                     <Grid item>
                                         <Paper elevation={2}>

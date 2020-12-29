@@ -138,12 +138,12 @@ export default function ListRoom({search})
                     <TableHead>
                         <TableRow>
                             <StyledTableCell width= "5%"/>
-                            <StyledTableCell width = "15%" align="center">ID phòng</StyledTableCell>
-                            <StyledTableCell width = "25%" align="center">Tên phòng</StyledTableCell>
-                            <StyledTableCell width = "15%" align="center">Người chơi</StyledTableCell>
-                            <StyledTableCell width = "10%" align="center">Khán giả</StyledTableCell>
-                            <StyledTableCell width = "15%" align="center">Trạng thái</StyledTableCell>
-                            <StyledTableCell width = "15%" align="center">Tham gia</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Room ID</StyledTableCell>
+                            <StyledTableCell width = "25%" align="center">Name</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Player</StyledTableCell>
+                            <StyledTableCell width = "10%" align="center">Audience</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Status</StyledTableCell>
+                            <StyledTableCell width = "15%" align="center">Join</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -178,21 +178,21 @@ export default function ListRoom({search})
                                         <StyledTableCell width = "15%" align="center">
                                             <Button variant="contained" color="primary"
                                                     disableElevation disabled style={{fontsize: 12}}>
-                                                Đã bắt đầu
+                                                Started
                                             </Button>
                                         </StyledTableCell>
                                     </React.Fragment>
                                     :
                                     <React.Fragment>
                                         <StyledTableCell width = "15%" align="center">
-                                            Đang chờ
+                                            Waiting
                                         </StyledTableCell>
                                         <StyledTableCell width = "15%" align="center">
                                             <Button variant="contained" color="primary"
                                                     disableElevation
                                                     onClick={() => joinRoom(row)}
                                             >
-                                                Tham gia
+                                                Join now
                                             </Button>
                                         </StyledTableCell>
                                     </React.Fragment>

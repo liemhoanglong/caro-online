@@ -64,10 +64,10 @@ export default function EnterPassword ({open, handleClose, handleAgree, id})
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">Nhập mật khẩu</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">Entering password</DialogTitle>
 
                 <DialogContent>
-                    <DialogContentText>Phòng này đã bị khóa, nhập mật khẩu để tham gia</DialogContentText>
+                    <DialogContentText>This room has been locked, please enter password to join.</DialogContentText>
                     <Collapse in={alert}>
                         <Alert severity="error"
                                action={
@@ -83,7 +83,7 @@ export default function EnterPassword ({open, handleClose, handleAgree, id})
                                    </IconButton>
                                }
                         >
-                            Sai mật khẩu, thử lại!
+                            Wrong password. Try again!
                         </Alert>
                     </Collapse>
 
@@ -103,17 +103,17 @@ export default function EnterPassword ({open, handleClose, handleAgree, id})
                         <Grid item>
                             <FormControlLabel
                                 control={<Checkbox name="show password" checked={isCheck} onChange={handleCheckBox} />}
-                                label="Hiện password"
+                                label="Show password"
                             />
                         </Grid>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closePass} color="primary">
-                        Hủy
+                        Cancel
                     </Button>
                     <Button onClick={agreePass} color="primary">
-                        Xác nhận
+                        Agree
                     </Button>
                 </DialogActions>
             </Dialog>

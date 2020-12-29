@@ -42,10 +42,11 @@ export default function SearchRoom({handleChange}) {
         <Paper component="form" className={classes.root}>
             <InputBase
                 className={classes.input}
-                placeholder="Tìm bàn"
+                placeholder="Find a match"
                 inputProps={{ 'aria-label': 'Search Room' }}
                 onChange={(e) => handle(e)}
                 value={input}
+                autoFocus={false}
             />
             <IconButton className={classes.iconButton} aria-label="search">
                 <SearchIcon />

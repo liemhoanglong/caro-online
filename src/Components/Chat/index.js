@@ -32,9 +32,9 @@ export default function ChatRoom()
             const currentUser = JSON.parse(localStorage.getItem("user"));
             if(user.username === currentUser.username)
             {
-                setListMessage(listMessage.concat({username: "Bạn", data: "đã tham gia phòng"}));
+                setListMessage(listMessage.concat({username: "You", data: "joined room"}));
             }
-            else setListMessage(listMessage.concat({username: user.username, data: "đã tham gia phòng"}));
+            else setListMessage(listMessage.concat({username: user.username, data: "joined room"}));
         }
 
         socket.on("join-room-audience", eventHandler);
@@ -46,7 +46,7 @@ export default function ChatRoom()
 
     useEffect(() => {
         const eventHandler = (data) => {
-            setListMessage(listMessage.concat({username: data, data: "đã rời khỏi phòng chơi"}));
+            setListMessage(listMessage.concat({username: data, data: "left room"}));
         }
 
         socket.on("chat-user-leave", eventHandler);
@@ -62,7 +62,7 @@ export default function ChatRoom()
         {
             const user = JSON.parse(localStorage.getItem("user"));
             const dataToSend = {username: user.username, data: newChat};
-            const dataToRender = {username: "Bạn", data: newChat};
+            const dataToRender = {username: "You", data: newChat};
             setListMessage(listMessage.concat(dataToRender));
             setNewChat("");
             socket.emit("chat", dataToSend);
@@ -71,7 +71,6 @@ export default function ChatRoom()
 
     return(
         <React.Fragment>
-            <Typography variant="h5">Chat</Typography>
             <Paper elevation={2}>
                 <List component="nav" style={{height: 300, maxHeight: 300, overflow: "auto"}}>
                     {listMessage.map((dl, index) => {

@@ -75,12 +75,12 @@ export default function Lobby() {
                     <Grid item container xs={6} justify="flex-end" alignContent="center" spacing={2}>
                         <Grid item>
                             <Button variant="contained" color="primary" disableElevation onClick={playNow}>
-                                Chơi ngay
+                                Quick play
                             </Button>
                         </Grid>
                         <Grid item>
                             <Button variant="contained" color="primary" disableElevation onClick={createRoom}>
-                                Tạo phòng
+                                Create a room
                             </Button>
                         </Grid>
                     </Grid>
@@ -94,7 +94,7 @@ export default function Lobby() {
                             <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography>Điểm: 1609</Typography>
+                            <Typography>Score: 1609</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <ListUser/>
