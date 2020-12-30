@@ -72,7 +72,7 @@ export default function ChatRoom()
     return(
         <React.Fragment>
             <Paper elevation={2}>
-                <List component="nav" style={{height: 300, maxHeight: 300, overflow: "auto"}}>
+                <List component="nav" style={{height: 200, maxHeight: 300, overflow: "auto"}}>
                     {listMessage.map((dl, index) => {
                         return(
                             <ListItem key={index} dense={true}  >
@@ -87,17 +87,16 @@ export default function ChatRoom()
                         <div ref={messageEndRef}/>
                 </List>
                 <Grid container alignContent="center" justify="space-between">
-                   <Grid item>
+                   <Grid item xs={9} style={{paddingLeft: 10, paddingRight: 10}}>
                        <TextField id="filled-basic"
-                                  label="Chat something..."
+                                  label="Say something..."
                                   fullWidth
                                   onChange={(e) => setNewChat(e.target.value)}
                                   value = {newChat}
                                   autoComplete="off"
-                                  multiline
                        />
                    </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} style={{paddingTop: 5}}>
                         <Button onClick={sendMessage} variant="contained" color="primary" fullWidth>Send</Button>
                     </Grid>
                 </Grid>

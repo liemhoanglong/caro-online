@@ -11,7 +11,7 @@ import ChatRoom from "../Chat"
 
 import {socket, handleMove} from "../../Context/socket";
 
-const size = 10;
+const size = 16;
 
 export default function Game() {
     // const [size, setSize] = useState(10);
@@ -24,7 +24,7 @@ export default function Game() {
     const [gameInfo, setGameInfo] = useState({});
     const [playerType, setPlayerType] = useState("");
 
-    const [isGameOver, setIsGameOver] = useState(false); // game end by win, lose or draw
+   // const [isGameOver, setIsGameOver] = useState(false); // game end by win, lose or draw
     // game end by player out room
     const [isPlayerOut, setIsPlayerOut] = useState(false);
 
@@ -32,7 +32,6 @@ export default function Game() {
 
     useEffect(() => {
         const joinRoomPlayer = (data) => {
-            console.log(data);
             setGameInfo(data);
             const user = JSON.parse(localStorage.getItem("user"));
             if(data.playerO && data.playerO.userID === user.id) //if player is O
@@ -130,8 +129,11 @@ export default function Game() {
 
     const startGame = () =>
     {
-        setGameInfo({...gameInfo, isStart: true});
-        socket.emit("play-game", gameInfo.id);
+        if(gameInfo.playerX && gameInfo.playerO)
+        {
+            setGameInfo({...gameInfo, isStart: true});
+            socket.emit("play-game", gameInfo.id);
+        }
     }
 
     const location = (move) => {
@@ -148,11 +150,7 @@ export default function Game() {
             'Move #0: Game start';
         return (
             <ListItem button key={move}>
-                {move === stepNumber ?
-                    <ListItemText primary={desc}/>
-                    :
-                    <ListItemText primary={desc}/>
-                }
+                <ListItemText primary={desc}/>
             </ListItem>
         );
     });
@@ -204,8 +202,7 @@ export default function Game() {
         {
             return (<Player status={1} type="You (O)" player={gameInfo.playerO} />)
         }
-        // is audience
-        else
+        else// is audience
         {
             if(gameInfo.playerX)
                 return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} />)
@@ -256,87 +253,82 @@ export default function Game() {
     }
 
     return (
-        <div>
-            <Grid container direction="column">
-                <Grid container direction="row">
-                    <Grid item xs={1}>
-                        <IconButton>
-                            <ArrowBackIcon style={{fontSize: 36}}/>
-                        </IconButton>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center" item xs={9}>
-                        <Typography variant="h4">{`Room: ${gameInfo.id}`}</Typography>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center" item xs={1}>
-                        <Typography variant="h6">00:45</Typography>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center" item xs={1}>
-                        <Button variant="contained" color="primary" disableElevation>Invite...</Button>
-                    </Grid>
+        <Grid container direction="column">
+            <Grid container alignContent="center" justify="space-between" style={{padding: 10}}>
+                <Grid item>
+                    <Typography variant="h5">{`Room: ${gameInfo.id}`}</Typography>
                 </Grid>
-                <Grid container direction="row"  style={{padding: 5}}>
-                    <Grid container direction="column" item xs={2}>
-                        <Grid container item justify="center" alignItems="center" spacing={2}>
-                            {renderPlayer1()}
-                            <Grid container item xs={12} justify="center" alignItems="center">
-                                <Typography variant="h3">VS.</Typography>
+                <Grid item>
+                    <Typography variant={"h5"}>{status}</Typography>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="primary" disableElevation>Invite friend</Button>
+                </Grid>
+            </Grid>
+            <Grid container direction="row"  style={{padding: 5}}>
+                <Grid container direction="column" item xs={2}>
+                    <Grid container item justify="center" alignItems="center" spacing={2}>
+                        {renderPlayer1()}
+                        <Grid container item xs={12} justify="center" alignItems="center">
+                            {/*<Typography variant="h3">VS.</Typography>*/}
+                            <svg style={{margin:'0px 10px'}} id="Layer_1"
+                                 enableBackground="new 0 0 512 512"
+                                 height="30" viewBox="0 0 512 512" width="30"
+                                 xmlns="http://www.w3.org/2000/svg"><path d="m497 60.445h.01z"/><g><path d="m497 0h-45.445c-3.979 0-7.794 1.58-10.606 4.394l-290.896 290.895 66.658 66.658 290.895-290.896c2.814-2.813 4.394-6.628 4.394-10.607v-45.444c0-8.284-6.716-15-15-15z"/><path d="m59.792 385.693c-8.902 8.902-13.637 20.537-14.081 32.272-11.592.324-23.087 4.897-31.935 13.744-18.367 18.367-18.367 48.147 0 66.515 18.367 18.367 48.147 18.367 66.515 0 8.794-8.794 13.366-20.205 13.739-31.726 11.523-.372 22.935-4.948 31.73-13.743l27.24-27.241-66.515-66.514z"/><path d="m272.446 306.798h94.268v25.564h-94.268z" transform="matrix(.707 -.707 .707 .707 -132.374 319.58)"/><path d="m168.129 234.786 66.658-66.658-163.735-163.734c-2.813-2.814-6.628-4.394-10.607-4.394h-45.445c-8.284 0-15 6.716-15 15v45.444c0 3.979 1.58 7.794 4.394 10.606z"/><path d="m466.29 417.966c-.444-11.735-5.18-23.371-14.081-32.272l-26.694-26.694-66.515 66.514 27.241 27.241c8.795 8.795 20.207 13.371 31.73 13.743.373 11.521 4.945 22.932 13.739 31.726 18.367 18.367 48.147 18.367 66.515 0 18.367-18.367 18.367-48.147 0-66.515-8.848-8.846-20.343-13.419-31.935-13.743z"/><path d="m443.349 277.527c-5.858-5.858-15.356-5.857-21.213 0l-144.609 144.608c-5.858 5.857-5.858 15.356 0 21.213 5.857 5.857 15.355 5.857 21.213 0l144.609-144.608c5.858-5.857 5.858-15.355 0-21.213z"/><path d="m89.864 277.527c-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213l144.609 144.608c5.857 5.857 15.356 5.857 21.213 0 5.858-5.857 5.858-15.355 0-21.213z"/></g></svg>
+                        </Grid>
+                        {renderPlayer2()}
+                        <Grid container item xs={12} justify="space-around" alignItems="baseline">
+                            <Grid item>
+                                <Button variant="contained" color="primary">Give up</Button>
                             </Grid>
-                            {renderPlayer2()}
-                            <Grid container item xs={12} justify="center" alignItems="center">
-                                <Grid item xs={6}>
-                                    <Button variant="contained" color="primary"
-                                            disableElevation fullWidth>Give up</Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button variant="contained" color="primary"
-                                            disableElevation fullWidth>Draw deal</Button>
-                                </Grid>
+                            <Grid item>
+                                <Button variant="contained" color="primary">Draw deal</Button>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container item xs={5} justify="center" alignItems="center">
-                        {gameInfo.isStart ?
-                            <Board
-                                winningSquares={winner ? winner.line : []}
-                                squares={current.squares}
-                                onClick={i => handleClick(i)}
-                                size={size}
-                            />
-                            : playerType === "X" ?
-                            <Button onClick={startGame}>Play</Button>
-                                : <Typography>Waiting for host start the game!</Typography>
-                        }
-
+                </Grid>
+                <Grid container item xs={6} justify="center" alignContent="center">
+                    <Grid item>
+                    {gameInfo.isStart ?
+                        <Board
+                            winningSquares={winner ? winner.line : []}
+                            squares={current.squares}
+                            onClick={i => handleClick(i)}
+                            size={size}
+                        />
+                        : playerType === "X" ?
+                        <Button variant="contained" onClick={startGame}>Play</Button>
+                            : <Typography>Waiting for host start the game!</Typography>
+                    }
                     </Grid>
-                    <Grid item xs={5}>
-                        <Grid container>
-                            <Grid container item xs={12} justify="center">
-                                <Typography variant={"h4"}>{status}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <Grid container>
+                        <Grid container item spacing={1}>
+                            <Grid item xs={12} zeroMinWidth wrap="nowrap">
+                                <Typography variant={"h5"}>Chat</Typography>
+                                <ChatRoom/>
                             </Grid>
-                            <Grid container>
-                                <Grid container direction={"column"} item xs={6}>
-                                    <Grid item container justify="space-between">
-                                        <Typography variant={"h5"}>Move history</Typography>
-                                        <Switch onClick={() => sortHistory()}
-                                                inputProps={{ 'aria-label': 'primary checkbox' }} />
-                                    </Grid>
-                                    <Grid item>
-                                        <Paper elevation={2}>
-                                            <List component="nav" style={{maxHeight: 300, overflow: "auto"}}>
-                                                {isDes ? moves.reverse() : moves}
-                                            </List>
-                                        </Paper>
-                                    </Grid>
+                            <Grid container item xs={12}>
+                                <Grid item container justify="space-between" xs={12}>
+                                    <Typography variant="h5">Move history</Typography>
+                                    <Switch onClick={() => sortHistory()}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }} />
                                 </Grid>
-                                <Grid container direction={"column"} item xs={6} zeroMinWidth wrap="nowrap">
-                                    <ChatRoom/>
+                                <Grid item xs={12}>
+                                    <Paper elevation={2}>
+                                        <List component="nav" dense
+                                              style={{height: 200, maxHeight: 300, overflow: "auto"}}>
+                                            {isDes ? moves.reverse() : moves}
+                                        </List>
+                                    </Paper>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        </div>
+        </Grid>
     );
 }
 
