@@ -27,7 +27,7 @@ export default function Lobby() {
             const random = Math.floor(Math.random() * 1000)
             id = user.username + "_"+random;
         }
-        socket.emit("play-now", {id, password: ""});
+        socket.emit("play-now", {id, password: "", timing: 45});
         setIDRoom(id);
         setIsDirectPage(true);
     }
@@ -44,13 +44,13 @@ export default function Lobby() {
         setOpenNewRoom(false);
     }
 
-    const handleAgreeCreateRoom = (password) =>
+    const handleAgreeCreateRoom = (password, timing) =>
     {
         const user = JSON.parse(localStorage.getItem("user"));
         const random = Math.floor(Math.random() * 1000)
         const id = user.username + "_"+random;
         setIDRoom(id);
-        socket.emit("create-room", {id, password});
+        socket.emit("create-room", {id, password, timing});
 
         setIsDirectPage(true);
     }

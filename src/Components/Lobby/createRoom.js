@@ -23,6 +23,7 @@ export default function CreateRoom({open, handleClose, handleAgree})
     const [password, setPassword] = useState("");
     const [isCheck, setIsCheck] = useState(false);
     const [isSwitch, setIsSwitch] = useState(false);
+    const [timing, setTiming] = useState(45);
 
     const handleCheckBox = () =>
     {
@@ -38,7 +39,7 @@ export default function CreateRoom({open, handleClose, handleAgree})
 
     const agreeCreate = () =>
     {
-        handleAgree(password);
+        handleAgree(password, timing);
         setPassword("");
         setIsCheck(false);
     }
@@ -106,7 +107,8 @@ export default function CreateRoom({open, handleClose, handleAgree})
                             <Select
                                 labelId="demo-simple-select-helper-label"
                                 id="demo-simple-select-helper"
-                                value="45"
+                                value={timing}
+                                onChange={(e) => setTiming(e.target.value)}
                             >
                                 <MenuItem value={30}>30</MenuItem>
                                 <MenuItem value={45}>45</MenuItem>
