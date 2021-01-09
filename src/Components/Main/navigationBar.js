@@ -83,9 +83,10 @@ export default function NavigationBar()
     useEffect(() => {
         if(loginState.isLogin && loginState.user !== null)
         {
+            console.log(loginState)
             userLogin(loginState.user._id, loginState.user.username);
         }
-    })
+    }, [loginState.isLogin, loginState.user])
 
     const handleToHomePage = () =>
     {
@@ -112,7 +113,7 @@ export default function NavigationBar()
                         onClick={handleClick}
                         style={{textTransform: "none", backgroundColor: "#239478", color: "#fff"}}
                     >
-                        {loginState.user ? `Hi, ${loginState.user.lastName}` : "Hi"}
+                        {loginState.user ? `Hi, ${loginState.user.firstName + " " + loginState.user.lastName}` : "Hi"}
                     </Button>
                     <StyledMenu
                         id="customized-menu"
@@ -121,7 +122,7 @@ export default function NavigationBar()
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <Link to="/users/profile" style={{ textDecoration: 'none', color: "inherit" }}>
+                        <Link to="/profile" style={{ textDecoration: 'none', color: "inherit" }}>
                             <StyledMenuItem onClick={handleClose}>
                                 <ListItemIcon>
                                     <AccountCircleIcon fontSize="small" />

@@ -11,7 +11,7 @@ import ChatRoom from "../Chat"
 
 import {socket, handleMove} from "../../Context/socket";
 
-const size = 16;
+const size = 20;
 
 export default function Game() {
     // const [size, setSize] = useState(10);
