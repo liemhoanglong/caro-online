@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Button, IconButton, Typography, 
+import {Grid, Button, Typography,
     List, ListItem, ListItemText, Paper, Switch} from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import {Redirect} from "react-router-dom";
 
 import './game.css';
 import Board from './board'
@@ -10,25 +11,95 @@ import calculateWinner from "./gameCheck";
 import ChatRoom from "../Chat"
 
 import {socket, handleMove} from "../../Context/socket";
+import callAPI from "../../Util/callAPI";
 
 const size = 20;
 
-export default function Game() {
+export default function Game({match}) {
     // const [size, setSize] = useState(10);
     const [history, setHistory] = useState([{squares: Array(size * size).fill(null)}])
-    const [stepNumber, setStepNumber] = useState(0)
+    const [stepNumber, setStepNumber] = useState(0);
+    const [isDes, setIsDes] = useState(true);
 
     const [displayRenderX, setDisplayRenderX] = useState(true);
     const [isYourTurn, setIsYourTurn] = useState(true);
 
     const [gameInfo, setGameInfo] = useState({});
     const [playerType, setPlayerType] = useState("");
+    const [isPlayerOut, setIsPlayerOut] = useState({status:false, user: null});
 
-   // const [isGameOver, setIsGameOver] = useState(false); // game end by win, lose or draw
-    // game end by player out room
-    const [isPlayerOut, setIsPlayerOut] = useState(false);
+    const [isValidRoom, setIsValidRoom] = useState(true);
 
-    const [isDes, setIsDes] = useState(true)
+    const currentRoom = match.params.id;
+
+    useEffect(()=> {
+        const fetchData = async () =>
+        {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const respond = await callAPI("POST",
+                "game/checkGame",
+                {id: currentRoom, user: user.id});
+            if(respond.data.msg === -1) //sorry, you should to go now
+            {
+                setIsValidRoom(false);
+                return;
+            }
+            const dataInfo = respond.data.data;
+            setGameInfo(dataInfo.info);
+
+            if(user.id === dataInfo.info.playerX.userID)
+            {
+                setPlayerType("X");
+                if(dataInfo.info.isXTurn) {
+                    setIsYourTurn(true);
+                    setIsPlayerOut(false);
+                }
+                else {
+                    setIsYourTurn(false);
+                    setDisplayRenderX(false);
+                    setIsPlayerOut(false);
+                }
+            }
+            else if(user.id === dataInfo.info.playerO.userID)
+            {
+                setPlayerType("O")
+                if(dataInfo.info.isXTurn) {
+                    setIsYourTurn(false);
+                    setIsPlayerOut(false);
+                }
+                else {
+                    setDisplayRenderX(false);
+                    setIsYourTurn(true);
+                    setIsPlayerOut(false);
+                }
+            }
+            else setPlayerType("A")
+
+            if (respond.data.msg >= 1) //if game started and user is (X,O) reconnect
+            {
+                const historyGame = dataInfo.content.history;
+                setHistory(historyGame.history);
+                setStepNumber(historyGame.step);
+            }
+            else if (respond.data.msg === 0) // if game not start and user reconnect
+            {
+                setDisplayRenderX(true);
+            }
+            socket.emit("enter-room", {id: currentRoom, userID: user.id, username: user.username});
+        }
+
+        fetchData();
+    },[currentRoom])
+
+    useEffect(() => {
+       const reconnect = () =>
+       {
+
+       }
+        socket.on("reconnect", reconnect);
+
+       return () => socket.off("reconnect", reconnect)
+    },[])
 
     useEffect(() => {
         const joinRoomPlayer = (data) => {
@@ -77,6 +148,7 @@ export default function Game() {
         const roomChange = (data) =>
         {
             setGameInfo(data);
+            setIsPlayerOut({status: false, user: null});
         }
 
         socket.on("room-change", roomChange);
@@ -87,15 +159,12 @@ export default function Game() {
     useEffect(() => {
         const roomChangePlayer = (data) =>
         {
-            setGameInfo(data);
-            setIsPlayerOut(true);
+            setIsPlayerOut({status: true, user: data});
         }
-
         socket.on("room-change-player", roomChangePlayer);
 
         return () => socket.off("room-change-player", roomChangePlayer);
     },[])
-
 
     const handleClick = (i) => {
         if(gameInfo.isStart && isYourTurn && playerType !== "A")
@@ -159,16 +228,14 @@ export default function Game() {
     {
         if(playerType === "A") // type = audience
         {
-            //do ???
+            if(isYourTurn)
+                return(`${gameInfo.playerX.username} turn (X)`);
+            else return(`${gameInfo.playerO.username} turn (O)`);
         }
         else
         {
             if(isYourTurn)
-                return (
-                    <>
-                    {"Your turn "}
-                    <span style={{color: 'red'}}>{playerType}</span>
-                        </>);
+                return (`Your turn (${playerType})`);
             else
             {
                 const opposite = playerType === "X"? "O" : "X";
@@ -181,14 +248,14 @@ export default function Game() {
     {
         if(who === "X")
         {
-            if(playerType === "X") return "You WIN";
-            else if (playerType === "O") return "You lose";
-            else return gameInfo.playerX.username + " win";
+            if(playerType === "X") return "Match end - You WIN";
+            else if (playerType === "O") return "Match end - You lose";
+            else return "Match end - "+ gameInfo.playerX.username + " win";
         }else if (who ==="O")
         {
             if(playerType === "O") return "You lose";
             else if(playerType === "X") return "You WIN";
-            else return gameInfo.playerO.username + " win";
+            else return "Match end - " + gameInfo.playerO.username + " win";
         }
     }
 
@@ -204,6 +271,14 @@ export default function Game() {
         }
         else// is audience
         {
+            if(isPlayerOut.status)
+            {
+                if(gameInfo.isStart && isPlayerOut.user === gameInfo.playerX.username)
+                    return (<Player status={-1} type="" player={""}/>)
+                else
+                    return (<Player status={0} type="" player={""}/>)
+            }
+
             if(gameInfo.playerX)
                 return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} />)
             else return (<Player status={0} player=""/>);
@@ -212,7 +287,7 @@ export default function Game() {
 
     const renderPlayer2 = () =>
     {
-        if(isPlayerOut)
+        if(isPlayerOut.status)
         {
             if(gameInfo.isStart)
                 return (<Player status={-1} type="" player={""}/>)
@@ -236,8 +311,9 @@ export default function Game() {
         // is audience
         else
         {
+
             if(gameInfo.playerO)
-                return (<Player status={0} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
+                return (<Player status={1} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
             else
                 return (<Player status={0} type="" player=""/>);
         }
@@ -247,10 +323,12 @@ export default function Game() {
     if (winner) {
         status = renderWinner(winner.square);
     } else if (!current.squares.includes(null)) {
-        status = "Draw!";
+        status = "Match end - Draw!";
     } else {
         status = renderTurn();
     }
+
+    if(!isValidRoom) return(<Redirect to="/lobby"/>);
 
     return (
         <Grid container direction="column">
@@ -305,9 +383,11 @@ export default function Game() {
                 <Grid item xs={4}>
                     <Grid container>
                         <Grid container item spacing={1}>
-                            <Grid item xs={12} zeroMinWidth wrap="nowrap">
+                            <Grid item xs={12}>
                                 <Typography variant={"h5"}>Chat</Typography>
-                                <ChatRoom/>
+                            </Grid>
+                            <Grid container item xs={12} zeroMinWidth wrap="nowrap">
+                                <ChatRoom id={currentRoom}/>
                             </Grid>
                             <Grid container item xs={12}>
                                 <Grid item container justify="space-between" xs={12}>

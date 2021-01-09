@@ -83,7 +83,6 @@ export default function NavigationBar()
     useEffect(() => {
         if(loginState.isLogin && loginState.user !== null)
         {
-            console.log(loginState)
             userLogin(loginState.user._id, loginState.user.username);
         }
     }, [loginState.isLogin, loginState.user])

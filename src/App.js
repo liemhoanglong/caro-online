@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import HomeScreen from "./Components/Main";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -37,7 +37,7 @@ const App = () => {
                             <Route path="/login" component={LogIn} />
                             <Route path="/register" component={Register} />
                             <Route path="/lobby" component={Lobby} />
-                            <Route path="/game/:id" component={Game} />
+                            <Route path="/game/:id" component={(match) => Game(match)} />
                             <Route
                                 path="/profile"
                                 render={(props) => (

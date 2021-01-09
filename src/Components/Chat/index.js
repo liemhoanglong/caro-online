@@ -2,12 +2,26 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Button, List, ListItem, ListItemText, Typography, Paper, Box, TextField} from "@material-ui/core"
 import {socket} from "../../Context/socket";
 import Grid from "@material-ui/core/Grid";
+import callAPI from "../../Util/callAPI";
 
-export default function ChatRoom()
+export default function ChatRoom({id})
 {
     const [listMessage, setListMessage] = useState([]);
     const [newChat, setNewChat] = useState("");
     const messageEndRef = useRef(null);
+
+    useEffect(() => {
+       const fetchChat = async () =>
+       {
+           const respond = await callAPI("POST", "game/getChatRoom", {id: id});
+           if(respond.data.msg === 1)
+           {
+               setListMessage(respond.data.data);
+           }
+       }
+       fetchChat();
+    },[id])
+
 
     const scrollToBottom = () => {
         messageEndRef.current.scrollIntoView({ behavior: "smooth" })
@@ -71,7 +85,7 @@ export default function ChatRoom()
 
     return(
         <React.Fragment>
-            <Paper elevation={2}>
+            <Paper style={{width: "100%"}} elevation={2}>
                 <List component="nav" style={{height: 200, maxHeight: 300, overflow: "auto"}}>
                     {listMessage.map((dl, index) => {
                         return(
