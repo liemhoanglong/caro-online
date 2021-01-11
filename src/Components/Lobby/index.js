@@ -17,6 +17,7 @@ export default function Lobby() {
     const [IDRoom, setIDRoom] = useState("");
 
 
+
     const playNow = async () =>
     {
         const res = await checkAvailableRoom();
@@ -43,6 +44,8 @@ export default function Lobby() {
     {
         setOpenNewRoom(false);
     }
+
+
 
     const handleAgreeCreateRoom = (password, timing) =>
     {
@@ -94,7 +97,7 @@ export default function Lobby() {
                             <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography>Score: 1609</Typography>
+                            <Typography>{`countdown`}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <ListUser/>

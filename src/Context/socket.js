@@ -10,8 +10,4 @@ export const userLogin = (userID, username) =>
     socket.emit("user-login", {userID,username});
 }
 
-export const handleMove = (history, step) =>
-{
-    socket.emit("move", {history, step});
-}
 

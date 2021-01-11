@@ -21,12 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Chat/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Chat/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Profile/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Profile/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Context/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Context/socket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +91,8 @@
       <workItem from="1609159192552" duration="13943000" />
       <workItem from="1609248936445" duration="7463000" />
       <workItem from="1610168026926" duration="32437000" />
+      <workItem from="1610255921459" duration="12272000" />
+      <workItem from="1610359785786" duration="9624000" />
     </task>
     <servers />
   </component>
@@ -117,9 +116,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1609174694196" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1610209659257">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1610368736849">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1610209659257" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1610368736849" />
   </component>
 </project>
