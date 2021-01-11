@@ -29,6 +29,21 @@ export const signUpService = (username, firstName, lastName, password, email) =>
     })
 };
 
+export const activateService = (id) =>
+{
+    return callAPI("GET", `users/activate/${id}`, null)
+};
+
+export const forgotPasswordService = (input) =>
+{
+    return callAPI("POST", `auth/forgot-password`, input)
+};
+
+export const resetPasswordService = (id, input) =>
+{
+    return callAPI("POST", `users/reset-password/${id}`, input)
+};
+
 export const logoutService = () => {
     localStorage.removeItem("user");
 };

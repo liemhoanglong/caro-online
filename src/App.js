@@ -7,6 +7,9 @@ import { UserProvider } from "./Context/UserContext";
 
 import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
+import Activate from "./Components/User/activate";
+import ForgotPassword from "./Components/User/forgotPassword";
+import ResetPassword from "./Components/User/resetPassword";
 import Lobby from "./Components/Lobby";
 import Game from "./Components/Game"
 import NavigationBar from "./Components/Main/navigationBar";
@@ -38,6 +41,9 @@ const App = () => {
                             <Route path="/register" component={Register} />
                             <Route path="/lobby" component={Lobby} />
                             <Route path="/game/:id" component={Game} />
+                            <Route path="/users/activate/:id" exact component={Activate} />
+                            <Route path="/users/forgot-password" exact component={ForgotPassword} />
+                            <Route path="/users/reset-password/:id" exact component={ResetPassword} />
                             <Route
                                 path="/profile"
                                 render={(props) => (
