@@ -157,11 +157,11 @@ export default function Lobby() {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={Confirm} color="primary">
-                        Agree
-                    </Button>
                     <Button onClick={DisConfirm} color="primary">
                         Close
+                    </Button>
+                    <Button onClick={Confirm} color="primary">
+                        Agree
                     </Button>
                 </DialogActions>
             </Dialog>

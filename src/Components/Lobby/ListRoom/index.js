@@ -89,7 +89,10 @@ export default function ListRoom({search})
             audience--;
         if(row.playerO)
             audience--;
+
+        if(audience < 0 ) audience = 0;
         return audience;
+
     }
 
     const handleChangePage = (event, newPage) => {
