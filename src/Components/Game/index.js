@@ -9,7 +9,7 @@ import {Redirect} from "react-router-dom";
 import './game.css';
 import Board from './board'
 import Player from "./player";
-import calculateWinner from "./gameCheck";
+import calculateWinner from "./gameService";
 import ChatRoom from "../Chat"
 
 import {socket} from "../../Context/socket";
@@ -22,6 +22,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
+import calculateElo from "./calculateElo";
 
 const size = 20;
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -99,6 +100,9 @@ export default function Game({match}) {
                 const historyGame = dataInfo.content.history;
                 setHistory(historyGame.history);
                 setStepNumber(historyGame.step);
+                const timeLeft = Math.floor((Date.now() - dataInfo.info.timeLastMove) / 1000);
+                setCountdown(timeLeft);
+                setIsStartCount(true);
             }
             else if (respond.data.msg === 0) // if game not start and user reconnect
             {
@@ -167,22 +171,28 @@ export default function Game({match}) {
            setCountdown(0);
            setIsStartCount(0);
            setIsYourTurn(false);
+           const newScore = calculateElo(gameInfo.playerX.elo, gameInfo.playerO.elo, who);
+
 
            if(who === "X")
            {
-               if(playerType === "X")  setEndGame("Match end - You WIN");
+               if(playerType === "X")
+                   setEndGame("Match end - You WIN");
                else if (playerType === "O") setEndGame("Match end - You LOSE");
                else setEndGame("Match end - "+ gameInfo.playerX.username + " win");
            }else if (who === "O" )
            {
-               if(playerType === "O")  setEndGame("Match end - You LOSE");
-               else if(playerType === "X")  setEndGame("Match end - You WIN");
+               if(playerType === "O") setEndGame("Match end - You WIN");
+               else if(playerType === "X")  setEndGame("Match end - You LOSE");
                else setEndGame("Match end - " + gameInfo.playerO.username + " win");
            }
            else
            {
                setEndGame("Match end - DRAW")
            }
+
+           setGameInfo({...gameInfo, playerX: {...gameInfo.playerX, elo: newScore.playerX},
+               playerO: {...gameInfo.playerO, elo: newScore.playerO}});
        }
        socket.on("end-game", handleEndGame);
 
@@ -195,20 +205,26 @@ export default function Game({match}) {
            setCountdown(0);
            setIsStartCount(0);
            setIsYourTurn(false);
+           const newScore = calculateElo(gameInfo.playerX.elo, gameInfo.playerO.elo, who);
 
            if(who === "X")
            {
-               if(playerType === "X")  setEndGame("Match end - You LOSE (due gave up)");
+               if(playerType === "X")
+                   setEndGame("Match end - You LOSE (due gave up)");
+
                else if (playerType === "O") setEndGame("Match end - You WIN (your rival gave up)");
                else setEndGame("Match end - "+ gameInfo.playerX.username +
                        " WIN (due " + gameInfo.playerO.username +" gave up)");
            }else if (who === "O" )
            {
-               if(playerType === "O")  setEndGame("Match end - You LOSE (due gave up)");
+               if(playerType === "O") setEndGame("Match end - You LOSE (due gave up)");
                else if(playerType === "X")  setEndGame("Match end - You WIN (your rival gave up)");
                else setEndGame("Match end - "+ gameInfo.playerO.username +
                        " WIN (due " + gameInfo.playerX.username +" gave up)");
            }
+
+           setGameInfo({...gameInfo, playerX: {...gameInfo.playerX, elo: newScore.playerX},
+               playerO: {...gameInfo.playerO, elo: newScore.playerO}});
        }
 
        socket.on("give-up-request", giveUpRequest);
@@ -279,7 +295,7 @@ export default function Game({match}) {
     },[playerType])
 
     useEffect(() => {
-        const drawDealSuccess = (who) =>
+        const drawDealSuccess = () =>
         {
             setCountdown(0);
             setIsStartCount(0);

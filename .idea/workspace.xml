@@ -20,14 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/Game/drawDeal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Components/Game/calculateElo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Game/giveUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/giveUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/gameCheck.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/gameService.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/User/activate.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/User/activate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/User/forgotPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/User/forgotPassword.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/User/resetPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/User/resetPassword.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Main/navigationBar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +94,7 @@
       <workItem from="1610168026926" duration="32437000" />
       <workItem from="1610255921459" duration="12272000" />
       <workItem from="1610359785786" duration="11980000" />
-      <workItem from="1610432375336" duration="17379000" />
+      <workItem from="1610432375336" duration="26695000" />
     </task>
     <servers />
   </component>

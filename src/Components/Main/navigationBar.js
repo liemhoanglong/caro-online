@@ -11,6 +11,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {logoutService} from "../User/Service/authService";
 import {userLogin} from "../../Context/socket";
 import {socket} from "../../Context/socket";
+import callAPI from "../../Util/callAPI";
 
 const StyledMenu = withStyles({
     paper: {
@@ -81,10 +82,16 @@ export default function NavigationBar()
     }
 
     useEffect(() => {
-        if(loginState.isLogin && loginState.user !== null)
+        const passData = async () =>
         {
-            userLogin(loginState.user._id, loginState.user.username);
+            if(loginState.isLogin && loginState.user !== null)
+            {
+                //const res = await callAPI("GET", "users/getElo", null);
+                userLogin(loginState.user._id, loginState.user.username);
+            }
         }
+        passData();
+
     }, [loginState.isLogin, loginState.user])
 
     const handleToHomePage = () =>
