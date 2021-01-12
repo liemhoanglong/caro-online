@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Grid, Avatar, Button, Typography} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
+import {Grid, Avatar, Button, Typography, Box} from '@material-ui/core';
 import {Redirect} from "react-router-dom"
 
 import SearchRoom from "./searchRoom";
@@ -8,14 +8,38 @@ import {socket} from "../../Context/socket"
 import ListRoom from "./ListRoom";
 import CreateRoom from "./createRoom";
 import {checkAvailableRoom} from "./service";
+import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Lobby() {
     const [isDirectPage, setIsDirectPage] = useState(false);
     const [openNewRoom, setOpenNewRoom] = useState(false);
     const [search, setSearch] = useState("");
     const [IDRoom, setIDRoom] = useState("");
+    const [isInvite, setIsInvite] = useState(false);
+    const [inviteeInfo, setInviteeInfo] = useState({id: "", invitee:"", to: ""});
 
+    useEffect(()=>{
+       const inviteComing = (data) =>
+       {
+           const user = JSON.parse(localStorage.getItem("user"));
+           if(user.username === data.to)
+           {
+               setIDRoom(data.id)
+               setInviteeInfo(data);
+               setIsInvite(true);
+           }
+       }
+       socket.on("invite-friend", inviteComing);
+       return () => socket.off("invite-friend", inviteComing);
+    },[])
 
     const playNow = async () =>
     {
@@ -35,8 +59,6 @@ export default function Lobby() {
     const createRoom = () =>
     {
         setOpenNewRoom(true);
-        // socket.emit("create-room");
-        // setIsDirectPage(true);
     }
 
     const handleCloseCreateRoom = () =>
@@ -58,6 +80,17 @@ export default function Lobby() {
     const searchRoom = (text) =>
     {
         setSearch(text);
+    }
+
+    const Confirm = () =>
+    {
+        setIsDirectPage(true);
+        socket.emit("join-room-id", inviteeInfo.id);
+    }
+
+    const DisConfirm = () =>
+    {
+        setIsInvite(false);
     }
 
     if(isDirectPage)
@@ -94,7 +127,7 @@ export default function Lobby() {
                             <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography>Score: 1609</Typography>
+                            <Typography>{`countdown`}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <ListUser/>
@@ -105,6 +138,33 @@ export default function Lobby() {
             <CreateRoom open={openNewRoom}
                         handleClose={handleCloseCreateRoom}
                         handleAgree = {handleAgreeCreateRoom}/>
+            <Dialog open={isInvite}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={DisConfirm}>
+                <DialogTitle>
+                    You have a message
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">
+                        <Box fontWeight='fontWeightBold' display='inline'>{`${inviteeInfo.invitee} `}</Box>
+                        {"invite you join to room "}
+                        <Box fontWeight='fontWeightBold' display='inline'>{`${inviteeInfo.id} `}</Box>
+                    </Typography>
+                    <Typography variant="h6">
+                        {"Do you want to join this room?"}
+                    </Typography>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={Confirm} color="primary">
+                        Agree
+                    </Button>
+                    <Button onClick={DisConfirm} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment>
     );
 }
