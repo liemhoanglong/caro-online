@@ -12,6 +12,7 @@ import ChatRoom from "../Chat"
 
 import {socket} from "../../Context/socket";
 import callAPI from "../../Util/callAPI";
+import InviteFriend from "./invite";
 
 const size = 20;
 
@@ -156,12 +157,12 @@ export default function Game({match}) {
            if(who === "X")
            {
                if(playerType === "X")  setEndGame("Match end - You WIN");
-               else if (playerType === "O") setEndGame("Match end - You lose");
+               else if (playerType === "O") setEndGame("Match end - You LOSE");
                else setEndGame("Match end - "+ gameInfo.playerX.username + " win");
            }else if (who === "O" )
            {
-               if(playerType === "O")  setEndGame("You lose");
-               else if(playerType === "X")  setEndGame("You WIN");
+               if(playerType === "O")  setEndGame("Match end - You LOSE");
+               else if(playerType === "X")  setEndGame("Match end - You WIN");
                else setEndGame("Match end - " + gameInfo.playerO.username + " win");
            }
            else
@@ -240,7 +241,6 @@ export default function Game({match}) {
             }]);
 
             const newStepNumber = history1.length;
-        
             setHistory(newHistory);
             setStepNumber(newStepNumber);
             setIsYourTurn(!isYourTurn);
@@ -259,6 +259,8 @@ export default function Game({match}) {
     {
         if(gameInfo.playerX && gameInfo.playerO)
         {
+            setGameInfo({...gameInfo, isStart: true});
+            setIsStartCount(true);
             socket.emit("play-game", gameInfo.id);
         }
     }
@@ -294,12 +296,12 @@ export default function Game({match}) {
         if(who === "X")
         {
             if(playerType === "X") return "Match end - You WIN";
-            else if (playerType === "O") return "Match end - You lose";
+            else if (playerType === "O") return "Match end - You LOSE";
             else return "Match end - "+ gameInfo.playerX.username + " win";
         }else if (who ==="O")
         {
-            if(playerType === "O") return "You lose";
-            else if(playerType === "X") return "You WIN";
+            if(playerType === "O") return "Match end - You LOSE";
+            else if(playerType === "X") return "Match end - You WIN";
             else return "Match end - " + gameInfo.playerO.username + " win";
         }
     }
@@ -377,7 +379,7 @@ export default function Game({match}) {
         );
     });
 
-    let status="";
+    let status;
 
     if (winner) {
         status = renderWinner(winner.square);
@@ -404,7 +406,7 @@ export default function Game({match}) {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="primary" disableElevation>Invite friend</Button>
+                    <InviteFriend id={gameInfo.id}/>
                 </Grid>
             </Grid>
             <Grid container direction="row"  style={{padding: 5}}>
@@ -412,7 +414,6 @@ export default function Game({match}) {
                     <Grid container item justify="center" alignItems="center" spacing={2}>
                         {renderPlayer1()}
                         <Grid container item xs={12} justify="center" alignItems="center">
-                            {/*<Typography variant="h3">VS.</Typography>*/}
                             <svg style={{margin:'0px 10px'}} id="Layer_1"
                                  enableBackground="new 0 0 512 512"
                                  height="30" viewBox="0 0 512 512" width="30"
