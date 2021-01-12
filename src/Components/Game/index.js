@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Button, IconButton, Typography, 
+import {Grid, Button, Typography,
     List, ListItem, ListItemText, Paper, Switch} from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import {Redirect} from "react-router-dom";
 
 import './game.css';
 import Board from './board'
@@ -9,42 +10,118 @@ import Player from "./player";
 import calculateWinner from "./gameCheck";
 import ChatRoom from "../Chat"
 
-import {socket, handleMove} from "../../Context/socket";
+import {socket} from "../../Context/socket";
+import callAPI from "../../Util/callAPI";
+import InviteFriend from "./invite";
 
 const size = 20;
 
-export default function Game() {
+export default function Game({match}) {
     // const [size, setSize] = useState(10);
     const [history, setHistory] = useState([{squares: Array(size * size).fill(null)}])
-    const [stepNumber, setStepNumber] = useState(0)
+    const [stepNumber, setStepNumber] = useState(0);
+    const [isDes, setIsDes] = useState(true);
 
     const [displayRenderX, setDisplayRenderX] = useState(true);
     const [isYourTurn, setIsYourTurn] = useState(true);
+    const [countdown, setCountdown] = useState(0);
+    const [isStartCount, setIsStartCount] = useState(false);
+    const [endGame, setEndGame] = useState(false);
 
     const [gameInfo, setGameInfo] = useState({});
     const [playerType, setPlayerType] = useState("");
+    const [isPlayerOut, setIsPlayerOut] = useState({status:false, user: null});
 
-   // const [isGameOver, setIsGameOver] = useState(false); // game end by win, lose or draw
-    // game end by player out room
-    const [isPlayerOut, setIsPlayerOut] = useState(false);
+    const [isValidRoom, setIsValidRoom] = useState(true);
 
-    const [isDes, setIsDes] = useState(true)
+    const currentRoom = match.params.id;
+
+    useEffect(()=> {
+        const fetchData = async () =>
+        {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const respond = await callAPI("POST",
+                "game/checkGame",
+                {id: currentRoom, user: user.id});
+            if(respond.data.msg === -1) //sorry, you should to go now
+            {
+                setIsValidRoom(false);
+                return;
+            }
+            const dataInfo = respond.data.data;
+            setGameInfo(dataInfo.info);
+            setCountdown(dataInfo.info.timing);
+
+            if(user.id === dataInfo.info.playerX.userID)
+            {
+                setPlayerType("X");
+                if(dataInfo.info.isXTurn) {
+                    setIsYourTurn(true);
+                    setIsPlayerOut({status: false, user: null});
+                }
+                else {
+                    setIsYourTurn(false);
+                    setDisplayRenderX(false);
+                    setIsPlayerOut({status: false, user: null});
+                }
+            }
+            else if(user.id === dataInfo.info.playerO.userID)
+            {
+                setPlayerType("O")
+                if(dataInfo.info.isXTurn) {
+                    setIsYourTurn(false);
+                    setIsPlayerOut({status: false, user: null});
+                }
+                else {
+                    setDisplayRenderX(false);
+                    setIsYourTurn(true);
+                    setIsPlayerOut({status: false, user: null});
+                }
+            }
+            else setPlayerType("A")
+
+            if (respond.data.msg >= 1) //if game started and user is (X,O) reconnect
+            {
+                const historyGame = dataInfo.content.history;
+                setHistory(historyGame.history);
+                setStepNumber(historyGame.step);
+            }
+            else if (respond.data.msg === 0) // if game not start and user reconnect
+            {
+                setDisplayRenderX(true);
+            }
+            socket.emit("enter-room", {id: currentRoom, userID: user.id, username: user.username});
+        }
+
+        fetchData();
+    },[currentRoom])
+
+    useEffect(() => {
+       const reconnect = () =>
+       {
+
+       }
+        socket.on("reconnect", reconnect);
+
+       return () => socket.off("reconnect", reconnect)
+    },[])
 
     useEffect(() => {
         const joinRoomPlayer = (data) => {
             setGameInfo(data);
+            setCountdown(data.timing);
             const user = JSON.parse(localStorage.getItem("user"));
             if(data.playerO && data.playerO.userID === user.id) //if player is O
             {
                 setIsYourTurn(false);
                 setPlayerType("O");
-                setIsPlayerOut(false);
+                setIsPlayerOut({status: false, user: null});
             }
             else if(data.playerX && data.playerX.userID === user.id) // if player is X
             {
                 setIsYourTurn(true);
                 setPlayerType("X");
-                setIsPlayerOut(false);
+                setIsPlayerOut({status: false, user: null});
             }
             else // if player is audience
             {
@@ -59,24 +136,64 @@ export default function Game() {
     })
 
     useEffect(() => {
+       const playGame = () =>
+       {
+           setGameInfo({...gameInfo, isStart: true});
+           setIsStartCount(true);
+       }
+
+       socket.on("play-game", playGame);
+       
+       return () => socket.off("play-game", playGame);
+    },[gameInfo])
+
+    useEffect(()=>{
+       const handleEndGame = (who) =>
+       {
+           setCountdown(0);
+           setIsStartCount(0);
+           setIsYourTurn(false);
+
+           if(who === "X")
+           {
+               if(playerType === "X")  setEndGame("Match end - You WIN");
+               else if (playerType === "O") setEndGame("Match end - You LOSE");
+               else setEndGame("Match end - "+ gameInfo.playerX.username + " win");
+           }else if (who === "O" )
+           {
+               if(playerType === "O")  setEndGame("Match end - You LOSE");
+               else if(playerType === "X")  setEndGame("Match end - You WIN");
+               else setEndGame("Match end - " + gameInfo.playerO.username + " win");
+           }
+           else
+           {
+               setEndGame("Match end - DRAW")
+           }
+       }
+       socket.on("end-game", handleEndGame);
+
+       return () => socket.off("end-game", handleEndGame)
+    })
+
+    useEffect(() => {
         const move = (data) => {
             setHistory(data.history);
             setStepNumber(data.step);
             setDisplayRenderX(!displayRenderX);
             setIsYourTurn(!isYourTurn);
+            setCountdown(gameInfo.timing);
         }
 
         socket.on("move", move);
 
-        return () => {
-            socket.off("move", move);
-        }
-    }, [displayRenderX, isYourTurn])
+        return () => socket.off("move", move);
+    }, [displayRenderX, isYourTurn, gameInfo.timing])
 
     useEffect(() =>{
         const roomChange = (data) =>
         {
             setGameInfo(data);
+            setIsPlayerOut({status: false, user: null});
         }
 
         socket.on("room-change", roomChange);
@@ -87,15 +204,26 @@ export default function Game() {
     useEffect(() => {
         const roomChangePlayer = (data) =>
         {
-            setGameInfo(data);
-            setIsPlayerOut(true);
+            setIsPlayerOut({status: true, user: data});
         }
-
         socket.on("room-change-player", roomChangePlayer);
 
         return () => socket.off("room-change-player", roomChangePlayer);
     },[])
 
+    useEffect(() =>{
+        let t;
+        const count = () =>
+            setCountdown(countdown - 1);
+
+        if(countdown > 0 && isStartCount)
+            t = setTimeout(() => count(), 1000);
+        else
+            setIsStartCount(false)
+
+        return () => clearTimeout(t);
+
+    },[countdown, isStartCount])
 
     const handleClick = (i) => {
         if(gameInfo.isStart && isYourTurn && playerType !== "A")
@@ -113,13 +241,13 @@ export default function Game() {
             }]);
 
             const newStepNumber = history1.length;
-        
             setHistory(newHistory);
             setStepNumber(newStepNumber);
             setIsYourTurn(!isYourTurn);
             setDisplayRenderX(!displayRenderX);
+            setCountdown(gameInfo.timing);
 
-            handleMove(newHistory, newStepNumber);
+            socket.emit("move", {history: newHistory, step: newStepNumber});
         }
     }
 
@@ -132,6 +260,7 @@ export default function Game() {
         if(gameInfo.playerX && gameInfo.playerO)
         {
             setGameInfo({...gameInfo, isStart: true});
+            setIsStartCount(true);
             socket.emit("play-game", gameInfo.id);
         }
     }
@@ -142,33 +271,18 @@ export default function Game() {
         return ': row ' + row + ' col ' + col
     }
 
-    const current = history[stepNumber];
-    const winner = calculateWinner(current.squares, current.location, size);
-    const moves = history.map((step, move) => {
-        const desc = move ?
-            'Move #' + move + location(history[move].location) :
-            'Move #0: Game start';
-        return (
-            <ListItem button key={move}>
-                <ListItemText primary={desc}/>
-            </ListItem>
-        );
-    });
-
     const renderTurn = () =>
     {
         if(playerType === "A") // type = audience
         {
-            //do ???
+            if(isYourTurn)
+                return(`${gameInfo.playerX.username} turn (X)`);
+            else return(`${gameInfo.playerO.username} turn (O)`);
         }
         else
         {
             if(isYourTurn)
-                return (
-                    <>
-                    {"Your turn "}
-                    <span style={{color: 'red'}}>{playerType}</span>
-                        </>);
+                return (`Your turn (${playerType})`);
             else
             {
                 const opposite = playerType === "X"? "O" : "X";
@@ -181,14 +295,14 @@ export default function Game() {
     {
         if(who === "X")
         {
-            if(playerType === "X") return "You WIN";
-            else if (playerType === "O") return "You lose";
-            else return gameInfo.playerX.username + " win";
+            if(playerType === "X") return "Match end - You WIN";
+            else if (playerType === "O") return "Match end - You LOSE";
+            else return "Match end - "+ gameInfo.playerX.username + " win";
         }else if (who ==="O")
         {
-            if(playerType === "O") return "You lose";
-            else if(playerType === "X") return "You WIN";
-            else return gameInfo.playerO.username + " win";
+            if(playerType === "O") return "Match end - You LOSE";
+            else if(playerType === "X") return "Match end - You WIN";
+            else return "Match end - " + gameInfo.playerO.username + " win";
         }
     }
 
@@ -204,6 +318,14 @@ export default function Game() {
         }
         else// is audience
         {
+            if(isPlayerOut.status)
+            {
+                if(gameInfo.isStart && isPlayerOut.user === gameInfo.playerX.username)
+                    return (<Player status={-1} type="" player={""}/>)
+                else
+                    return (<Player status={0} type="" player={""}/>)
+            }
+
             if(gameInfo.playerX)
                 return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} />)
             else return (<Player status={0} player=""/>);
@@ -212,7 +334,7 @@ export default function Game() {
 
     const renderPlayer2 = () =>
     {
-        if(isPlayerOut)
+        if(isPlayerOut.status)
         {
             if(gameInfo.isStart)
                 return (<Player status={-1} type="" player={""}/>)
@@ -236,21 +358,38 @@ export default function Game() {
         // is audience
         else
         {
+
             if(gameInfo.playerO)
-                return (<Player status={0} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
+                return (<Player status={1} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
             else
                 return (<Player status={0} type="" player=""/>);
         }
     }
 
+    const current = history[stepNumber];
+    const winner = calculateWinner(current.squares, current.location, size);
+    const moves = history.map((step, move) => {
+        const desc = move ?
+            'Move #' + move + location(history[move].location) :
+            'Move #0: Game start';
+        return (
+            <ListItem button key={move}>
+                <ListItemText primary={desc}/>
+            </ListItem>
+        );
+    });
+
     let status;
+
     if (winner) {
         status = renderWinner(winner.square);
     } else if (!current.squares.includes(null)) {
-        status = "Draw!";
+        status = "Match end - Draw!";
     } else {
         status = renderTurn();
     }
+
+    if(!isValidRoom) return(<Redirect to="/lobby"/>);
 
     return (
         <Grid container direction="column">
@@ -259,10 +398,15 @@ export default function Game() {
                     <Typography variant="h5">{`Room: ${gameInfo.id}`}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography variant={"h5"}>{status}</Typography>
+                    <Typography variant={"h5"}>
+                        {endGame ?
+                            endGame :
+                            `${status} - ${countdown} s`
+                        }
+                    </Typography>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="primary" disableElevation>Invite friend</Button>
+                    <InviteFriend id={gameInfo.id}/>
                 </Grid>
             </Grid>
             <Grid container direction="row"  style={{padding: 5}}>
@@ -270,7 +414,6 @@ export default function Game() {
                     <Grid container item justify="center" alignItems="center" spacing={2}>
                         {renderPlayer1()}
                         <Grid container item xs={12} justify="center" alignItems="center">
-                            {/*<Typography variant="h3">VS.</Typography>*/}
                             <svg style={{margin:'0px 10px'}} id="Layer_1"
                                  enableBackground="new 0 0 512 512"
                                  height="30" viewBox="0 0 512 512" width="30"
@@ -297,17 +440,19 @@ export default function Game() {
                             size={size}
                         />
                         : playerType === "X" ?
-                        <Button variant="contained" onClick={startGame}>Play</Button>
-                            : <Typography>Waiting for host start the game!</Typography>
+                        <Button variant="contained" color="primary" size="large" onClick={startGame}>Play</Button>
+                            : <Typography variant="h5">Waiting for host start the game!</Typography>
                     }
                     </Grid>
                 </Grid>
                 <Grid item xs={4}>
                     <Grid container>
                         <Grid container item spacing={1}>
-                            <Grid item xs={12} zeroMinWidth wrap="nowrap">
+                            <Grid item xs={12}>
                                 <Typography variant={"h5"}>Chat</Typography>
-                                <ChatRoom/>
+                            </Grid>
+                            <Grid container item xs={12} zeroMinWidth wrap="nowrap">
+                                <ChatRoom id={currentRoom}/>
                             </Grid>
                             <Grid container item xs={12}>
                                 <Grid item container justify="space-between" xs={12}>

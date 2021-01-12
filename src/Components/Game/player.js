@@ -34,6 +34,7 @@ export default function Player({status, type, player})
                     <CardActionArea style={{paddingTop: 50, paddingBottom: 50}}>
                         <Grid justify="center" alignContent="center" container>
                             <Typography variant="h5">Player left room</Typography>
+                            <Typography variant="h6">Waiting for reconnect...</Typography>
                         </Grid>
                     </CardActionArea>
                 </Card>

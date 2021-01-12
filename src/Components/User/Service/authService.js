@@ -1,4 +1,5 @@
 import callAPI from "../../../Util/callAPI";
+import {socket} from "../../../Context/socket";
 
 export async function loginService(username, password){
     try
@@ -45,6 +46,7 @@ export const resetPasswordService = (id, input) =>
 };
 
 export const logoutService = () => {
+    socket.emit('user-log-out');
     localStorage.removeItem("user");
 };
 

@@ -20,9 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Components/Game/invite.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/createRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/createRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/ListUser/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/ListUser/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/User/Service/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/User/Service/authService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +92,10 @@
       <workItem from="1608967515429" duration="5296000" />
       <workItem from="1609159192552" duration="13943000" />
       <workItem from="1609248936445" duration="7463000" />
+      <workItem from="1610168026926" duration="32437000" />
+      <workItem from="1610255921459" duration="12272000" />
+      <workItem from="1610359785786" duration="11980000" />
+      <workItem from="1610432375336" duration="6978000" />
     </task>
     <servers />
   </component>
@@ -108,23 +115,13 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="339" y="162" key="run.anything.popup" timestamp="1609174694196">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1610434076175">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1609174694196" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608907670727">
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1610434076175" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1610433370246">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1608907670727" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/Components/Chat/index.js</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1610433370246" />
   </component>
 </project>

@@ -27,13 +27,10 @@ export default function Profile(props) {
         }
     }, [userNow.isLogin, userNow.user])
 
-    console.log(userNow)
 
     const handleEditProfile = async (e) => {
         e.preventDefault();
-        console.log(input);
         const res = await userAPI.editProfile(input);
-        console.log(userNow)
         if (res.data.error) {
             setError(res.data.error);
         }
@@ -45,17 +42,14 @@ export default function Profile(props) {
 
     const handleChangePass = async (e) => {
         e.preventDefault();
-        console.log(input2);
         if (input2.newpass ===input2.repass)
         {
             const res = await userAPI.changePass(input2);
             if (res.data.error) {
-                console.log(res.data.error);
                 setMsg('');
                 setError2(res.data.error);
             }
             else {
-                console.log(res.data);
                 setError2('');
                 setMsg(res.data.msg);
             }
