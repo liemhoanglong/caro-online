@@ -1,21 +1,22 @@
 import React, {useState} from "react"
-import {Button} from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
 import Typography from "@material-ui/core/Typography";
+import DialogActions from "@material-ui/core/DialogActions";
+import {Box, Button} from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
 import {socket} from "../../Context/socket";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function GiveUp({isStart})
+
+export default function DrawDeal({isStart})
 {
     const [open, setOpen] = useState(false);
-    const [isClick, setClick] = useState(false);
 
     const handleClose = () =>
     {
@@ -29,17 +30,16 @@ export default function GiveUp({isStart})
 
     const handleAgree = () =>
     {
-        setClick(true);
-        socket.emit("give-up");
-        handleClose();
+        setOpen(false);
+        socket.emit("draw-deal");
     }
 
     return(
         <React.Fragment>
-            {isStart && !isClick ?
-                <Button variant="contained" color="primary" onClick={handleOpen}>Give up</Button>
+            {isStart ?
+                <Button variant="contained" color="primary" onClick={handleOpen}>Draw deal</Button>
                 :
-                <Button variant="contained" color="primary" disabled>Give up</Button>
+                <Button variant="contained" color="primary" disabled>Draw deal</Button>
             }
             <Dialog
                 open={open}
@@ -49,9 +49,11 @@ export default function GiveUp({isStart})
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">Give up</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw Deal</Box>
+                </DialogTitle>
                 <DialogContent>
-                    <Typography variant="h6">Are you sure? You will lose this game!</Typography>
+                    <Typography variant="h6">Are you sure want to give a draw deal with your rival?</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -63,5 +65,5 @@ export default function GiveUp({isStart})
                 </DialogActions>
             </Dialog>
         </React.Fragment>
-    );
+    )
 }

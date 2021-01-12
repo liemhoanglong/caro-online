@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Button, Typography,
-    List, ListItem, ListItemText, Paper, Switch} from '@material-ui/core';
+import {
+    Grid, Button, Typography,
+    List, ListItem, ListItemText, Paper, Switch, Box
+} from '@material-ui/core';
 
 import {Redirect} from "react-router-dom";
 
@@ -14,8 +16,17 @@ import {socket} from "../../Context/socket";
 import callAPI from "../../Util/callAPI";
 import InviteFriend from "./invite";
 import GiveUp from "./giveUp";
+import DrawDeal from "./drawDeal";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
 
 const size = 20;
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Game({match}) {
     // const [size, setSize] = useState(10);
@@ -34,6 +45,8 @@ export default function Game({match}) {
     const [isPlayerOut, setIsPlayerOut] = useState({status:false, user: null});
 
     const [isValidRoom, setIsValidRoom] = useState(true);
+    const [isOpenDrawDeal, setIsOpenDrawDeal] = useState(false);
+    const [isOpenDealFail, setIsOpenDealFail] = useState(false);
 
     const currentRoom = match.params.id;
 
@@ -252,6 +265,44 @@ export default function Game({match}) {
         return () => clearTimeout(t);
 
     },[countdown, isStartCount])
+    
+    useEffect(() => {
+        const drawDealRequest = (who) =>
+        {
+            if(who === playerType)
+                setIsOpenDrawDeal(true);
+            else setIsOpenDrawDeal(false);
+        }
+        socket.on("draw-deal-request", drawDealRequest);
+
+        return () => socket.off("draw-deal-request", drawDealRequest);
+    },[playerType])
+
+    useEffect(() => {
+        const drawDealSuccess = (who) =>
+        {
+            setCountdown(0);
+            setIsStartCount(0);
+            setIsYourTurn(false);
+
+            setEndGame("Match end - Draw")
+        }
+        socket.on("draw-deal-success", drawDealSuccess);
+
+        return () => socket.off("draw-deal-success", drawDealSuccess);
+    },[])
+
+    useEffect(() =>{
+        const drawDealFail = (who) =>
+        {
+            if(who === playerType)
+                setIsOpenDealFail(true);
+            else setIsOpenDealFail(false);
+        }
+        socket.on("draw-deal-fail", drawDealFail);
+
+        return () => socket.off("draw-deal-fail", drawDealFail);
+    })
 
     const handleClick = (i) => {
         if(gameInfo.isStart && isYourTurn && playerType !== "A")
@@ -393,6 +444,18 @@ export default function Game({match}) {
                 return (<Player status={0} type="" player=""/>);
         }
     }
+    
+    const handleCloseDrawDeal = () =>
+    {
+        setIsOpenDrawDeal(false);
+        socket.emit("disagree-draw-deal");
+    }
+    
+    const handleAgreeDrawDeal = () =>
+    {
+        setIsOpenDrawDeal(false);
+        socket.emit("agree-draw-deal");
+    }
 
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares, current.location, size);
@@ -455,7 +518,7 @@ export default function Game({match}) {
                                         <GiveUp isStart={gameInfo.isStart}/>
                                     </Grid>
                                     <Grid item>
-                                        <Button variant="contained" color="primary">Draw deal</Button>
+                                        <DrawDeal isStart={gameInfo.isStart}/>
                                     </Grid>
                                 </Grid>
                             </React.Fragment>
@@ -507,6 +570,45 @@ export default function Game({match}) {
                     </Grid>
                 </Grid>
             </Grid>
+            <Dialog
+                open={isOpenDrawDeal}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleCloseDrawDeal}
+            >
+                <DialogTitle>
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw Deal</Box>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">Your rival sent you a draw deal. Agree?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDrawDeal} color="primary">
+                        Close
+                    </Button>
+                    <Button onClick={handleAgreeDrawDeal} color="primary">
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={isOpenDealFail}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setIsOpenDealFail(false)}
+            >
+                <DialogTitle>
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw deal failure</Box>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">Your rival ignore your draw-deal</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsOpenDealFail(false)} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     );
 }
