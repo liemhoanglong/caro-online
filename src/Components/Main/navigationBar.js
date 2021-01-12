@@ -8,6 +8,7 @@ import Menu, { MenuProps } from '@material-ui/core/Menu';
 import {Link} from "react-router-dom";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import DescriptionIcon from '@material-ui/icons/Description';
 import {logoutService} from "../User/Service/authService";
 import {userLogin} from "../../Context/socket";
 import {socket} from "../../Context/socket";
@@ -109,6 +110,15 @@ export default function NavigationBar()
                         aria-haspopup="true"
                         variant="contained"
                         color="primary"
+                        style={{textTransform: "none", backgroundColor: "#239478", color: "#fff", marginRight: 10}}
+                    >
+                        <Link to="/leaderboard" style={{textTransform: "none", textDecoration: "none", color: "#fff"}}>Leaderboard</Link>
+                    </Button>
+                    <Button
+                        aria-controls="customized-menu"
+                        aria-haspopup="true"
+                        variant="contained"
+                        color="primary"
                         onClick={handleClick}
                         style={{textTransform: "none", backgroundColor: "#239478", color: "#fff"}}
                     >
@@ -127,6 +137,14 @@ export default function NavigationBar()
                                     <AccountCircleIcon fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText primary="Profile" />
+                            </StyledMenuItem>
+                        </Link>
+                        <Link to="/history" style={{ textDecoration: 'none', color: "inherit" }}>
+                            <StyledMenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                    <DescriptionIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText primary="History" />
                             </StyledMenuItem>
                         </Link>
                         <Link to="/login" style={{ textDecoration: 'none', color: "inherit" }}>
