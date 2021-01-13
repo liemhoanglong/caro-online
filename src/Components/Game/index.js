@@ -183,13 +183,13 @@ export default function Game({match}) {
                else if (playerType === "O") setEndGameText("Match end - You LOSE");
                else setEndGameText("Match end - "+ gameInfo.playerX.username + " win");
 
-               setEloDisplay({X: `+(${newScore.diff})`, O: `-(${newScore.diff})`})
+               setEloDisplay({X: `+(${newScore.diff.plus})`, O: `-(${newScore.diff.minus})`})
            }else if (who === "O" )
            {
                if(playerType === "O") setEndGameText("Match end - You WIN");
                else if(playerType === "X")  setEndGameText("Match end - You LOSE");
                else setEndGameText("Match end - " + gameInfo.playerO.username + " win");
-               setEloDisplay({X: `-(${newScore.diff})`, O: `+(${newScore.diff})`})
+               setEloDisplay({X: `-(${newScore.diff.minus})`, O: `+(${newScore.diff.plus})`})
            }
            else
            {
@@ -224,14 +224,14 @@ export default function Game({match}) {
                else setEndGameText("Match end - "+ gameInfo.playerX.username +
                        " WIN (due " + gameInfo.playerO.username +" gave up)");
 
-               setEloDisplay({X: `-(${newScore.diff})`, O: `+(${newScore.diff})`})
+               setEloDisplay({X: `-(${newScore.diff.minus})`, O: `+(${newScore.diff.plus})`})
            }else if (who === "O" )
            {
                if(playerType === "O") setEndGameText("Match end - You LOSE (due gave up)");
                else if(playerType === "X")  setEndGameText("Match end - You WIN (your rival gave up)");
                else setEndGameText("Match end - "+ gameInfo.playerO.username +
                        " WIN (due " + gameInfo.playerX.username +" gave up)");
-               setEloDisplay({X: `+(${newScore.diff})`, O: `-(${newScore.diff})`})
+               setEloDisplay({X: `+(${newScore.diff.plus})`, O: `-(${newScore.diff.minus})`})
            }
 
            setGameInfo({...gameInfo, playerX: {...gameInfo.playerX, elo: newScore.playerX},
