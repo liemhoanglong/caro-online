@@ -14,6 +14,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Button from "@material-ui/core/Button";
 
 import './history.css'
 import War from '../IconSVG/War';
@@ -203,6 +204,9 @@ export default function History(props) {
     if(!rows) return <></>
     return (
         <Container className={classes.root}>
+            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20}}>&lt; Exit</Button>
+            </Link>
             <h1 style={{ textAlign: "center" }}>History</h1>
             <Grid container spacing={3}>
                 <Grid item xs={6}>
