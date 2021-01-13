@@ -1,42 +1,7 @@
 import React, { useState } from 'react';
-import { Redirect, Link } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
-
-import { useUpdateUserContext } from "../../Context/UserContext";
-import { userLogin } from "../../Context/socket";
+import { Redirect } from "react-router-dom";
 import { activateService } from "./Service/authService";
-
-import {
-    Avatar, Button, Container,
-    CssBaseline, TextField, Grid,
-    Typography, Collapse
-} from '@material-ui/core';
-
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from '@material-ui/icons/Close';
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(5),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: "#fff"
-    },
-}));
+import {Button,} from '@material-ui/core';
 
 export default function Activate(props) {
     const [alert, setAlert] = useState(false);
@@ -71,7 +36,7 @@ export default function Activate(props) {
                         color="primary"
                         onClick={handleActivated}
                     >
-                        Acitvate
+                        Activate
                     </Button>
                 </>
             }

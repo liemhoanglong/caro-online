@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Button, Typography,
-    List, ListItem, ListItemText, Paper, Switch} from '@material-ui/core';
+import {
+    Grid, Button, Typography,
+    List, ListItem, ListItemText, Paper, Switch, Box
+} from '@material-ui/core';
 
 import {Redirect} from "react-router-dom";
 
@@ -13,8 +15,18 @@ import ChatRoom from "../Chat"
 import {socket} from "../../Context/socket";
 import callAPI from "../../Util/callAPI";
 import InviteFriend from "./invite";
+import GiveUp from "./giveUp";
+import DrawDeal from "./drawDeal";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
 
 const size = 20;
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Game({match}) {
     // const [size, setSize] = useState(10);
@@ -33,6 +45,8 @@ export default function Game({match}) {
     const [isPlayerOut, setIsPlayerOut] = useState({status:false, user: null});
 
     const [isValidRoom, setIsValidRoom] = useState(true);
+    const [isOpenDrawDeal, setIsOpenDrawDeal] = useState(false);
+    const [isOpenDealFail, setIsOpenDealFail] = useState(false);
 
     const currentRoom = match.params.id;
 
@@ -174,6 +188,33 @@ export default function Game({match}) {
 
        return () => socket.off("end-game", handleEndGame)
     })
+    
+    useEffect(() => {
+       const giveUpRequest = (who) =>
+       {
+           setCountdown(0);
+           setIsStartCount(0);
+           setIsYourTurn(false);
+
+           if(who === "X")
+           {
+               if(playerType === "X")  setEndGame("Match end - You LOSE (due gave up)");
+               else if (playerType === "O") setEndGame("Match end - You WIN (your rival gave up)");
+               else setEndGame("Match end - "+ gameInfo.playerX.username +
+                       " WIN (due " + gameInfo.playerO.username +" gave up)");
+           }else if (who === "O" )
+           {
+               if(playerType === "O")  setEndGame("Match end - You LOSE (due gave up)");
+               else if(playerType === "X")  setEndGame("Match end - You WIN (your rival gave up)");
+               else setEndGame("Match end - "+ gameInfo.playerO.username +
+                       " WIN (due " + gameInfo.playerX.username +" gave up)");
+           }
+       }
+
+       socket.on("give-up-request", giveUpRequest);
+
+       return () => socket.off("give-up-request", giveUpRequest);
+    })
 
     useEffect(() => {
         const move = (data) => {
@@ -224,6 +265,44 @@ export default function Game({match}) {
         return () => clearTimeout(t);
 
     },[countdown, isStartCount])
+    
+    useEffect(() => {
+        const drawDealRequest = (who) =>
+        {
+            if(who === playerType)
+                setIsOpenDrawDeal(true);
+            else setIsOpenDrawDeal(false);
+        }
+        socket.on("draw-deal-request", drawDealRequest);
+
+        return () => socket.off("draw-deal-request", drawDealRequest);
+    },[playerType])
+
+    useEffect(() => {
+        const drawDealSuccess = (who) =>
+        {
+            setCountdown(0);
+            setIsStartCount(0);
+            setIsYourTurn(false);
+
+            setEndGame("Match end - Draw")
+        }
+        socket.on("draw-deal-success", drawDealSuccess);
+
+        return () => socket.off("draw-deal-success", drawDealSuccess);
+    },[])
+
+    useEffect(() =>{
+        const drawDealFail = (who) =>
+        {
+            if(who === playerType)
+                setIsOpenDealFail(true);
+            else setIsOpenDealFail(false);
+        }
+        socket.on("draw-deal-fail", drawDealFail);
+
+        return () => socket.off("draw-deal-fail", drawDealFail);
+    })
 
     const handleClick = (i) => {
         if(gameInfo.isStart && isYourTurn && playerType !== "A")
@@ -365,6 +444,18 @@ export default function Game({match}) {
                 return (<Player status={0} type="" player=""/>);
         }
     }
+    
+    const handleCloseDrawDeal = () =>
+    {
+        setIsOpenDrawDeal(false);
+        socket.emit("disagree-draw-deal");
+    }
+    
+    const handleAgreeDrawDeal = () =>
+    {
+        setIsOpenDrawDeal(false);
+        socket.emit("agree-draw-deal");
+    }
 
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares, current.location, size);
@@ -420,14 +511,20 @@ export default function Game({match}) {
                                  xmlns="http://www.w3.org/2000/svg"><path d="m497 60.445h.01z"/><g><path d="m497 0h-45.445c-3.979 0-7.794 1.58-10.606 4.394l-290.896 290.895 66.658 66.658 290.895-290.896c2.814-2.813 4.394-6.628 4.394-10.607v-45.444c0-8.284-6.716-15-15-15z"/><path d="m59.792 385.693c-8.902 8.902-13.637 20.537-14.081 32.272-11.592.324-23.087 4.897-31.935 13.744-18.367 18.367-18.367 48.147 0 66.515 18.367 18.367 48.147 18.367 66.515 0 8.794-8.794 13.366-20.205 13.739-31.726 11.523-.372 22.935-4.948 31.73-13.743l27.24-27.241-66.515-66.514z"/><path d="m272.446 306.798h94.268v25.564h-94.268z" transform="matrix(.707 -.707 .707 .707 -132.374 319.58)"/><path d="m168.129 234.786 66.658-66.658-163.735-163.734c-2.813-2.814-6.628-4.394-10.607-4.394h-45.445c-8.284 0-15 6.716-15 15v45.444c0 3.979 1.58 7.794 4.394 10.606z"/><path d="m466.29 417.966c-.444-11.735-5.18-23.371-14.081-32.272l-26.694-26.694-66.515 66.514 27.241 27.241c8.795 8.795 20.207 13.371 31.73 13.743.373 11.521 4.945 22.932 13.739 31.726 18.367 18.367 48.147 18.367 66.515 0 18.367-18.367 18.367-48.147 0-66.515-8.848-8.846-20.343-13.419-31.935-13.743z"/><path d="m443.349 277.527c-5.858-5.858-15.356-5.857-21.213 0l-144.609 144.608c-5.858 5.857-5.858 15.356 0 21.213 5.857 5.857 15.355 5.857 21.213 0l144.609-144.608c5.858-5.857 5.858-15.355 0-21.213z"/><path d="m89.864 277.527c-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213l144.609 144.608c5.857 5.857 15.356 5.857 21.213 0 5.858-5.857 5.858-15.355 0-21.213z"/></g></svg>
                         </Grid>
                         {renderPlayer2()}
-                        <Grid container item xs={12} justify="space-around" alignItems="baseline">
-                            <Grid item>
-                                <Button variant="contained" color="primary">Give up</Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary">Draw deal</Button>
-                            </Grid>
-                        </Grid>
+                        {playerType !== "A" ?
+                            <React.Fragment>
+                                <Grid container item xs={12} justify="space-around" alignItems="baseline">
+                                    <Grid item>
+                                        <GiveUp isStart={gameInfo.isStart}/>
+                                    </Grid>
+                                    <Grid item>
+                                        <DrawDeal isStart={gameInfo.isStart}/>
+                                    </Grid>
+                                </Grid>
+                            </React.Fragment>
+                            :
+                            <React.Fragment/>
+                        }
                     </Grid>
                 </Grid>
                 <Grid container item xs={6} justify="center" alignContent="center">
@@ -473,6 +570,45 @@ export default function Game({match}) {
                     </Grid>
                 </Grid>
             </Grid>
+            <Dialog
+                open={isOpenDrawDeal}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleCloseDrawDeal}
+            >
+                <DialogTitle>
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw Deal</Box>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">Your rival sent you a draw deal. Agree?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDrawDeal} color="primary">
+                        Close
+                    </Button>
+                    <Button onClick={handleAgreeDrawDeal} color="primary">
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={isOpenDealFail}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setIsOpenDealFail(false)}
+            >
+                <DialogTitle>
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw deal failure</Box>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="h6">Your rival ignore your draw-deal</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsOpenDealFail(false)} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     );
 }

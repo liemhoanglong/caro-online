@@ -1,35 +1,46 @@
-import React, {useState} from "react";
-import {Button} from "@material-ui/core";
+import React, {useState} from "react"
 import Slide from "@material-ui/core/Slide";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+import Typography from "@material-ui/core/Typography";
 import DialogActions from "@material-ui/core/DialogActions";
+import {Box, Button} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
-import UserList from "../ListUser";
+import {socket} from "../../Context/socket";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function InviteFriend({id})
+
+export default function DrawDeal({isStart})
 {
     const [open, setOpen] = useState(false);
-
-    const handleOpen = () =>
-    {
-        setOpen(true);
-    }
 
     const handleClose = () =>
     {
         setOpen(false);
     }
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const handleOpen = () =>
+    {
+        setOpen(true);
+    }
+
+    const handleAgree = () =>
+    {
+        setOpen(false);
+        socket.emit("draw-deal");
+    }
 
     return(
         <React.Fragment>
-            <Button variant="contained" color="primary" disableElevation onClick={handleOpen}>Invite friend</Button>
+            {isStart ?
+                <Button variant="contained" color="primary" onClick={handleOpen}>Draw deal</Button>
+                :
+                <Button variant="contained" color="primary" disabled>Draw deal</Button>
+            }
             <Dialog
                 open={open}
                 TransitionComponent={Transition}
@@ -38,13 +49,18 @@ export default function InviteFriend({id})
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">Invite friends</DialogTitle>
+                <DialogTitle id="alert-dialog-slide-title">
+                    <Box fontWeight='fontWeightBold' display='inline'>Draw Deal</Box>
+                </DialogTitle>
                 <DialogContent>
-                    <UserList type={1} id={id} invitee={user.username} handleClose={handleClose}/>
+                    <Typography variant="h6">Are you sure want to give a draw deal with your rival?</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Close
+                    </Button>
+                    <Button onClick={handleAgree} color="primary">
+                        Agree
                     </Button>
                 </DialogActions>
             </Dialog>

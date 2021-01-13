@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import { Redirect } from "react-router-dom";
 import { forgotPasswordService } from "./Service/authService";
 
-import {
-    Avatar, Button, Container,
-    CssBaseline, TextField, Grid,
-    Typography, Collapse
-} from '@material-ui/core';
+import {Button, Container, TextField, Grid} from '@material-ui/core';
 
 
 export default function ForgotPassword(props) {
@@ -30,7 +25,7 @@ export default function ForgotPassword(props) {
                 :
                 <Container>
                     <Grid container spacing={3}>
-                        <Grid item md={4} xs={0}></Grid>
+                        <Grid item md={4} xs={0}/>
                         <Grid item md={4} xs={12}>
                             <h2>Forgot Password!</h2>
                             <form validate onSubmit={handleReset}>
