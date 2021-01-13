@@ -90,14 +90,14 @@ export default function UserList({type, id, invitee, handleClose}) {
             {listUserOnline.length > 1 ?
                 <React.Fragment>
                     <Paper elevation={1}>
-                        <List component="nav" className={classes.root}>
+                        <List component="nav" className={classes.root} style={{backgroundColor: "#F5F5F5"}}>
                             {displayItem()}
                         </List>
                     </Paper>
                 </React.Fragment>
                 :
                 <Grid container justify="center" alignContent="center">
-                    <Card  elevation={3} style={{maxHeight: 200, width: "100%", marginTop: 10}}>
+                    <Card  elevation={3} style={{maxHeight: 200, width: "100%", marginTop: 10, backgroundColor: "#F5F5F5"}}>
                         <CardActionArea style={{paddingTop: 50, paddingBottom: 50}}>
                             <Grid justify="center" alignContent="center" container>
                                 <Typography variant="h5">No user online...</Typography>
