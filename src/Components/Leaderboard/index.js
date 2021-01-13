@@ -8,6 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from "@material-ui/core/Button";
+import { Link } from 'react-router-dom';
 
 import Crown from '../IconSVG/Crown';
 import userAPI from '../../Util/userAPI';
@@ -74,6 +76,9 @@ export default function Leaderboard(props) {
     const classes = useStyles();
     return (
         <Container>
+            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20}}>&lt; Exit</Button>
+            </Link>
             <h1 style={{ textAlign: "center" }}>Leaderboard<Crown width='40px' height='40px' style={{transform: "rotate(45deg)"}}/></h1>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">

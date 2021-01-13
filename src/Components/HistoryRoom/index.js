@@ -3,6 +3,7 @@ import { Grid, GridList, Button, Switch, Box, Container } from '@material-ui/cor
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 import './game.css';
 import Board from './board'
@@ -121,7 +122,9 @@ export default function HistoryRoom(props) {
         {
           data ?
           <Container>
-            <br/>
+            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20, marginBottom:20 }}>&lt; Exit</Button>
+            </Link>
             <Grid container spacing={3} className="game">
               <Grid item xs={3}>
                 <Grid item xs={12}>
