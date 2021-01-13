@@ -42,7 +42,7 @@ export default function Player({status, type, player})
         )
     }
     else {
-        const character = player.username.charAt(0);
+        const character = player.username.charAt(0).toUpperCase();
         return (
             <Grid container item xs={12}>
                 <Card className={classes.root} elevation={2}>

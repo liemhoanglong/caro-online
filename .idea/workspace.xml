@@ -21,7 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a24577cf-a0c9-428e-8849-3dac26d73e9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/ListUser/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/ListUser/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/player.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +93,7 @@
       <workItem from="1610255921459" duration="12272000" />
       <workItem from="1610359785786" duration="11980000" />
       <workItem from="1610432375336" duration="26695000" />
-      <workItem from="1610508397409" duration="8338000" />
+      <workItem from="1610508397409" duration="10080000" />
     </task>
     <servers />
   </component>
