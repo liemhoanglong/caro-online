@@ -15,6 +15,9 @@ import Game from "./Components/Game"
 import NavigationBar from "./Components/Main/navigationBar";
 import NotFoundPage from "./Components/Main/pageNotFound";
 import Profile from "./Components/Profile";
+import History from "./Components/History";
+import HistoryRoom from "./Components/HistoryRoom";
+import Leaderboard from "./Components/Leaderboard";
 
 const theme = createMuiTheme({
     palette: {
@@ -45,6 +48,9 @@ const App = () => {
                             <Route path="/users/forgot-password" exact component={ForgotPassword} />
                             <Route path="/users/reset-password/:id" exact component={ResetPassword} />
                             <Route path="/game/:id" component={(match) => Game(match)} />
+                            <Route path="/history" component={History} />
+                            <Route path="/history-room/:id" component={HistoryRoom} />
+                            <Route path="/leaderboard" component={Leaderboard} />
                             <Route
                                 path="/profile"
                                 render={(props) => (
