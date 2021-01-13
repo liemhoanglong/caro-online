@@ -105,15 +105,17 @@ export default function NavigationBar()
                     </Link>
                 </Typography>
                 <div style={{display: loginState.isLogin ? "block" : "none"}}>
-                    <Button
-                        aria-controls="customized-menu"
-                        aria-haspopup="true"
-                        variant="contained"
-                        color="primary"
-                        style={{textTransform: "none", backgroundColor: "#239478", color: "#fff", marginRight: 10}}
-                    >
-                        <Link to="/leaderboard" style={{textTransform: "none", textDecoration: "none", color: "#fff"}}>Leaderboard</Link>
-                    </Button>
+                    <Link to="/leaderboard" style={{textTransform: "none", textDecoration: "none", color: "#fff"}}>
+                        <Button
+                            aria-controls="customized-menu"
+                            aria-haspopup="true"
+                            variant="contained"
+                            color="primary"
+                            style={{textTransform: "none", backgroundColor: "#239478", color: "#fff", marginRight: 10}}
+                        >
+                            Leaderboard
+                        </Button>
+                    </Link>
                     <Button
                         aria-controls="customized-menu"
                         aria-haspopup="true"

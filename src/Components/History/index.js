@@ -13,10 +13,12 @@ import Paper from '@material-ui/core/Paper';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 import './history.css'
 import War from '../IconSVG/War';
 import gameAPI from '../../Util/gameAPI';
+import userAPI from '../../Util/userAPI';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -148,13 +150,29 @@ export default function History(props) {
 
     const [reset, setReset] = useState(false);
     const [rows, setRows] = useState([]);
-    console.log(rows)
+    const [won, setWon] = useState(0);
+    const [elo, setElo] = useState(0);
+    console.log(elo)
+    // console.log(localStorage.getItem("id"))
 
     useEffect(() => {
         const fetchAll = async () => {
             try {
                 const res = await gameAPI.getAll();
-                setRows(res.data);
+                setRows(res.data.room);
+                setWon(res.data.won);
+            } catch (error) {
+                console.log('Failed to fetch: ', error);
+            }
+        }
+        fetchAll();
+    }, [reset])
+
+    useEffect(() => {
+        const fetchAll = async () => {
+            try {
+                const res = await userAPI.profile();
+                setElo(res.data.user.elo);
             } catch (error) {
                 console.log('Failed to fetch: ', error);
             }
@@ -182,9 +200,24 @@ export default function History(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    if(!rows) return <></>
     return (
         <Container className={classes.root}>
             <h1 style={{ textAlign: "center" }}>History</h1>
+            <Grid container spacing={3}>
+                <Grid item xs={6}>
+                    <h3 className={classes.paper}>Elo score: {elo}</h3>
+                </Grid>
+                <Grid item xs={6}>
+                    <h3 className={classes.paper}>Matches played: {rows.length}</h3>
+                </Grid>
+                <Grid item xs={6}>
+                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Won matches: {won}</h3>
+                </Grid>
+                <Grid item xs={6}>
+                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Winning Rate: {won/rows.length*100}%</h3>
+                </Grid>
+            </Grid>
             <Paper className={classes.paper}>
                 <TableContainer>
                     <Table

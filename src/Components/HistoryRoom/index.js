@@ -10,6 +10,7 @@ import Player from "./player";
 import calculateWinner from "./gameCheck";
 import War from '../IconSVG/War';
 import gameAPI from '../../Util/gameAPI'
+import userAPI from '../../Util/userAPI'
 
 const size = 20;
 
@@ -20,7 +21,8 @@ export default function HistoryRoom(props) {
   const [xIsNext, setXIsNext] = useState(true);
   const [isDes, setIsDes] = useState(true);
   const [data, setData] = useState();
-  console.log(data);
+  const [user, setUser] = useState();
+  // console.log(data);
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -34,6 +36,19 @@ export default function HistoryRoom(props) {
     }
     fetchAll();
   }, [])
+
+  console.log(user)
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await userAPI.getAll();
+        setUser(res.data.filter(item => item.id === data.playerX.userID || item.id === data.playerO.userID));
+      } catch (error) {
+        console.log('Failed to fetch: ', error);
+      }
+    }
+    fetchAll();
+  }, [data])
 
   const handleClick = (i) => {
     // const history2 = history.slice(0, stepNumber + 1);
@@ -110,13 +125,13 @@ export default function HistoryRoom(props) {
             <Grid container spacing={3} className="game">
               <Grid item xs={3}>
                 <Grid item xs={12}>
-                  <Player elo={1500} username={data.playerX.username} type={"X"} />
+                  <Player elo={user ? user[0].elo : 1500} username={data.playerX.username} type={"X"} />
                 </Grid>
                 <div style={{ textAlign: 'center', padding: 20 }}>
                   <War width='100px' height='100px' />
                 </div>
                 <Grid item xs={12}>
-                  <Player elo={1450} username={data.playerO.username} type={"O"} />
+                  <Player elo={user ? user[1].elo : 1400} username={data.playerO.username} type={"O"} />
                 </Grid>
               </Grid>
               <Grid item xs={6}>
@@ -129,8 +144,8 @@ export default function HistoryRoom(props) {
                   />
                 </div>
               </Grid>
-              <Grid xs={3}>
-                <Grid xs={12} className="game-info">
+              <Grid item xs={3}>
+                <Grid item xs={12} className="game-info">
                   <Container>
                     <h1 className="game-status">{status}</h1>
                     <h2>History move</h2>
@@ -145,7 +160,7 @@ export default function HistoryRoom(props) {
                     </GridList>
                   </Container>
                 </Grid>
-                <Grid xs={12} className="game-info">
+                <Grid item xs={12} className="game-info">
                   <Container>
                     <h2>Chat</h2>
                     <GridList cellHeight={160}>
