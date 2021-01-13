@@ -112,7 +112,7 @@ export default function NavigationBar()
                     </Link>
                 </Typography>
                 <div style={{display: loginState.isLogin ? "block" : "none"}}>
-                    <Link to="/leaderboard" style={{textTransform: "none", textDecoration: "none", color: "#fff"}}>
+                    {/* <Link to="/leaderboard" style={{textTransform: "none", textDecoration: "none", color: "#fff"}}>
                         <Button
                             aria-controls="customized-menu"
                             aria-haspopup="true"
@@ -122,7 +122,7 @@ export default function NavigationBar()
                         >
                             Leaderboard
                         </Button>
-                    </Link>
+                    </Link> */}
                     <Button
                         aria-controls="customized-menu"
                         aria-haspopup="true"

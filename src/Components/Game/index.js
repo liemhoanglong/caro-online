@@ -500,24 +500,11 @@ export default function Game({match}) {
 
     return (
         <Grid container direction="column">
-            <Grid container alignContent="center" justify="space-between" style={{padding: 10}}>
-                <Grid item>
-                    <Typography variant="h5">{`Room: ${gameInfo.id}`}</Typography>
-                </Grid>
-                <Grid item>
-                    <Typography variant={"h5"}>
-                        {endGame ?
-                            endGame :
-                            `${status} - ${countdown} s`
-                        }
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <InviteFriend id={gameInfo.id}/>
-                </Grid>
-            </Grid>
             <Grid container direction="row"  style={{padding: 5}}>
                 <Grid container direction="column" item xs={2}>
+                    <Grid item>
+                        <Typography variant="h5">{`Room: ${gameInfo.id}`}</Typography>
+                    </Grid>
                     <Grid container item justify="center" alignItems="center" spacing={2}>
                         {renderPlayer1()}
                         <Grid container item xs={12} justify="center" alignItems="center">
@@ -544,6 +531,14 @@ export default function Game({match}) {
                     </Grid>
                 </Grid>
                 <Grid container item xs={6} justify="center" alignContent="center">
+                    <Grid item xs={12} style={{marginBottom:10}}>
+                        <Typography variant={"h5"} style={{textAlign:"center"}}>
+                            {endGame ?
+                                endGame :
+                                `${status} - ${countdown} s`
+                            }
+                        </Typography>
+                    </Grid>
                     <Grid item>
                     {gameInfo.isStart ?
                         <Board
@@ -559,6 +554,9 @@ export default function Game({match}) {
                     </Grid>
                 </Grid>
                 <Grid item xs={4}>
+                    <Grid item>
+                        <InviteFriend id={gameInfo.id}/>
+                    </Grid>
                     <Grid container>
                         <Grid container item spacing={1}>
                             <Grid item xs={12}>

@@ -152,7 +152,7 @@ export default function History(props) {
     const [rows, setRows] = useState([]);
     const [won, setWon] = useState(0);
     const [elo, setElo] = useState(0);
-    console.log(elo)
+    // console.log(elo)
     // console.log(localStorage.getItem("id"))
 
     useEffect(() => {
@@ -215,7 +215,7 @@ export default function History(props) {
                     <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Won matches: {won}</h3>
                 </Grid>
                 <Grid item xs={6}>
-                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Winning Rate: {won/rows.length*100}%</h3>
+                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Winning Rate: {Math.floor(won/rows.length*100)}%</h3>
                 </Grid>
             </Grid>
             <Paper className={classes.paper}>
