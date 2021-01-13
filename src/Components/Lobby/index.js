@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Avatar, Button, Typography, Box} from '@material-ui/core';
+import {Grid, Avatar, Button, Typography, Box, Divider} from '@material-ui/core';
 import {Redirect} from "react-router-dom"
 
 import SearchRoom from "./searchRoom";
@@ -13,6 +13,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import Paper from "@material-ui/core/Paper";
+import ScoreIcon from '@material-ui/icons/Score';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -122,12 +124,33 @@ export default function Lobby() {
                     <Grid item xs={9}>
                         <ListRoom search={search}/>
                     </Grid>
-                    <Grid direction="row" alignContent="center" container item xs = {3} >
-                        <Grid item xs={12}>
-                            <Avatar style={{width: 200, height: 200, fontSize: 100}}>H</Avatar>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography>{`countdown`}</Typography>
+                    <Grid direction="row" alignContent="center" container item xs = {3} style={{paddingLeft: 10}}>
+                        <Paper style={{width: "100%"}}>
+                            <Grid container>
+                                <Grid container xs={5} item justify="center" style={{ paddingTop: 10}}>
+                                    <Avatar style={{width: 120, height: 120, fontSize: 48}}>H</Avatar>
+                                    <Grid container item alignContent="center" justify="center">
+                                        <Box fontWeight='fontWeightBold' display='inline'  style={{ fontSize: 18, padding: 5}}>hung100</Box>
+                                    </Grid>
+                                </Grid>
+                                <Divider orientation="vertical" flexItem/>
+                                <Grid container item xs={6} justify="center">
+                                    <Box fontWeight='fontWeightBold' display='inline' style={{fontSize: 18, padding: 5, paddingLeft: 10}}>Your stats</Box>
+                                    <Grid item container justify="space-between" style={{paddingLeft: 10}}>
+                                        <Grid item><Box fontWeight='fontWeightBold' display='inline'>Elo score:</Box> 123</Grid>
+                                        <Grid item><Box fontWeight='fontWeightBold' display='inline'>Top:</Box> 12</Grid>
+                                    </Grid>
+                                    <Grid item container style={{padding: 5, paddingLeft: 10}}>
+                                        <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total matches:</Box> 123</Grid>
+                                        <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total win:</Box> 12</Grid>
+                                        <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Win rate:</Box> 26%</Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+
+                        <Grid item container alignContent="center" justify="center" style={{marginTop: 20}}>
+                            <Box fontWeight='fontWeightBold' display='inline' style={{fontSize: 18}}>Online users</Box>
                         </Grid>
                         <Grid item xs={12}>
                             <ListUser/>

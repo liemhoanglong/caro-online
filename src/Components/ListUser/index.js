@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             maxHeight: 300,
             overflow: "auto",
+            marginTop: 10,
             backgroundColor: theme.palette.background.paper,
         },
     }),
@@ -86,15 +87,17 @@ export default function UserList({type, id, invitee, handleClose}) {
 
     return (
         <React.Fragment>
-            {listUserOnline.length > 0 ?
-                <Paper elevation={4}>
-                    <List component="nav" className={classes.root}>
-                        {displayItem()}
-                    </List>
-                </Paper>
+            {listUserOnline.length > 1 ?
+                <React.Fragment>
+                    <Paper elevation={1}>
+                        <List component="nav" className={classes.root}>
+                            {displayItem()}
+                        </List>
+                    </Paper>
+                </React.Fragment>
                 :
                 <Grid container justify="center" alignContent="center">
-                    <Card  elevation={3} style={{maxHeight: 200, width: "100%"}}>
+                    <Card  elevation={3} style={{maxHeight: 200, width: "100%", marginTop: 10}}>
                         <CardActionArea style={{paddingTop: 50, paddingBottom: 50}}>
                             <Grid justify="center" alignContent="center" container>
                                 <Typography variant="h5">No user online...</Typography>
