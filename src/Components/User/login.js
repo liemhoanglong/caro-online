@@ -14,6 +14,10 @@ import {Avatar, Button, Container,
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import GoogleLogin from "react-google-login";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import {FacebookLoginService, GoogleLoginService} from "./Service/thirdPartyLoginService";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -70,6 +74,52 @@ export default function LogIn() {
             }
         }
     }
+
+    const responseGoogle = async (response) => {
+        if(!response.err)
+        {
+            const res = await GoogleLoginService(response.tokenId);
+            if(res.error)
+            {
+                setStatus({type: "error", content: res.error})
+                setAlert(true);
+            }
+            else
+            {
+                //direct
+                updateUser(true, null);
+                setIsLogin(true);
+            }
+        }
+        else {
+            setStatus({type: "error", content: response.err});
+            setAlert(true);
+        }
+    }
+
+    const responseFacebook = async (response) => {
+        console.log(response)
+        if(!response.err)
+        {
+            const res = await FacebookLoginService(response.accessToken, response.userID);
+            if(res.error)
+            {
+                setStatus({type: "error", content: res.error})
+                setAlert(true);
+            }
+            else
+            {
+                //direct
+                updateUser(true, null);
+                setIsLogin(true);
+            }
+        }
+        else {
+            setStatus({type: "error", content: response.err});
+            setAlert(true);
+        }
+    }
+
 
     if(isLogin) return(<Redirect to ="/"/>);
 
@@ -137,6 +187,36 @@ export default function LogIn() {
                         >
                             Sign In
                         </Button>
+                        <Grid container justify="space-between" alignContent="center">
+                            <Grid item xs={12} sm={6}>
+                                <GoogleLogin
+                                    clientId="682680851043-qj3a8vrril7vm9q7gia73cjndm53o16u.apps.googleusercontent.com"
+                                    buttonText="Login with Google"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                    cookiePolicy={'single_host_origin'}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FacebookLogin
+                                    appId="369890444269182"
+                                    autoLoad={false}
+                                    callback={responseFacebook}
+                                    render={renderProps => (
+                                        <Button
+                                            onClick={renderProps.onClick}
+                                            variant="contained"
+                                            fullWidth
+                                            startIcon={<FacebookIcon style={{ color: "blue" }} />}
+                                            style={{backgroundColor: "#fff", textTransform:"none",
+                                                height: 42 }}
+                                        >
+                                            Login with Facebook
+                                        </Button>
+                                    )}
+                                />
+                            </Grid>
+                        </Grid>
                         <Grid container style={{marginTop: 10}}>
                             <Grid item xs>
                                 <Link to="/users/forgot-password" variant="body2">
