@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL_API = "http://localhost:3000/";
+const URL_API = "https://carogame-online-backend.herokuapp.com/";
 
 const callAPI = async (method, pathUrl, body) => {
     const token = await JSON.parse(localStorage.getItem('user'));
