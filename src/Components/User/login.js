@@ -85,19 +85,20 @@ export default function LogIn() {
                         Login
                     </Typography>
                     <Collapse in={alert}>
-                        <Alert severity={status.type}
-                               action={
-                                   <IconButton
-                                       aria-label="close"
-                                       color="inherit"
-                                       size="small"
-                                       onClick={() => {
-                                           setAlert(false);
-                                       }}
-                                   >
-                                       <CloseIcon fontSize="inherit" />
-                                   </IconButton>
-                               }
+                        <Alert 
+                            severity={status.type}
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setAlert(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
                         >
                             {status.content}
                         </Alert>

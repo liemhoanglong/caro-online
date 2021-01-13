@@ -5,7 +5,7 @@ const userAPI = {
         return callAPI("GET", "users/profile",null)
     },
     getAll: async () =>{
-        return callAPI("GET", 'users/get-all', null);
+        return callAPI("GET", 'users/getAll', null);
     },
 
     editProfile: async(data) =>{
