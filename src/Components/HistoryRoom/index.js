@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, GridList, Button, Switch, Box, Container } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import './game.css';
 import Board from './board'
@@ -122,8 +121,10 @@ export default function HistoryRoom(props) {
         {
           data ?
           <Container>
-            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20, marginBottom:20 }}>&lt; Exit</Button>
+            <Link to="/history" style={{ textDecoration: 'none', color: "inherit" }}>
+              <Button style={{textTransform: "none", marginRight: 10}} size="large" variant="contained" color="primary">
+                <ArrowBackIosIcon fontSize="small"/>
+                Back</Button>
             </Link>
             <Grid container spacing={3} className="game">
               <Grid item xs={3}>

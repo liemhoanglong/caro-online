@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import Crown from '../IconSVG/Crown';
 import userAPI from '../../Util/userAPI';
@@ -33,22 +34,6 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-// function createData(name, calories, fat, carbs, protein) {
-//     return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//     createData(1, 6.0, 4.0),
-//     createData(2, 9.0, 4.3),
-//     createData(3, 16.0, 6.0),
-//     createData(4, 6.0, 4.0),
-//     createData(5, 9.0, 4.3),
-//     createData(6, 16.0, 6.0),
-//     createData(7, 6.0, 4.0),
-//     createData(8, 9.0, 4.3),
-//     createData(9, 16.0, 6.0),
-//     createData(10, 16.0, 6.0),
-// ];
 
 const useStyles = makeStyles({
     table: {
@@ -77,7 +62,9 @@ export default function Leaderboard(props) {
     return (
         <Container>
             <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20}}>&lt; Exit</Button>
+                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small"/>
+                    Back</Button>
             </Link>
             <h1 style={{ textAlign: "center" }}>Leaderboard<Crown width='40px' height='40px' style={{transform: "rotate(45deg)"}}/></h1>
             <TableContainer component={Paper}>

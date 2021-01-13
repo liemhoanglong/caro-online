@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Player({status, type, player})
+export default function Player({status, type, player, elo})
 {
     const classes = useStyles();
     if(status === 0)
@@ -57,7 +57,7 @@ export default function Player({status, type, player})
                                         <Typography><b>{player.username}</b></Typography>
                                     </Grid>
                                     <Grid container item xs={12} justify="center" alignItems="center">
-                                        <Typography>{`Elo: ${player.elo}`}</Typography>
+                                        <Typography>{`Elo: ${player.elo} ${elo}`}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>

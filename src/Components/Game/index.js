@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Grid, Button, Typography,
+import {Grid, Button, Typography,
     List, ListItem, ListItemText, Paper, Switch, Box
 } from '@material-ui/core';
-
-import {Redirect} from "react-router-dom";
 
 import './game.css';
 import Board from './board'
@@ -13,7 +10,6 @@ import calculateWinner from "./gameService";
 import ChatRoom from "../Chat"
 
 import {socket} from "../../Context/socket";
-import callAPI from "../../Util/callAPI";
 import InviteFriend from "./invite";
 import GiveUp from "./giveUp";
 import DrawDeal from "./drawDeal";
@@ -22,7 +18,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import calculateElo from "./calculateElo";
+import {Link} from "react-router-dom";
 
 const size = 20;
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -39,80 +37,82 @@ export default function Game({match}) {
     const [isYourTurn, setIsYourTurn] = useState(true);
     const [countdown, setCountdown] = useState(0);
     const [isStartCount, setIsStartCount] = useState(false);
-    const [endGame, setEndGame] = useState(false);
+    const [endGameText, setEndGameText] = useState(false);
+    const [isEndGame, setIsEndGame] = useState(false);
+    const [eloDisplay, setEloDisplay] = useState({X: " ", O: " "});
 
     const [gameInfo, setGameInfo] = useState({});
     const [playerType, setPlayerType] = useState("");
     const [isPlayerOut, setIsPlayerOut] = useState({status:false, user: null});
 
-    const [isValidRoom, setIsValidRoom] = useState(true);
+    //const [isValidRoom, setIsValidRoom] = useState(true);
     const [isOpenDrawDeal, setIsOpenDrawDeal] = useState(false);
     const [isOpenDealFail, setIsOpenDealFail] = useState(false);
 
     const currentRoom = match.params.id;
 
-    useEffect(()=> {
-        const fetchData = async () =>
-        {
-            const user = JSON.parse(localStorage.getItem("user"));
-            const respond = await callAPI("POST",
-                "game/checkGame",
-                {id: currentRoom, user: user.id});
-            if(respond.data.msg === -1) //sorry, you should to go now
-            {
-                setIsValidRoom(false);
-                return;
-            }
-            const dataInfo = respond.data.data;
-            setGameInfo(dataInfo.info);
-            setCountdown(dataInfo.info.timing);
-
-            if(user.id === dataInfo.info.playerX.userID)
-            {
-                setPlayerType("X");
-                if(dataInfo.info.isXTurn) {
-                    setIsYourTurn(true);
-                    setIsPlayerOut({status: false, user: null});
-                }
-                else {
-                    setIsYourTurn(false);
-                    setDisplayRenderX(false);
-                    setIsPlayerOut({status: false, user: null});
-                }
-            }
-            else if(user.id === dataInfo.info.playerO.userID)
-            {
-                setPlayerType("O")
-                if(dataInfo.info.isXTurn) {
-                    setIsYourTurn(false);
-                    setIsPlayerOut({status: false, user: null});
-                }
-                else {
-                    setDisplayRenderX(false);
-                    setIsYourTurn(true);
-                    setIsPlayerOut({status: false, user: null});
-                }
-            }
-            else setPlayerType("A")
-
-            if (respond.data.msg >= 1) //if game started and user is (X,O) reconnect
-            {
-                const historyGame = dataInfo.content.history;
-                setHistory(historyGame.history);
-                setStepNumber(historyGame.step);
-                const timeLeft = Math.floor((Date.now() - dataInfo.info.timeLastMove) / 1000);
-                setCountdown(timeLeft);
-                setIsStartCount(true);
-            }
-            else if (respond.data.msg === 0) // if game not start and user reconnect
-            {
-                setDisplayRenderX(true);
-            }
-            socket.emit("enter-room", {id: currentRoom, userID: user.id, username: user.username});
-        }
-
-        fetchData();
-    },[currentRoom])
+    // useEffect(()=> {
+    //     const fetchData = async () =>
+    //     {
+    //         const user = JSON.parse(localStorage.getItem("user"));
+    //         const respond = await callAPI("POST",
+    //             "game/checkGame",
+    //             {id: currentRoom, user: user.id});
+    //         if(respond.data.msg === -1) //sorry, you should to go now
+    //         {
+    //             setIsValidRoom(false);
+    //             return;
+    //         }
+    //         const dataInfo = respond.data.data;
+    //         setGameInfo(dataInfo.info);
+    //         setCountdown(dataInfo.info.timing);
+    //
+    //         if(user.id === dataInfo.info.playerX.userID)
+    //         {
+    //             setPlayerType("X");
+    //             if(dataInfo.info.isXTurn) {
+    //                 setIsYourTurn(true);
+    //                 setIsPlayerOut({status: false, user: null});
+    //             }
+    //             else {
+    //                 setIsYourTurn(false);
+    //                 setDisplayRenderX(false);
+    //                 setIsPlayerOut({status: false, user: null});
+    //             }
+    //         }
+    //         else if(user.id === dataInfo.info.playerO.userID)
+    //         {
+    //             setPlayerType("O")
+    //             if(dataInfo.info.isXTurn) {
+    //                 setIsYourTurn(false);
+    //                 setIsPlayerOut({status: false, user: null});
+    //             }
+    //             else {
+    //                 setDisplayRenderX(false);
+    //                 setIsYourTurn(true);
+    //                 setIsPlayerOut({status: false, user: null});
+    //             }
+    //         }
+    //         else setPlayerType("A")
+    //
+    //         if (respond.data.msg >= 1) //if game started and user is (X,O) reconnect
+    //         {
+    //             const historyGame = dataInfo.content.history;
+    //             setHistory(historyGame.history);
+    //             setStepNumber(historyGame.step);
+    //             const timeLeft = Math.floor((Date.now() - dataInfo.info.timeLastMove) / 1000);
+    //             setCountdown(timeLeft);
+    //             setIsStartCount(true);
+    //         }
+    //         else if (respond.data.msg === 0) // if game not start and user reconnect
+    //         {
+    //             setDisplayRenderX(true);
+    //         }
+    //         socket.emit("enter-room", {id: currentRoom, userID: user.id, username: user.username});
+    //     }
+    //
+    //     fetchData();
+    // },[currentRoom])
 
     useEffect(() => {
        const reconnect = () =>
@@ -171,24 +171,30 @@ export default function Game({match}) {
            setCountdown(0);
            setIsStartCount(0);
            setIsYourTurn(false);
+           setIsEndGame(true);
            const newScore = calculateElo(gameInfo.playerX.elo, gameInfo.playerO.elo, who);
 
 
            if(who === "X")
            {
                if(playerType === "X")
-                   setEndGame("Match end - You WIN");
-               else if (playerType === "O") setEndGame("Match end - You LOSE");
-               else setEndGame("Match end - "+ gameInfo.playerX.username + " win");
+                   setEndGameText("Match end - You WIN");
+
+               else if (playerType === "O") setEndGameText("Match end - You LOSE");
+               else setEndGameText("Match end - "+ gameInfo.playerX.username + " win");
+
+               setEloDisplay({X: `+(${newScore.diff})`, O: `-(${newScore.diff})`})
            }else if (who === "O" )
            {
-               if(playerType === "O") setEndGame("Match end - You WIN");
-               else if(playerType === "X")  setEndGame("Match end - You LOSE");
-               else setEndGame("Match end - " + gameInfo.playerO.username + " win");
+               if(playerType === "O") setEndGameText("Match end - You WIN");
+               else if(playerType === "X")  setEndGameText("Match end - You LOSE");
+               else setEndGameText("Match end - " + gameInfo.playerO.username + " win");
+               setEloDisplay({X: `-(${newScore.diff})`, O: `+(${newScore.diff})`})
            }
            else
            {
-               setEndGame("Match end - DRAW")
+               setEndGameText("Match end - DRAW")
+               setEloDisplay({X: "(+0)", O: "(+0)"})
            }
 
            setGameInfo({...gameInfo, playerX: {...gameInfo.playerX, elo: newScore.playerX},
@@ -205,22 +211,27 @@ export default function Game({match}) {
            setCountdown(0);
            setIsStartCount(0);
            setIsYourTurn(false);
+           setIsEndGame(true);
            const newScore = calculateElo(gameInfo.playerX.elo, gameInfo.playerO.elo, who);
 
            if(who === "X")
            {
                if(playerType === "X")
-                   setEndGame("Match end - You LOSE (due gave up)");
-
-               else if (playerType === "O") setEndGame("Match end - You WIN (your rival gave up)");
-               else setEndGame("Match end - "+ gameInfo.playerX.username +
+               {
+                   setEndGameText("Match end - You LOSE (due gave up)");
+               }
+               else if (playerType === "O") setEndGameText("Match end - You WIN (your rival gave up)");
+               else setEndGameText("Match end - "+ gameInfo.playerX.username +
                        " WIN (due " + gameInfo.playerO.username +" gave up)");
+
+               setEloDisplay({X: `-(${newScore.diff})`, O: `+(${newScore.diff})`})
            }else if (who === "O" )
            {
-               if(playerType === "O") setEndGame("Match end - You LOSE (due gave up)");
-               else if(playerType === "X")  setEndGame("Match end - You WIN (your rival gave up)");
-               else setEndGame("Match end - "+ gameInfo.playerO.username +
+               if(playerType === "O") setEndGameText("Match end - You LOSE (due gave up)");
+               else if(playerType === "X")  setEndGameText("Match end - You WIN (your rival gave up)");
+               else setEndGameText("Match end - "+ gameInfo.playerO.username +
                        " WIN (due " + gameInfo.playerX.username +" gave up)");
+               setEloDisplay({X: `+(${newScore.diff})`, O: `-(${newScore.diff})`})
            }
 
            setGameInfo({...gameInfo, playerX: {...gameInfo.playerX, elo: newScore.playerX},
@@ -300,8 +311,10 @@ export default function Game({match}) {
             setCountdown(0);
             setIsStartCount(0);
             setIsYourTurn(false);
+            setIsEndGame(true);
+            setEloDisplay("+0");
 
-            setEndGame("Match end - Draw")
+            setEndGameText("Match end - Draw")
         }
         socket.on("draw-deal-success", drawDealSuccess);
 
@@ -405,11 +418,11 @@ export default function Game({match}) {
     {
         //player is X
         if (playerType === "X")
-            return (<Player status={1} type="You (X)" player={gameInfo.playerX} />);
+            return (<Player status={1} type="You (X)" player={gameInfo.playerX} elo={eloDisplay.X} />);
         //player is O
         else if (playerType === "O")
         {
-            return (<Player status={1} type="You (O)" player={gameInfo.playerO} />)
+            return (<Player status={1} type="You (O)" player={gameInfo.playerO} elo={eloDisplay.O} />)
         }
         else// is audience
         {
@@ -422,7 +435,7 @@ export default function Game({match}) {
             }
 
             if(gameInfo.playerX)
-                return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} />)
+                return (<Player status={1} type={`${gameInfo.playerX.username} (X)`} player={gameInfo.playerX} elo={eloDisplay.X} />)
             else return (<Player status={0} player=""/>);
         }
     }
@@ -440,14 +453,14 @@ export default function Game({match}) {
         if (playerType === "X")
         {
             if(gameInfo.playerO)
-                return (<Player status={1} type="Rival (O)" player={gameInfo.playerO} />);
+                return (<Player status={1} type="Rival (O)" player={gameInfo.playerO} elo={eloDisplay.O}/>);
             else return (<Player status={0} type="" player=""/>);
         }
         //player is O
         else if (playerType === "O")
         {
             if(gameInfo.playerX)
-                return (<Player status={1} type="Rival (X)" player={gameInfo.playerX} />)
+                return (<Player status={1} type="Rival (X)" player={gameInfo.playerX} elo={eloDisplay.X} />)
             else return (<Player status={0} type="" player=""/>);
         }
         // is audience
@@ -455,7 +468,7 @@ export default function Game({match}) {
         {
 
             if(gameInfo.playerO)
-                return (<Player status={1} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} />)
+                return (<Player status={1} type={`${gameInfo.playerO.username} (O)`} player={gameInfo.playerO} elo={eloDisplay.O} />)
             else
                 return (<Player status={0} type="" player=""/>);
         }
@@ -471,6 +484,11 @@ export default function Game({match}) {
     {
         setIsOpenDrawDeal(false);
         socket.emit("agree-draw-deal");
+    }
+
+    const backToLobby = () =>
+    {
+        socket.emit('go-to-homepage');
     }
 
     const current = history[stepNumber];
@@ -496,14 +514,23 @@ export default function Game({match}) {
         status = renderTurn();
     }
 
-    if(!isValidRoom) return(<Redirect to="/lobby"/>);
+    //if(!isValidRoom) return(<Redirect to="/lobby"/>);
 
     return (
         <Grid container direction="column">
             <Grid container direction="row"  style={{padding: 5}}>
                 <Grid container direction="column" item xs={2}>
-                    <Grid item>
-                        <Typography variant="h5">{`Room: ${gameInfo.id}`}</Typography>
+                    <Grid container wrap="wrap">
+                        <Grid item style={{paddingBottom: 10}}>
+                            <Link to="/lobby" style={{ textDecoration: 'none', color: "inherit" }}>
+                                <Button onClick={backToLobby} style={{textTransform: "none", marginRight: 10}} size="large" variant="contained" color="primary">
+                                    <ArrowBackIosIcon fontSize="small"/>
+                                    Back</Button>
+                            </Link>
+                        </Grid>
+                        <Grid item style={{paddingBottom: 10}}>
+                            <Typography style={{whiteSpace: "noWrap"}} variant="h5">{`Room: ${gameInfo.id}`}</Typography>
+                        </Grid>
                     </Grid>
                     <Grid container item justify="center" alignItems="center" spacing={2}>
                         {renderPlayer1()}
@@ -514,27 +541,33 @@ export default function Game({match}) {
                                  xmlns="http://www.w3.org/2000/svg"><path d="m497 60.445h.01z"/><g><path d="m497 0h-45.445c-3.979 0-7.794 1.58-10.606 4.394l-290.896 290.895 66.658 66.658 290.895-290.896c2.814-2.813 4.394-6.628 4.394-10.607v-45.444c0-8.284-6.716-15-15-15z"/><path d="m59.792 385.693c-8.902 8.902-13.637 20.537-14.081 32.272-11.592.324-23.087 4.897-31.935 13.744-18.367 18.367-18.367 48.147 0 66.515 18.367 18.367 48.147 18.367 66.515 0 8.794-8.794 13.366-20.205 13.739-31.726 11.523-.372 22.935-4.948 31.73-13.743l27.24-27.241-66.515-66.514z"/><path d="m272.446 306.798h94.268v25.564h-94.268z" transform="matrix(.707 -.707 .707 .707 -132.374 319.58)"/><path d="m168.129 234.786 66.658-66.658-163.735-163.734c-2.813-2.814-6.628-4.394-10.607-4.394h-45.445c-8.284 0-15 6.716-15 15v45.444c0 3.979 1.58 7.794 4.394 10.606z"/><path d="m466.29 417.966c-.444-11.735-5.18-23.371-14.081-32.272l-26.694-26.694-66.515 66.514 27.241 27.241c8.795 8.795 20.207 13.371 31.73 13.743.373 11.521 4.945 22.932 13.739 31.726 18.367 18.367 48.147 18.367 66.515 0 18.367-18.367 18.367-48.147 0-66.515-8.848-8.846-20.343-13.419-31.935-13.743z"/><path d="m443.349 277.527c-5.858-5.858-15.356-5.857-21.213 0l-144.609 144.608c-5.858 5.857-5.858 15.356 0 21.213 5.857 5.857 15.355 5.857 21.213 0l144.609-144.608c5.858-5.857 5.858-15.355 0-21.213z"/><path d="m89.864 277.527c-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213l144.609 144.608c5.857 5.857 15.356 5.857 21.213 0 5.858-5.857 5.858-15.355 0-21.213z"/></g></svg>
                         </Grid>
                         {renderPlayer2()}
-                        {playerType !== "A" ?
-                            <React.Fragment>
-                                <Grid container item xs={12} justify="space-around" alignItems="baseline">
-                                    <Grid item>
-                                        <GiveUp isStart={gameInfo.isStart}/>
+                        {!isEndGame ?
+                            playerType !== "A" ?
+                                <React.Fragment>
+                                    <Grid container item xs={12} justify="space-around" alignItems="baseline">
+                                        <Grid item>
+                                            <GiveUp isStart={gameInfo.isStart}/>
+                                        </Grid>
+                                        <Grid item>
+                                            <DrawDeal isStart={gameInfo.isStart}/>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        <DrawDeal isStart={gameInfo.isStart}/>
-                                    </Grid>
-                                </Grid>
-                            </React.Fragment>
-                            :
-                            <React.Fragment/>
+                                </React.Fragment>
+                                :
+                                <React.Fragment/>
+                                :
+                            <Link to="/lobby" style={{ textDecoration: 'none', color: "inherit" }}>
+                                <Button variant="contained" color="primary" onClick={backToLobby}>Back to lobby</Button>
+                            </Link>
+
                         }
                     </Grid>
                 </Grid>
                 <Grid container item xs={6} justify="center" alignContent="center">
                     <Grid item xs={12} style={{marginBottom:10}}>
                         <Typography variant={"h5"} style={{textAlign:"center"}}>
-                            {endGame ?
-                                endGame :
+                            {endGameText ?
+                                endGameText :
                                 `${status} - ${countdown} s`
                             }
                         </Typography>
@@ -554,7 +587,7 @@ export default function Game({match}) {
                     </Grid>
                 </Grid>
                 <Grid item xs={4}>
-                    <Grid item>
+                    <Grid container justify="flex-end" alignContent="flex-end" style={{paddingTop: 10}}>
                         <InviteFriend id={gameInfo.id}/>
                     </Grid>
                     <Grid container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import './history.css'
 import War from '../IconSVG/War';
@@ -205,7 +206,9 @@ export default function History(props) {
     return (
         <Container className={classes.root}>
             <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{ textTransform: "none", backgroundColor: "#239478", color: "white", marginTop:20}}>&lt; Exit</Button>
+                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small"/>
+                    Back</Button>
             </Link>
             <h1 style={{ textAlign: "center" }}>History</h1>
             <Grid container spacing={3}>

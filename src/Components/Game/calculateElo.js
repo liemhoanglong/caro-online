@@ -15,6 +15,6 @@ export default function calculateElo(scoreX, scoreO, result)
     else scoreGet = 112;
 
     if(result === "X")
-        return({playerX: scoreX + scoreGet, playerO: scoreO - scoreGet > 0 ? scoreO - scoreGet : 0})
-    else return({playerX: scoreX - scoreGet > 0 ? scoreX - scoreGet : 0, playerO: scoreO + scoreGet})
+        return({playerX: scoreX + scoreGet, playerO: scoreO - scoreGet > 0 ? scoreO - scoreGet : 0, diff: scoreGet})
+    else return({playerX: scoreX - scoreGet > 0 ? scoreX - scoreGet : 0, playerO: scoreO + scoreGet, diff: scoreGet})
 }

@@ -4,8 +4,10 @@ import TextField from '@material-ui/core/TextField';
 
 import { useUserContext, useUpdateUserContext } from "../../Context/UserContext";
 import userAPI from '../../Util/userAPI'
+import {Link} from "react-router-dom";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-export default function Profile(props) {
+export default function Profile() {
     const userNow = useUserContext();
     const setUserNow = useUpdateUserContext();
     const [error, setError] = useState();
@@ -64,6 +66,11 @@ export default function Profile(props) {
     }
     return (
         <Container>
+            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small"/>
+                    Back</Button>
+            </Link>
             <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
                     <h1>Edit profile</h1>
@@ -71,7 +78,7 @@ export default function Profile(props) {
                         <TextField
                             margin="normal"
                             fullWidth
-                            label="Fisrt name"
+                            label="First name"
                             value={input.firstName}
                             variant="outlined"
                             onChange={(e) =>

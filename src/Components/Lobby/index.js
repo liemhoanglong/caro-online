@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Grid, Avatar, Button, Typography, Box, Divider} from '@material-ui/core';
-import {Redirect} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 
 import SearchRoom from "./searchRoom";
 import ListUser from '../ListUser/index'
@@ -13,6 +13,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import Paper from "@material-ui/core/Paper";
 import callAPI from "../../Util/callAPI";
 
@@ -113,7 +114,14 @@ export default function Lobby() {
         <React.Fragment>
             <Grid container style={{padding: 10}}>
                 <Grid container item alignContent="space-between" justify="space-between" >
-                    <Grid item xs={6}>
+                    <Grid item xs={1}>
+                        <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                            <Button style={{textTransform: "none", marginRight: 10}} size="large" variant="contained" color="primary">
+                                <ArrowBackIosIcon fontSize="small"/>
+                                Back</Button>
+                        </Link>
+                    </Grid>
+                    <Grid item xs={5}>
                         <SearchRoom handleChange={searchRoom}/>
                     </Grid>
                     <Grid item container xs={6} justify="flex-end" alignContent="center" spacing={2}>

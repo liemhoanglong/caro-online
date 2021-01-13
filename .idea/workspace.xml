@@ -24,6 +24,14 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/calculateElo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/calculateElo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Game/player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Game/player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/History/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/History/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/HistoryRoom/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/HistoryRoom/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Leaderboard/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Leaderboard/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Lobby/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Lobby/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Profile/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Profile/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/User/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/User/login.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
