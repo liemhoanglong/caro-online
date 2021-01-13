@@ -134,22 +134,18 @@ export default function Lobby() {
                         <ListRoom search={search}/>
                     </Grid>
                     <Grid direction="row" alignContent="center" container item xs = {3} style={{paddingLeft: 10}}>
-                        <Paper style={{width: "100%"}}>
+                        <Paper style={{width: "100%", backgroundColor: "#F5F5F5"}}>
                             <Grid container>
-                                <Grid container xs={5} item justify="center" style={{ paddingTop: 10}}>
-                                    <Avatar style={{width: 120, height: 120, fontSize: 72}}>{userData.username ? userData.username.charAt(0).toUpperCase() : ""}</Avatar>
+                                <Grid container xs={12} item justify="center" style={{ paddingTop: 10}}>
+                                    <Avatar style={{width: 150, height: 150, fontSize: 100}}>{userData.username ? userData.username.charAt(0).toUpperCase() : ""}</Avatar>
                                     <Grid container item alignContent="center" justify="center">
                                         <Box fontWeight='fontWeightBold' display='inline'  style={{ fontSize: 18, padding: 5}}>{userData.username}</Box>
                                     </Grid>
                                 </Grid>
-                                <Divider orientation="vertical" flexItem/>
-                                <Grid container item xs={6} justify="center">
-                                    <Box fontWeight='fontWeightBold' display='inline' style={{fontSize: 18, padding: 5, paddingLeft: 10}}>Your stats</Box>
-                                    <Grid item container justify="space-between" style={{paddingLeft: 10}}>
-                                        <Grid item><Box fontWeight='fontWeightBold' display='inline'>Elo score:</Box> {userData.elo}</Grid>
-                                        <Grid item><Box fontWeight='fontWeightBold' display='inline'>Top:</Box> {userData.position}</Grid>
-                                    </Grid>
+                                <Grid container item xs={12} justify="center">
                                     <Grid item container style={{padding: 5, paddingLeft: 10}}>
+                                        <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Elo score:</Box> {userData.elo}</Grid>
+                                        <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Top:</Box> {userData.position}</Grid>
                                         <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total matches:</Box> {userData.match}</Grid>
                                         <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total win:</Box> {userData.win}</Grid>
                                         <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Win rate:</Box> {userData.winRate}%</Grid>

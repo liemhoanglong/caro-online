@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 
 import { useUserContext } from "../../Context/UserContext";
 import Crown from '../IconSVG/Crown';
@@ -15,10 +16,12 @@ export default function HomeScreen() {
     return (
         <React.Fragment>
             <Grid container>
-                <Grid item sm={4} md={0} style={{ textAlign: "right" }}>
-                    <img src="https://i.pinimg.com/originals/9e/c6/e1/9ec6e148fd1a2a3c7a3eb6e4fbee48ba.png" alt="Girl in a jacket" height={800} />
-                </Grid>
-                <Grid item sm={4} md={4}>
+                <Hidden smDown>
+                    <Grid item md={4} style={{ textAlign: "right" }}>
+                        <img src="https://i.pinimg.com/originals/9e/c6/e1/9ec6e148fd1a2a3c7a3eb6e4fbee48ba.png" alt="Girl in a jacket" width={200} style={{marginTop: 30}}/>
+                    </Grid>
+                </Hidden>
+                <Grid item sm={12} md={4}>
                     {!loginState.isLogin ?
                         <>
                             <Link to="/login" style={{ textDecoration: 'none', color: "inherit" }}>
@@ -49,9 +52,11 @@ export default function HomeScreen() {
                     }
 
                 </Grid>
-                <Grid item sm={4} md={0}>
-                    <img src="https://lh3.googleusercontent.com/proxy/q6tISMAunB7ewOuuPgVujx2qI46CGAvXXCXCyKNy3qaagcw55OAhzIiAmew3zII6eV5q1cRf2GYepvHofS9_Sey2_lH2FAGq3NL58BCLVwgrUnBpnUnPJ48VWPwOkw" alt="Girl in a jacket" height={800} />
-                </Grid>
+                <Hidden smDown>
+                    <Grid item md={4}>
+                        <img src="https://lh3.googleusercontent.com/proxy/q6tISMAunB7ewOuuPgVujx2qI46CGAvXXCXCyKNy3qaagcw55OAhzIiAmew3zII6eV5q1cRf2GYepvHofS9_Sey2_lH2FAGq3NL58BCLVwgrUnBpnUnPJ48VWPwOkw" alt="Girl in a jacket" width={250} style={{marginTop: 30}}/>
+                    </Grid>
+                </Hidden>
             </Grid>
 
         </React.Fragment>
