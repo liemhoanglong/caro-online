@@ -5,18 +5,29 @@ export default function calculateElo(scoreX, scoreO, result)
     if(result === "Draw")
         return ({playerX: scoreX, playerO: scoreO})
 
-    let scoreGet;
-    // let scoreGet = Math.abs(Math.floor(20+scoreX-scoreX)/8);
-    // let scoreGet = Math.abs(Math.floor(20+scoreX-scoreX)/10);
+    let scoreGet = {};
     if(different <= 50)
-        scoreGet = 14;
+    {
+        scoreGet.plus = Math.floor((15 + different) /8);
+        scoreGet.minus = Math.floor((15 + different) /10);
+    }
     else if(different <= 200)
-        scoreGet = 31;
+    {
+        scoreGet.plus = Math.floor((30 + different) /8);
+        scoreGet.minus = Math.floor((30 + different) /10);
+    }
     else if (different <= 500)
-        scoreGet = 64;
-    else scoreGet = 112;
+    {
+        scoreGet.plus = Math.floor((65 + different) /8);
+        scoreGet.minus = Math.floor((65 + different) /10);
+    }
+    else
+    {
+        scoreGet.plus = Math.floor((90 + different) /8);
+        scoreGet.minus = Math.floor((90 + different) /10);
+    }
 
     if(result === "X")
-        return({playerX: scoreX + scoreGet, playerO: scoreO - scoreGet > 0 ? scoreO - scoreGet : 0, diff: scoreGet})
-    else return({playerX: scoreX - scoreGet > 0 ? scoreX - scoreGet : 0, playerO: scoreO + scoreGet, diff: scoreGet})
+        return({playerX: scoreX + scoreGet.plus, playerO: scoreO - scoreGet.minus > 0 ? scoreO - scoreGet.minus : 0, diff: scoreGet})
+    else return({playerX: scoreX - scoreGet.minus > 0 ? scoreX - scoreGet.minus : 0, playerO: scoreO + scoreGet.plus, diff: scoreGet})
 }
