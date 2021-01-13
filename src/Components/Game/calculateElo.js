@@ -6,6 +6,8 @@ export default function calculateElo(scoreX, scoreO, result)
         return ({playerX: scoreX, playerO: scoreO})
 
     let scoreGet;
+    // let scoreGet = Math.abs(Math.floor(20+scoreX-scoreX)/8);
+    // let scoreGet = Math.abs(Math.floor(20+scoreX-scoreX)/10);
     if(different <= 50)
         scoreGet = 14;
     else if(different <= 200)
@@ -15,6 +17,6 @@ export default function calculateElo(scoreX, scoreO, result)
     else scoreGet = 112;
 
     if(result === "X")
-        return({playerX: scoreX + scoreGet, playerO: scoreO - scoreGet > 0 ? scoreO - scoreGet : 0})
-    else return({playerX: scoreX - scoreGet > 0 ? scoreX - scoreGet : 0, playerO: scoreO + scoreGet})
+        return({playerX: scoreX + scoreGet, playerO: scoreO - scoreGet > 0 ? scoreO - scoreGet : 0, diff: scoreGet})
+    else return({playerX: scoreX - scoreGet > 0 ? scoreX - scoreGet : 0, playerO: scoreO + scoreGet, diff: scoreGet})
 }

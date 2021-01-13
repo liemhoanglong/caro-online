@@ -81,8 +81,8 @@ export default function LogIn() {
             const res = await GoogleLoginService(response.tokenId);
             if(res.error)
             {
-                setStatus({type: "error", content: res.error})
-                setAlert(true);
+                // setStatus({type: "error", content: res.error})
+                // setAlert(true);
             }
             else
             {
@@ -92,8 +92,8 @@ export default function LogIn() {
             }
         }
         else {
-            setStatus({type: "error", content: response.err});
-            setAlert(true);
+            // setStatus({type: "error", content: response.err});
+            // setAlert(true);
         }
     }
 
@@ -104,8 +104,8 @@ export default function LogIn() {
             const res = await FacebookLoginService(response.accessToken, response.userID);
             if(res.error)
             {
-                setStatus({type: "error", content: res.error})
-                setAlert(true);
+                // setStatus({type: "error", content: res.error})
+                // setAlert(true);
             }
             else
             {
@@ -115,8 +115,8 @@ export default function LogIn() {
             }
         }
         else {
-            setStatus({type: "error", content: response.err});
-            setAlert(true);
+            // setStatus({type: "error", content: response.err});
+            // setAlert(true);
         }
     }
 
@@ -199,7 +199,7 @@ export default function LogIn() {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <FacebookLogin
-                                    appId="369890444269182"
+                                    appId="391298855501194"
                                     autoLoad={false}
                                     callback={responseFacebook}
                                     render={renderProps => (

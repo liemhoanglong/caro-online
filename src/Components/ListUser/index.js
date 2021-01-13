@@ -89,8 +89,8 @@ export default function UserList({type, id, invitee, handleClose}) {
         <React.Fragment>
             {listUserOnline.length > 1 ?
                 <React.Fragment>
-                    <Paper elevation={1} style={{backgroundColor: "#F5F5F5"}}>
-                        <List component="nav" className={classes.root}>
+                    <Paper elevation={1}>
+                        <List component="nav" className={classes.root} style={{backgroundColor: "#F5F5F5"}}>
                             {displayItem()}
                         </List>
                     </Paper>
