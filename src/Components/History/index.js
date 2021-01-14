@@ -49,7 +49,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+    { id: 'gamePlay', numeric: false, disablePadding: false, label: 'Date' },
     { id: 'playerX', numeric: false, disablePadding: false, label: 'Player 1 Vs Player 2' },
     { id: 'result', numeric: false, disablePadding: false, label: 'Winner' },
 ];

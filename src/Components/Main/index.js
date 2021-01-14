@@ -6,6 +6,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import { useUserContext } from "../../Context/UserContext";
 import Crown from '../IconSVG/Crown';
+import sasuke from '../IconSVG/sasuke.png';
 import History from '../IconSVG/History';
 import Lobby from '../IconSVG/Lobby';
 import Play from '../IconSVG/Play';
@@ -76,7 +77,7 @@ export default function HomeScreen() {
                 </Grid>
                 <Hidden smDown>
                     <Grid item md={4}>
-                        <img src="https://lh3.googleusercontent.com/proxy/q6tISMAunB7ewOuuPgVujx2qI46CGAvXXCXCyKNy3qaagcw55OAhzIiAmew3zII6eV5q1cRf2GYepvHofS9_Sey2_lH2FAGq3NL58BCLVwgrUnBpnUnPJ48VWPwOkw" alt="Girl in a jacket" width={250} style={{marginTop: 30}}/>
+                        <img src={sasuke} alt="Girl in a jacket" width={250} style={{marginTop: 30}}/>
                     </Grid>
                 </Hidden>
             </Grid>
