@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, GridList, Button, Switch, Box, Container } from '@material-ui/core';
+import { Grid, GridList, Button, Switch, Box, Container, Card } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -99,7 +99,7 @@ export default function HistoryRoom(props) {
 
     const msg = data.chat.map((item, i) => {
       return (
-        <Typography style={{width:"100%", height:"auto"}} variant="subtitle1">
+        <Typography style={{ width: "100%", height: "auto" }} variant="subtitle1">
           <div key={i} variant="body2" gutterBottom >
             <b>{item.username}: </b>{item.data}
           </div>
@@ -120,63 +120,70 @@ export default function HistoryRoom(props) {
       <>
         {
           data ?
-          <Container>
-            <Link to="/history" style={{ textDecoration: 'none', color: "inherit" }}>
-              <Button style={{textTransform: "none", marginRight: 10}} size="large" variant="contained" color="primary">
-                <ArrowBackIosIcon fontSize="small"/>
+            <Grid container style={{ padding: 10 }}>
+              <Link to="/history" style={{ textDecoration: 'none', color: "inherit" }}>
+                <Button style={{ textTransform: "none" }} size="large" variant="contained" color="primary">
+                  <ArrowBackIosIcon fontSize="small" />
                 Back</Button>
-            </Link>
-            <Grid container spacing={3} className="game">
-              <Grid item xs={3}>
-                <Grid item xs={12}>
-                  <Player elo={user ? user[0].elo : 1500} username={data.playerX.username} type={"X"} />
+              </Link>
+              <Grid container spacing={3} className="game">
+                <Grid item container md={3} justify='center'>
+                  <Grid item xs={12}>
+                    <Player elo={user ? user[0].elo : 1500} username={data.playerX.username} type={"X"} />
+                  </Grid>
+                  <div style={{ padding: 20 }}>
+                    <War width='100px' height='100px' />
+                  </div>
+                  <Grid item xs={12}>
+                    <Player elo={user ? user[1].elo : 1400} username={data.playerO.username} type={"O"} />
+                  </Grid>
                 </Grid>
-                <div style={{ textAlign: 'center', padding: 20 }}>
-                  <War width='100px' height='100px' />
-                </div>
-                <Grid item xs={12}>
-                  <Player elo={user ? user[1].elo : 1400} username={data.playerO.username} type={"O"} />
+                <Grid item container md={6} justify='center'>
+                  <div className="game-board">
+                    <Board
+                      winningSquares={winner ? winner.line : []}
+                      squares={current.squares}
+                      onClick={i => handleClick(i)}
+                      size={size}
+                    />
+                  </div>
                 </Grid>
-              </Grid>
-              <Grid item xs={6}>
-                <div className="game-board">
-                  <Board
-                    winningSquares={winner ? winner.line : []}
-                    squares={current.squares}
-                    onClick={i => handleClick(i)}
-                    size={size}
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={3}>
-                <Grid item xs={12} className="game-info">
-                  <Container>
-                    <h1 className="game-status">{status}</h1>
-                    <h2>History move</h2>
-                    <Box component="div" display="inline" p={1}>
-                      <Switch onClick={() => sortHistory()} inputProps={{ 'aria-label': 'primary checkbox' }} />
-                    </Box>
-                    <Box component="div" display="inline" p={1}>
-                      Sort by: {isDes ? "Asending" : "Descending"}
-                    </Box>
-                    <GridList cellHeight={160}>
-                      <div style={{ width: '100%' }}>{isDes ? moves.reverse() : moves}</div>
-                    </GridList>
-                  </Container>
-                </Grid>
-                <Grid item xs={12} className="game-info">
-                  <Container>
-                    <h2>Chat</h2>
-                    <GridList cellHeight={160}>
-                      <div style={{ width: '100%' }}>
-                        {msg}
-                      </div>
-                    </GridList>
-                  </Container>
+                <Grid item container md={3} spacing={3}>
+                  <Grid item container xs={12} justify='center'>
+                    <Card style={{ width: '80%' }} className='paper-custom'>
+                      <Container>
+                        <h2 style={{ marginBottom: 0, textAlign: 'center' }}>Move history</h2>
+                        <Box component="div" display="inline">
+                          <Switch onClick={() => sortHistory()} inputProps={{ 'aria-label': 'primary checkbox' }} />
+                        </Box>
+                        <Box component="div" display="inline">
+                          Sort by: {isDes ? "Asending" : "Descending"}
+                        </Box>
+                        <GridList cellHeight={190}>
+                          <div style={{ width: '100%' }}>{isDes ? moves.reverse() : moves}</div>
+                        </GridList>
+                        <br />
+                      </Container>
+                    </Card>
+                    <br />
+                    <br />
+                  </Grid>
+                  <Grid item container xs={12} justify='center'>
+                    <Card style={{ width: '80%' }} className='paper-custom'>
+                      <Container>
+                        <h2 style={{ marginBottom: 0, textAlign: 'center' }}>Chat</h2>
+                        <GridList cellHeight={190}>
+                          <div style={{ width: '100%' }}>
+                            {msg}
+                          </div>
+                        </GridList>
+                        <br />
+                      </Container>
+                    </Card>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Container>
 
             : null
         }

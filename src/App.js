@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import { UserProvider } from "./Context/UserContext";
-
 import LogIn from "./Components/User/login";
 import Register from "./Components/User/register";
 import Activate from "./Components/User/activate";
@@ -18,6 +17,7 @@ import Profile from "./Components/Profile";
 import History from "./Components/History";
 import HistoryRoom from "./Components/HistoryRoom";
 import Leaderboard from "./Components/Leaderboard";
+import './App.css';
 
 const theme = createMuiTheme({
     palette: {
@@ -37,6 +37,7 @@ const App = () => {
             <Router>
                 <ThemeProvider theme={theme}>
                     <UserProvider>
+                        <div className='bg' />
                         <NavigationBar />
                         <Switch>
                             <Route path="/" exact component={HomeScreen} />
@@ -54,7 +55,7 @@ const App = () => {
                             <Route
                                 path="/profile"
                                 render={(props) => (
-                                    <Profile/>
+                                    <Profile />
                                 )}
                             />
                             <Route component={NotFoundPage} />

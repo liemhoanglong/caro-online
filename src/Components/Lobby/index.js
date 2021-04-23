@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Avatar, Button, Typography, Box, Divider } from '@material-ui/core';
+import { Grid, Avatar, Button, Typography, Box, Container } from '@material-ui/core';
 import { Link, Redirect } from "react-router-dom"
 
 import SearchRoom from "./searchRoom";
@@ -102,70 +102,65 @@ export default function Lobby() {
 
     return (
         <React.Fragment>
-            <Grid container style={{ padding: 10 }}>
-                <Grid container item alignContent="space-between" justify="space-between" >
-                    
-                </Grid>
-                <Grid container item style={{ marginTop: 5 }}>
-                    <Grid item xs={9} container style={{height: 40}}>
-                        <Grid item xs={3}>
-                            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                                <Button style={{ textTransform: "none", fontSize:12 }} variant="contained" color="primary">
-                                    <ArrowBackIosIcon fontSize="small" />
-                                    Back
-                                </Button>
-                            </Link>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <SearchRoom handleChange={searchRoom} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <br/>
-                            <ListRoom  search={search} />
-                        </Grid>
+            <Grid style={{ padding: 10 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
+                    <Button style={{ textTransform: "none" }} variant="contained" color="primary">
+                        <ArrowBackIosIcon fontSize="small" />
+                        Back
+                    </Button>
+                </Link>
+                <Container>
+                    <h1 style={{ textAlign: "center" }}>Lobby</h1>
+                </Container>
+                <Grid item container style={{ height: 40 }} spacing={2}>
+                    <Grid item md={8} xs={12} justify='center'>
+                        <SearchRoom handleChange={searchRoom} />
                     </Grid>
-                    <Grid direction="row" alignContent="center" container item xs={3} style={{ paddingLeft: 10 }} spacing={1}>
-                        <Grid item xs={12} md={6} >
-                            <Button fullWidth style={{fontSize:12}} variant="contained" color="primary" disableElevation onClick={playNow}>
-                                Quick  play
+                    <Grid item md={2} xs={6}>
+                        <Button fullWidth variant="contained" color="primary" disableElevation onClick={playNow}>
+                            Quick play
+                        </Button>
+                    </Grid>
+                    <Grid item md={2} xs={6}>
+                        <Button fullWidth variant="contained" color="primary" disableElevation onClick={createRoom}>
+                            Create room
                             </Button>
-                        </Grid>
-                        <Grid item xs={12} md={6} >
-                            <Button fullWidth style={{fontSize:12}} variant="contained" color="primary" disableElevation onClick={createRoom}>
-                                Create room
-                            </Button>
-                        </Grid>
+                    </Grid>
+                    <Grid item md={8} xs={12}>
+                        <ListRoom search={search} />
+                    </Grid>
+                    <Grid item md={4} xs={12} direction="row" alignContent="center" spacing={1}>
                         <Grid item xs={12}>
-                            <Paper style={{ width: "100%", backgroundColor: "#F5F5F5" }}>
+                            <Paper className='paper-custom'>
                                 <Grid container>
-                                    <Grid container xs={12} item justify="center" style={{ paddingTop: 10 }}>
+                                    < Grid container xs={12} item justify="center" style={{ paddingTop: 10 }}>
                                         <Avatar style={{ width: 150, height: 150, fontSize: 100 }}>{userData.username ? userData.username.charAt(0).toUpperCase() : ""}</Avatar>
                                         <Grid container item alignContent="center" justify="center">
                                             <Box fontWeight='fontWeightBold' display='inline' style={{ fontSize: 18, padding: 5 }}>{userData.username}</Box>
                                         </Grid>
                                     </Grid>
                                     <Grid container item xs={12} justify="center">
-                                        <Grid item container style={{ padding: 5, paddingLeft: 10 }}>
-                                            <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Elo score:</Box> {userData.elo}</Grid>
-                                            <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Top:</Box> {userData.position}</Grid>
-                                            <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total matches:</Box> {userData.match}</Grid>
-                                            <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Total win:</Box> {userData.win}</Grid>
-                                            <Grid item xs={12}><Box fontWeight='fontWeightBold' display='inline'>Win rate:</Box> {userData.winRate}%</Grid>
+                                        <Grid style={{ padding: 5, paddingLeft: 10 }}>
+                                            <h4 style={{ margin: '2px 0' }}>Elo score: {userData.elo}</h4>
+                                            <h4 style={{ margin: '2px 0' }}>Top: {userData.position}</h4>
+                                            <h4 style={{ margin: '2px 0' }}>Total matches: {userData.match}</h4>
+                                            <h4 style={{ margin: '2px 0' }}>Total win: {userData.win}</h4>
+                                            <h4 style={{ margin: '2px 0' }}>Win rate: {userData.winRate}%</h4>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Paper>
                         </Grid>
-
-                        <Grid item container alignContent="center" justify="center" style={{ marginTop: 20 }}>
-                            <Box fontWeight='fontWeightBold' display='inline' style={{ fontSize: 18 }}>Online users</Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListUser />
+                        <Grid item xs={12} alignContent="center" justify="center" style={{ marginTop: 20 }}>
+                            <Paper className='paper-custom' style={{ padding: '1rem' }}>
+                                <Box fontWeight='fontWeightBold' display='inline' style={{ fontSize: 18 }}>Online users</Box>
+                                <ListUser />
+                            </Paper>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+
+            </Grid >
             <CreateRoom open={openNewRoom}
                 handleClose={handleCloseCreateRoom}
                 handleAgree={handleAgreeCreateRoom} />
@@ -196,6 +191,6 @@ export default function Lobby() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

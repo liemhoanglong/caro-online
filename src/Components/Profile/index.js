@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Card, Container, Grid } from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 
 import { useUserContext, useUpdateUserContext } from "../../Context/UserContext";
 import userAPI from '../../Util/userAPI'
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 export default function Profile() {
@@ -44,8 +44,7 @@ export default function Profile() {
 
     const handleChangePass = async (e) => {
         e.preventDefault();
-        if (input2.newpass ===input2.repass)
-        {
+        if (input2.newpass === input2.repass) {
             const res = await userAPI.changePass(input2);
             if (res.data.error) {
                 setMsg('');
@@ -65,119 +64,127 @@ export default function Profile() {
         return <></>
     }
     return (
-        <Container>
+        <Grid style={{ padding: 10 }}>
             <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
-                    <ArrowBackIosIcon fontSize="small"/>
+                <Button style={{ textTransform: "none" }} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small" />
                     Back</Button>
             </Link>
-            <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                    <h1>Edit profile</h1>
-                    <form onSubmit={handleEditProfile}>
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            label="First name"
-                            value={input.firstName}
-                            variant="outlined"
-                            onChange={(e) =>
-                                setInput({ ...input, firstName: e.target.value })}
-                        />
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            label="Last name"
-                            value={input.lastName}
-                            variant="outlined"
-                            onChange={(e) =>{
+            <Container>
+                <br />
+                <Grid container spacing={3}>
+                    <Grid item md={6} xs={12}>
+                        <Card style={{ padding: '1rem' }} className='paper-custom'>
+                            <h1>Edit profile</h1>
+                            <form onSubmit={handleEditProfile}>
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="First name"
+                                    value={input.firstName}
+                                    variant="outlined"
+                                    onChange={(e) =>
+                                        setInput({ ...input, firstName: e.target.value })}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Last name"
+                                    value={input.lastName}
+                                    variant="outlined"
+                                    onChange={(e) => {
 
-                                setInput({ ...input, lastName: e.target.value })
-                            }}
-                        />
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            label="Username"
-                            value={input.username}
-                            variant="outlined"
-                            disabled
-                            onChange={(e) =>
-                                setInput({ ...input, username: e.target.value })}
-                        />
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            label="Email"
-                            value={input.email}
-                            variant="outlined"
-                            disabled
-                            onChange={(e) =>
-                                setInput({ ...input, email: e.target.value })}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="Current password"
-                            type="password"
-                            value={input.password}
-                            variant="outlined"
-                            onChange={(e) =>
-                                setInput({ ...input, password: e.target.value })}
-                        />
-                        {error ? <h4 style={{ color: 'red', margin: '5px 0' }}>{error}</h4> : null}
-                        <Button type="submit" fullWidth variant="contained" color="primary" style={{ margin: '20px 0' }}>
-                            Edit profile
+                                        setInput({ ...input, lastName: e.target.value })
+                                    }}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Username"
+                                    value={input.username}
+                                    variant="outlined"
+                                    disabled
+                                    onChange={(e) =>
+                                        setInput({ ...input, username: e.target.value })}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    label="Email"
+                                    value={input.email}
+                                    variant="outlined"
+                                    disabled
+                                    onChange={(e) =>
+                                        setInput({ ...input, email: e.target.value })}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    label="Current password"
+                                    type="password"
+                                    value={input.password}
+                                    variant="outlined"
+                                    onChange={(e) =>
+                                        setInput({ ...input, password: e.target.value })}
+                                />
+                                {error ? <h4 style={{ color: 'red', margin: '5px 0' }}>{error}</h4> : null}
+                                <Button type="submit" fullWidth variant="contained" color="primary" style={{ margin: '20px 0' }}>
+                                    Edit profile
                         </Button>
-                    </form>
-                </Grid>
-                <Grid item md={6} xs={12}>
-                    <h1>Change password</h1>
-                    <form onSubmit={handleChangePass}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="Current password"
-                            type="password"
-                            value={input2.password}
-                            variant="outlined"
-                            onChange={(e) =>
-                                setInput2({ ...input2, password: e.target.value })}
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="New password"
-                            type="password"
-                            value={input2.newpass}
-                            variant="outlined"
-                            onChange={(e) =>
-                                setInput2({ ...input2, newpass: e.target.value })
-                            }
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="Retype password"
-                            type="password"
-                            value={input2.repass}
-                            variant="outlined"
-                            onChange={(e) =>{
-                                setInput2({ ...input2, repass: e.target.value })}
-                            }
-                        />
-                        {error2 ? <h4 style={{ color: 'red', margin: '5px 0' }}>{error2}</h4> : null}
-                        {msg ? <h4 style={{ color: 'green', margin: '5px 0' }}>{msg}</h4> : null}
-                        <Button type="submit" fullWidth variant="contained" color="primary" style={{ margin: '20px 0' }}>
-                            Change password
+                            </form>
+                        </Card>
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                        <Card style={{ padding: '1rem' }} className='paper-custom'>
+                            <h1>Change password</h1>
+                            <form onSubmit={handleChangePass}>
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    label="Current password"
+                                    type="password"
+                                    value={input2.password}
+                                    variant="outlined"
+                                    onChange={(e) =>
+                                        setInput2({ ...input2, password: e.target.value })}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    label="New password"
+                                    type="password"
+                                    value={input2.newpass}
+                                    variant="outlined"
+                                    onChange={(e) =>
+                                        setInput2({ ...input2, newpass: e.target.value })
+                                    }
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    label="Retype password"
+                                    type="password"
+                                    value={input2.repass}
+                                    variant="outlined"
+                                    onChange={(e) => {
+                                        setInput2({ ...input2, repass: e.target.value })
+                                    }
+                                    }
+                                />
+                                {error2 ? <h4 style={{ color: 'red', margin: '5px 0' }}>{error2}</h4> : null}
+                                {msg ? <h4 style={{ color: 'green', margin: '5px 0' }}>{msg}</h4> : null}
+                                <Button type="submit" fullWidth variant="contained" color="primary" style={{ margin: '20px 0' }}>
+                                    Change password
                         </Button>
-                    </form>
+                            </form>
+                        </Card>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Container>
+            </Container>
+        </Grid>
     )
 }

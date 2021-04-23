@@ -14,10 +14,11 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import Crown from '../IconSVG/Crown';
 import userAPI from '../../Util/userAPI';
+import { Grid } from '@material-ui/core';
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: "#CFD8DC",
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
         color: "black",
         fontWeight: 'bold',
     },
@@ -37,7 +38,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const useStyles = makeStyles({
     table: {
-        minWidth: 700,
+        minWidth: 280,
     },
 });
 
@@ -60,33 +61,35 @@ export default function Leaderboard(props) {
 
     const classes = useStyles();
     return (
-        <Container>
+        <Grid style={{ padding: 10 }}>
             <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
-                    <ArrowBackIosIcon fontSize="small"/>
+                <Button style={{ textTransform: "none" }} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small" />
                     Back</Button>
             </Link>
-            <h1 style={{ textAlign: "center" }}>Leaderboard<Crown width='40px' height='40px' style={{transform: "rotate(45deg)"}}/></h1>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>Rank</StyledTableCell>
-                            <StyledTableCell>Player</StyledTableCell>
-                            <StyledTableCell>Elo</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, i) => (
-                            <StyledTableRow key={row.i}>
-                                <StyledTableCell component="th" scope="row">{i+1}</StyledTableCell>
-                                <StyledTableCell>{row.name}</StyledTableCell>
-                                <StyledTableCell>{row.elo}</StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+            <Container>
+                <h1 style={{ textAlign: "center" }}>Leaderboard<Crown width='40px' height='40px' style={{ transform: "rotate(45deg)" }} /></h1>
+                <TableContainer className='paper-custom'>
+                    <Table className={classes.table} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell>Rank</StyledTableCell>
+                                <StyledTableCell>Player</StyledTableCell>
+                                <StyledTableCell>Elo</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row, i) => (
+                                <StyledTableRow key={row.i}>
+                                    <StyledTableCell component="th" scope="row"><b>{i + 1}</b></StyledTableCell>
+                                    <StyledTableCell><b>{row.name}</b></StyledTableCell>
+                                    <StyledTableCell><b>{row.elo}</b></StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Container>
+        </Grid>
     )
 }
