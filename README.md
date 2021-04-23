@@ -1,9 +1,11 @@
-# ❌ Game Caro Online with ReactJS ⭕
-This project was designed with Material Design.
+# ❌ Caro Online with MERN Stack ⭕
 
-## 👨‍🚀 Account 1: long123 - Password: long123
-## 🤹‍♂️ Account 2: linh - Password: linh123
+### This project was designed with Material Design.
 
+# [🕹️🕹️🕹️ Play Now 🕹️🕹️🕹️](https://tictactoewithreact.herokuapp.com/)
+
+### 👨‍🚀 Account 1: long123 - Password: long123
+### 🤹‍♂️ Account 2: linh - Password: linh123
 
 ## Available Scripts
 
