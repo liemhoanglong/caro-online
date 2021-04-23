@@ -1,13 +1,24 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Montserrat', sans-serif;
 }
 
-code {
+/* body {
+  -webkit-filter: blur(100px);
+  filter: blur(100px);
+  height: 100%;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/stotepicture.appspot.com/o/bg.png?alt=media&token=f26a143d-2fcd-4ccf-8443-5a6ae6799df1');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */

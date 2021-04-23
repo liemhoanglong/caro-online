@@ -14,10 +14,10 @@ export default function Player({ type, elo, username }) {
   const classes = useStyles();
   const character = username.charAt(0);
   return (
-    <Grid container item xs={12}>
-      <Card className={classes.root} elevation={3} style={{backgroundColor:'#F5F5F5'}}>
+    <Grid container item xs={12} justify='center'>
+      <Card className={classes.root} className='paper-custom'>
         <CardActionArea>
-          <Grid container direction="row" style={{marginTop:20}}>
+          <Grid container style={{ marginTop: 20 }}>
             <Grid container item xs={12}>
               <Grid container item xs={6} justify="center" alignItems="center">
                 <Avatar style={{ width: 100, height: 100, fontSize: 64 }}>{character}</Avatar>

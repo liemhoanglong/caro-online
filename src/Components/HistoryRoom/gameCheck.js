@@ -1,5 +1,4 @@
-
-export default  function calculateWinner(squares, indexNow, size) {
+export default function calculateWinner(squares, indexNow, size) {
     const di = [0, 0, 1, -1, -1, 1, -1, 1];
     const dj = [1, -1, 0, 0, -1, 1, 1, -1];
 

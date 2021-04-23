@@ -127,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
 //------------------Custom header TableCell-------------------
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: '#CFD8DC',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         fontWeight: 'bold',
     },
 }))(TableCell);
@@ -202,31 +202,31 @@ export default function History(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    if(!rows) return <></>
+    if (!rows) return <></>
     return (
-        <Container className={classes.root}>
+        <Grid style={{ padding: 10 }}>
             <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                <Button style={{textTransform: "none", marginRight: 10, marginTop: 10}} size="large" variant="contained" color="primary">
-                    <ArrowBackIosIcon fontSize="small"/>
+                <Button style={{ textTransform: "none" }} size="large" variant="contained" color="primary">
+                    <ArrowBackIosIcon fontSize="small" />
                     Back</Button>
             </Link>
-            <h1 style={{ textAlign: "center" }}>History</h1>
-            <Grid container spacing={3}>
-                <Grid item xs={6}>
-                    <h3 className={classes.paper}>Elo score: {elo}</h3>
+            <Container>
+                <h1 style={{ textAlign: "center" }}>History</h1>
+                <Grid container spacing={3}>
+                    <Grid item xs={6}>
+                        <h3 style={{ textAlign: 'center' }}>Elo score: {elo}</h3>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <h3 style={{ textAlign: 'center' }}>Matches played: {rows.length}</h3>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <h3 style={{ textAlign: 'center', marginTop: 0, marginBottom: 40 }}>Won matches: {won}</h3>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <h3 style={{ textAlign: 'center', marginTop: 0, marginBottom: 40 }}>Winning Rate: {won ? Math.floor(won / rows.length * 100) : 0}%</h3>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                    <h3 className={classes.paper}>Matches played: {rows.length}</h3>
-                </Grid>
-                <Grid item xs={6}>
-                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Won matches: {won}</h3>
-                </Grid>
-                <Grid item xs={6}>
-                    <h3 className={classes.paper} style={{marginTop:0, marginBottom:40}}>Winning Rate: {Math.floor(won/rows.length*100)}%</h3>
-                </Grid>
-            </Grid>
-            <Paper className={classes.paper}>
-                <TableContainer>
+                <TableContainer className='paper-custom'>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
@@ -249,13 +249,13 @@ export default function History(props) {
                                             tabIndex={-1}
                                             key={index}
                                         >
-                                            <TableCell>{row.gamePlay.slice(0, 10)}</TableCell>
+                                            <TableCell><b>{row.gamePlay.slice(0, 10)}</b></TableCell>
                                             <TableCell>
-                                                {row.playerX.username + ' '}
+                                                <b>{row.playerX.username + ' '}</b>
                                                 <War style={{ padding: 5 }} width='20px' height='20px' />
-                                                {' ' + row.playerO.username}
+                                                <b>{' ' + row.playerO.username}</b>
                                             </TableCell>
-                                            <TableCell>{row.result === "X" ? "player1" : row.result === "O" ? "player2" : "Draw"}</TableCell>
+                                            <TableCell> <b>{row.result === "X" ? "player1" : row.result === "O" ? "player2" : "Draw"}</b></TableCell>
                                             {/* <TableCell>{
                                                 row.result.includes("Draw") ?
                                                     "Draw" :
@@ -267,7 +267,7 @@ export default function History(props) {
                                             </TableCell> */}
                                             <TableCell align={'right'}>
                                                 <Link to={`/history-room/${row._id}`} className='view'>
-                                                    <VisibilityIcon className='view-icon' style={{ color: 'gray' }} />
+                                                    <VisibilityIcon className='view-icon' style={{ color: '#1B1C1C' }} />
                                                 </Link>
                                             </TableCell>
                                         </StyledTableRow>
@@ -276,22 +276,23 @@ export default function History(props) {
                             }
                         </TableBody>
                     </Table>
+                    <TablePagination
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}
+                        rowsPerPageOptions={[5]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 20]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </Paper>
-            {/* {
+                {/* {
                 rows.map((row,i)=>{
                     return <li key={i}>{row._id}</li>
                 })
             } */}
-        </Container>
+            </Container>
+        </Grid>
     );
 }

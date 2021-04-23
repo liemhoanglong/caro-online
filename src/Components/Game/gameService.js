@@ -1,5 +1,4 @@
-
-export default  function calculateWinner(squares, indexNow, size) {
+export default function calculateWinner(squares, indexNow, size) {
     const di = [0, 0, 1, -1, -1, 1, -1, 1];
     const dj = [1, -1, 0, 0, -1, 1, 1, -1];
 
@@ -29,7 +28,7 @@ export default  function calculateWinner(squares, indexNow, size) {
             tempJ = tempJ + dj[k + 1];
             tempIndex = tempI * size + tempJ;
         }
-        if (count1 + count2 - 1 === 5) {
+        if (count1 + count2 - 1 >= 5) {
             return {
                 square: squares[indexNow],
                 line: log
