@@ -5,7 +5,7 @@
 # [🕹️🕹️🕹️ Play Now 🕹️🕹️🕹️](https://tictactoewithreact.herokuapp.com/)
 
 ### 👨‍🚀 Account 1: long123 - Password: long123
-### 🤹‍♂️ Account 2: linh - Password: linh123
+### 🤹‍♂️ Account 2: hung100 - Password: hung100
 
 ## Available Scripts
 
